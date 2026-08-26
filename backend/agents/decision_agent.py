@@ -16,6 +16,8 @@ from datetime import datetime
 from pathlib import Path
 from services.audit_log import log_event
 from services.appeal_generator import generate_ombudsman_appeal_letter
+from agents.fraud_agent import analyze_fraud_risk
+from services.tariff_analyzer import analyze_bill_line_items
 
 RULES_PATH = Path(__file__).parent.parent / "data" / "policy_rules.json"
 
@@ -352,7 +354,26 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
             clinical_diagnosis=fields.get("diagnosis", "Inpatient Care"),
             procedure_performed=fields.get("procedure", "Medical Treatment"),
         )
-        reasoning_trace.append(f"LEGAL AGENT: Auto-drafted IRDAI Ombudsman Grievance Petition for claimant appeal.")
+    # Run Forensic Fraud & NABH Hospital Audit
+    hosp_name = fields.get("hospital_name", "City Care Multispeciality Hospital")
+    hosp_gstin = fields.get("hospital_gstin", "27AABCC1234F1Z9")
+    diag_str = fields.get("diagnosis", "Acute Appendicitis")
+    proc_str = fields.get("procedure", "Laparoscopic Appendectomy")
+    doc_ver_ok = checks.get("doctor_license", {}).get("passed", True)
+
+    fraud_audit = analyze_fraud_risk(
+        claim_id=claim_id,
+        hospital_name=hosp_name,
+        hospital_gstin=hosp_gstin,
+        diagnosis=diag_str,
+        procedure=proc_str,
+        total_amount=total_amount,
+        bill_raw_text=f"{hosp_name} {diag_str} {proc_str}",
+        treating_doctor_verified=doc_ver_ok,
+    )
+
+    # Run Line-Item Tariff Breakdown
+    tariff_breakdown = analyze_bill_line_items(total_amount=total_amount)
 
     return {
         "eligible": is_eligible,
@@ -369,6 +390,8 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
         ],
         "checks": checks,
         "dual_policy_optimization": dual_optimization,
+        "fraud_audit": fraud_audit,
+        "tariff_breakdown": tariff_breakdown,
         "ombudsman_appeal_letter": appeal_letter,
         "policy_summary": {
             "policy_id": policy.get("policy_id", policy_number),

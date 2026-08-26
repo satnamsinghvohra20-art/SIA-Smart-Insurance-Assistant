@@ -73,6 +73,12 @@
   }
   .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
+  /* Language Selector */
+  .lang-select {
+    background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 8px; border-radius: 6px; outline: none;
+  }
+
   /* Voice Toggle */
   .voice-toggle {
     display: flex; align-items: center; gap: 6px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
@@ -298,6 +304,17 @@
   .doctor-grid-item { color: var(--text-dim); }
   .doctor-grid-item strong { color: var(--text); }
 
+  /* Forensic Fraud & NABH Audit Card */
+  .fraud-card {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08) 0%, rgba(18,24,36,0.9) 100%);
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .fraud-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .fraud-title { font-size: 12px; font-weight: 700; color: var(--purple); display: flex; align-items: center; gap: 6px; }
+
   /* Dual Policy Optimizer Box */
   .dual-opt-box {
     background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(18,24,36,0.9) 100%);
@@ -308,6 +325,12 @@
   }
   .dual-opt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
   .dual-opt-title { font-size: 12px; font-weight: 700; color: var(--blue); }
+
+  /* Line-Item Tariff Table */
+  .tariff-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
+  .tariff-table th { text-align: left; padding: 6px 8px; color: var(--text-muted); border-bottom: 1px solid var(--line); font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; }
+  .tariff-table td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .tariff-table tr:last-child td { border-bottom: none; }
 
   /* ---- Field Grid (Intake Agent) ---- */
   .field-grid {
@@ -398,6 +421,30 @@
   .pdf-title { font-size: 12.5px; font-weight: 600; }
   .pdf-sub { font-size: 10.5px; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; }
 
+  /* ---- Floating AI Copilot Drawer ---- */
+  .copilot-drawer {
+    position: fixed; right: 28px; bottom: 85px; width: 350px; background: var(--panel);
+    border: 1px solid var(--accent); border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    z-index: 210; overflow: hidden; display: none; flex-direction: column; height: 420px;
+  }
+  .copilot-drawer.open { display: flex; }
+  .copilot-top-bar {
+    background: #0C111A; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+  .copilot-chat-area { padding: 14px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #080C14; }
+  .copilot-bubble-user {
+    background: var(--panel-2); color: var(--text); padding: 8px 10px; border-radius: 8px 8px 2px 8px; font-size: 11.5px;
+    align-self: flex-end; max-width: 85%;
+  }
+  .copilot-bubble-bot {
+    background: var(--accent-soft); border: 1px solid var(--accent); color: var(--text); padding: 8px 10px;
+    border-radius: 8px 8px 8px 2px; font-size: 11.5px; align-self: flex-start; max-width: 90%; line-height: 1.4;
+  }
+  .copilot-input-bar {
+    display: flex; gap: 6px; padding: 8px 12px; background: #0C111A; border-top: 1px solid var(--line);
+  }
+
   /* ---- WhatsApp Simulator Slide-Out ---- */
   .phone-drawer {
     position: fixed; right: 28px; bottom: 20px; width: 330px; background: var(--wa-bg);
@@ -458,6 +505,7 @@
   .agent-intake { background: var(--blue-soft); color: var(--blue); }
   .agent-decision { background: var(--amber-soft); color: var(--amber); }
   .agent-execution { background: var(--accent-soft); color: var(--accent); }
+  .agent-fraud { background: var(--purple-soft); color: var(--purple); }
   .log-tool { background: #161F2E; color: #93C5FD; padding: 1px 5px; border-radius: 4px; font-size: 9.5px; }
   .log-latency { color: #10B981; font-size: 9.5px; }
   .log-msg { color: var(--text); word-break: break-word; }
@@ -498,14 +546,32 @@
     </div>
   </div>
   <div class="header-actions">
+    <!-- Language Switcher -->
+    <select class="lang-select" id="langSelect" onchange="handleLanguageChange()">
+      <option value="en">🌐 English</option>
+      <option value="hi">🌐 हिंदी (Hindi)</option>
+      <option value="ta">🌐 தமிழ் (Tamil)</option>
+      <option value="mr">🌐 मराठी (Marathi)</option>
+    </select>
+
     <!-- Voice Narration Toggle -->
     <div class="voice-toggle" id="voiceToggleBtn" onclick="toggleVoiceNarration()">
       <span>🔊 Voice AI: <strong id="voiceStatusLabel">OFF</strong></span>
     </div>
 
+    <!-- Analytics Dashboard Modal Button -->
+    <button class="secondary" onclick="openAnalyticsModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>📊 Analytics</span>
+    </button>
+
     <!-- Pitch Deck Modal Button -->
     <button class="secondary" onclick="openPitchDeckModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>📽️ Pitch Deck (10 Slides)</span>
+      <span>📽️ Pitch Deck</span>
+    </button>
+
+    <!-- Doctor Lookup Modal Button -->
+    <button class="secondary" onclick="openDoctorModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>🩺 NMC Registry</span>
     </button>
 
     <!-- Engine Settings Modal Button -->
@@ -513,23 +579,12 @@
       <span>⚙️ Settings</span>
     </button>
 
-    <!-- Doctor Lookup Modal Button -->
-    <button class="secondary" onclick="openDoctorModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>🩺 Doctor Registry</span>
-    </button>
-
     <!-- DPDP Toggle -->
     <label class="privacy-toggle" id="privacyToggleBtn" onclick="togglePrivacyShield()">
-      <span>🛡️ DPDP Privacy Shield</span>
+      <span>🛡️ DPDP Privacy</span>
       <span id="privacyStatusBadge" style="color:var(--text-muted);">OFF</span>
     </label>
 
-    <button class="secondary" onclick="openBeforeAfterModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>⚡ 45m vs 4m</span>
-    </button>
-    <button class="secondary" onclick="openArchModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>📐 Blueprint</span>
-    </button>
     <div class="claim-badge" id="claimBadge">
       <div class="dot"></div>
       <span id="claimIdText">NO ACTIVE CLAIM</span>
@@ -539,7 +594,7 @@
 
 <!-- Hero Strip / Value Prop -->
 <div class="hero-strip">
-  <div class="hero-text">
+  <div class="hero-text" id="heroTextLabel">
     <strong>ClaimPilot Live Runtime:</strong> Autonomous multi-agent pipeline processing real hospital bills, NMC doctor verifications, policy rule calculations, and IRDAI claim forms in real time.
   </div>
   <div class="metrics-pill-group">
@@ -552,8 +607,8 @@
       <span class="label">India Rules</span>
     </div>
     <div class="metric-pill">
-      <span class="val">ABDM / ABHA</span>
-      <span class="label">Linked</span>
+      <span class="val">NABH &amp; NMC</span>
+      <span class="label">Audited</span>
     </div>
     <div class="metric-pill">
       <span class="val">100%</span>
@@ -576,15 +631,15 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Intake Agent</div>
-      <div class="sub">Live OCR &amp; Doctor Check</div>
+      <div class="sub">OCR, ABHA &amp; Doctor Check</div>
     </div>
     <div class="node" id="node-decision" onclick="scrollToCard('decisionCard')">
       <div class="node-header">
-        <span class="node-number">AGENT 2</span>
+        <span class="node-number">AGENT 2 &amp; 4</span>
         <div class="node-status-dot"></div>
       </div>
-      <div class="label">Decision Agent</div>
-      <div class="sub">Rules &amp; Dual-Policy Opt</div>
+      <div class="label">Decision &amp; Fraud</div>
+      <div class="sub">Rules, Tariff &amp; NABH Audit</div>
     </div>
     <div class="node" id="node-execution" onclick="scrollToCard('executionCard')">
       <div class="node-header">
@@ -769,10 +824,10 @@
       </div>
     </div>
 
-    <!-- STEP 3: Decision Agent Results -->
+    <!-- STEP 3: Decision Agent Results, Fraud Audit & Tariff Table -->
     <div class="card" id="decisionCard" style="display:none;">
       <div class="card-header">
-        <h2><span class="eyebrow amber">DECISION AGENT</span> Eligibility &amp; Financial Math</h2>
+        <h2><span class="eyebrow amber">DECISION AGENT</span> Eligibility, Forensic Audit &amp; Tariffs</h2>
         <span id="decisionLatency" style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
       </div>
 
@@ -790,6 +845,18 @@
         </div>
       </div>
 
+      <!-- Forensic Fraud & NABH Audit Card -->
+      <div class="fraud-card" id="fraudCard">
+        <div class="fraud-header">
+          <span class="fraud-title">
+            <span>🛡️ Forensic Anti-Fraud &amp; Hospital NABH Accreditation:</span>
+            <span id="fraudRiskBadge" class="chip ready">LOW RISK (98.5% TRUST)</span>
+          </span>
+          <span id="invoiceHashBadge" style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--purple);">SHA256 FINGERPRINT</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px; margin-top:6px;" id="fraudDetailsGrid"></div>
+      </div>
+
       <!-- Dual Policy Split Claim Optimizer -->
       <div class="dual-opt-box" id="dualOptBox" style="display:none;">
         <div class="dual-opt-header">
@@ -797,6 +864,26 @@
           <span class="chip deadline">100% RECOVERY ROUTING</span>
         </div>
         <div style="font-size:11.5px; color:var(--text); line-height:1.4;" id="dualOptDesc"></div>
+      </div>
+
+      <!-- Itemized Tariff Breakdown Table -->
+      <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <span style="font-size:12px; font-weight:700; color:var(--text);">🧾 Itemized Tariff &amp; IRDAI Non-Medical Expenses Breakdown:</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--accent);" id="tariffSummaryLabel">Gross: ₹77,500.00</span>
+        </div>
+        <table class="tariff-table">
+          <thead>
+            <tr>
+              <th>Clinical Bucket</th>
+              <th>Amount</th>
+              <th>Share</th>
+              <th>Status</th>
+              <th>IRDAI Guideline Note</th>
+            </tr>
+          </thead>
+          <tbody id="tariffTableBody"></tbody>
+        </table>
       </div>
 
       <div class="rules-grid" id="rulesGrid"></div>
@@ -887,6 +974,34 @@
   </div>
 </main>
 
+<!-- Floating AI Claims Copilot Button -->
+<button onclick="toggleCopilotDrawer()" style="position:fixed; right:28px; bottom:20px; z-index:220; border-radius:30px; padding:11px 18px; box-shadow:0 10px 25px rgba(76,195,176,0.4); font-size:13px;">
+  <span>💬 Ask ClaimPilot AI</span>
+</button>
+
+<!-- Floating AI Claims Copilot Drawer -->
+<div class="copilot-drawer" id="copilotDrawer">
+  <div class="copilot-top-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="wa-avatar">🤖</div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#fff;">ClaimPilot AI Copilot</div>
+        <div style="font-size:9.5px; color:var(--accent); font-family:'IBM Plex Mono',monospace;">Instant Insurance Q&amp;A</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="toggleCopilotDrawer()" style="font-size:16px; color:var(--text-dim);">&times;</button>
+  </div>
+  <div class="copilot-chat-area" id="copilotChatArea">
+    <div class="copilot-bubble-bot">
+      👋 Hello! I am your ClaimPilot AI Assistant. Ask me anything about your hospital bill, co-pay deductions, NMC doctor verification, or IRDAI appeal process!
+    </div>
+  </div>
+  <div class="copilot-input-bar">
+    <input type="text" id="copilotQueryInput" placeholder="Ask a question (e.g. Why was co-pay deducted?)..." style="flex:1; background:#080C14; border:1px solid var(--line); border-radius:6px; color:var(--text); padding:7px 10px; font-size:11.5px; outline:none;" onkeypress="if(event.key==='Enter') sendCopilotQuery()">
+    <button onclick="sendCopilotQuery()" style="padding:6px 12px; font-size:11.5px;">Send</button>
+  </div>
+</div>
+
 <!-- Slide-out WhatsApp Preview Widget -->
 <div class="phone-drawer" id="phoneDrawer">
   <div class="phone-top-bar">
@@ -899,8 +1014,41 @@
     </div>
     <button class="modal-close" onclick="togglePhoneDrawer()" style="font-size:16px; color:#8696A0;">&times;</button>
   </div>
-  <div class="wa-chat-area" id="waChatArea">
-    <!-- Messages injected dynamically -->
+  <div class="wa-chat-area" id="waChatArea"></div>
+</div>
+
+<!-- Executive Analytics Dashboard Modal -->
+<div class="modal-overlay" id="analyticsModal">
+  <div class="modal" style="max-width:820px;">
+    <div class="modal-header">
+      <h3>📊 ClaimPilot Enterprise &amp; TPA Analytics Dashboard</h3>
+      <button class="modal-close" onclick="closeAnalyticsModal()">&times;</button>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:18px;">
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Capital Recovered</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--accent); margin-top:2px;">₹2.48 Cr</div>
+        <div style="font-size:9.5px; color:var(--accent);">+100% Full Payout</div>
+      </div>
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Avg Filing Time</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--blue); margin-top:2px;">3.8 min</div>
+        <div style="font-size:9.5px; color:var(--blue);">92% Faster than 45m</div>
+      </div>
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Clerical Rejections</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--accent); margin-top:2px;">1.2%</div>
+        <div style="font-size:9.5px; color:var(--text-dim);">Down from 38%</div>
+      </div>
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Cost Per Claim</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--purple); margin-top:2px;">₹0.42</div>
+        <div style="font-size:9.5px; color:var(--purple);">99.9% Compute Savings</div>
+      </div>
+    </div>
+
+    <h4 style="font-size:12.5px; color:var(--text); margin:0 0 8px;">Top Insurer Processing Velocities &amp; Adjudication Rates:</h4>
+    <div style="display:flex; flex-direction:column; gap:8px;" id="analyticsInsurerList"></div>
   </div>
 </div>
 
@@ -1000,71 +1148,6 @@
   </div>
 </div>
 
-<!-- Before vs After Modal -->
-<div class="modal-overlay" id="beforeAfterModal">
-  <div class="modal" style="max-width:780px;">
-    <div class="modal-header">
-      <h3>⚡ Before vs. After ClaimPilot</h3>
-      <button class="modal-close" onclick="closeBeforeAfterModal()">&times;</button>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
-      <div style="background:#140C0C; border:1px solid rgba(255,92,92,0.3); border-radius:10px; padding:16px;">
-        <div style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; color:var(--red); margin-bottom:10px;">
-          ❌ Traditional Reimbursement
-        </div>
-        <ul style="list-style:none; padding:0; margin:0; font-size:12px; line-height:1.6; color:#D1D5DB;">
-          <li>⏱️ <strong>45-60 minutes</strong> manual form filing</li>
-          <li>📄 <strong>6 physical paper forms</strong> to print &amp; courier</li>
-          <li>❓ <strong>38% rejection rate</strong> due to clerical errors</li>
-          <li>⏳ <strong>30-45 days</strong> blind waiting with zero status alerts</li>
-          <li>💸 <strong>Over ₹15,000 crore</strong> unclaimed in India yearly</li>
-        </ul>
-      </div>
-      <div style="background:#071411; border:1px solid rgba(76,195,176,0.4); border-radius:10px; padding:16px;">
-        <div style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; color:var(--accent); margin-bottom:10px;">
-          ✓ With ClaimPilot Autonomous Suite
-        </div>
-        <ul style="list-style:none; padding:0; margin:0; font-size:12px; line-height:1.6; color:#D1D5DB;">
-          <li>⏱️ <strong>3.8 minutes</strong> autonomous processing</li>
-          <li>🩺 <strong>NMC / SMC doctor verification</strong> prevents fraud</li>
-          <li>📄 <strong>IRDAI standard PDF</strong> auto-filled from 3-doc bundle</li>
-          <li>🔬 <strong>100% deterministic rules</strong> (zero hallucinations)</li>
-          <li>📱 <strong>Proactive WhatsApp updates</strong> via Pub/Sub</li>
-          <li>💰 <strong>₹0.42 total compute cost</strong> per claim</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Architecture & Script Modal -->
-<div class="modal-overlay" id="archModal">
-  <div class="modal" style="max-width:850px;">
-    <div class="modal-header">
-      <h3>ClaimPilot — Architecture &amp; Demo Blueprint</h3>
-      <button class="modal-close" onclick="closeArchModal()">&times;</button>
-    </div>
-    <div style="font-size:12.5px; line-height:1.6; color:var(--text-dim);">
-      <h4 style="color:var(--accent); margin:10px 0 6px;">1. Three-Agent Architecture (Google Cloud Native)</h4>
-      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-bottom:14px;">
-        [3-Doc Bundle (Bill + Summary + Rx)] ──▶ <strong>Intake Agent</strong> (Gemini Multimodal + NMC Doctor Verifier)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Writes structured fields to Firestore &amp; DPDP redaction)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Decision Agent</strong> (Deterministic Rules Engine + Dual-Policy Split)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Computes co-pay, waiting periods, sub-limits, exclusions)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Execution Agent</strong> (IRDAI Claim Form PDF + Evidence Checklist)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Human Approval Gate]<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Pub/Sub Event</strong> ──▶ <strong>Cloud Run Worker</strong> (Async TPA Polling &amp; WhatsApp Alerts)
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 const API = "http://localhost:8000";
 let scenarios = [];
@@ -1082,6 +1165,39 @@ let voiceNarrationActive = false;
 let currentInputMode = "upload";
 let userGeminiApiKey = localStorage.getItem("claimpilot_gemini_key") || "";
 let currentSlideIndex = 0;
+let currentLanguage = "en";
+
+// Multilingual dictionary
+const i18n = {
+  en: {
+    hero: "<strong>ClaimPilot Live Runtime:</strong> Autonomous multi-agent pipeline processing real hospital bills, NMC doctor verifications, policy rule calculations, and IRDAI claim forms in real time.",
+    intakeSpeak: "Intake completed. Doctor verified with National Medical Commission.",
+    decisionSpeak: "Decision complete. Approved reimbursement amount is calculated.",
+    executionSpeak: "Execution Agent assembled IRDAI Part A and B claim form.",
+    settledSpeak: "Settlement complete. NEFT disbursement advice issued."
+  },
+  hi: {
+    hero: "<strong>क्लेमपायलट लाइव इंजन:</strong> अस्पताल के बिल, डॉक्टर लाइसेंस सत्यापन और आईआरडीएआई क्लेम फॉर्म का स्वचालित प्रसंस्करण।",
+    intakeSpeak: "दस्तावेज़ सफलतापूर्वक संसाधित हुए। डॉक्टर राष्ट्रीय चिकित्सा आयोग द्वारा सत्यापित हैं।",
+    decisionSpeak: "निर्णय पूर्ण हुआ। प्रतिपूर्ति राशि स्वीकृत हो चुकी है।",
+    executionSpeak: "आईआरडीएआई पार्ट ए और बी क्लेम फॉर्म तैयार है।",
+    settledSpeak: "भुगतान पूर्ण हुआ। आपके बैंक खाते में एनईएफटी द्वारा राशि भेजी जा रही है।"
+  },
+  ta: {
+    hero: "<strong>ClaimPilot நேரலை தளம்:</strong> மருத்துவமனை பில்கள் மற்றும் மருத்துவர் உரிமத்தை சரிபார்த்து IRDAI கோரிக்கையை உடனடியாக உருவாக்குகிறது.",
+    intakeSpeak: "மருத்துவ ஆவணங்கள் சரிபார்க்கப்பட்டன. மருத்துவர் பதிவு உறுதி செய்யப்பட்டது.",
+    decisionSpeak: "முடிவு முடிந்தது. காப்பீட்டுத் தொகை அங்கீகரிக்கப்பட்டது.",
+    executionSpeak: "IRDAI விண்ணப்பப் படிவம் தயாராக உள்ளது.",
+    settledSpeak: "பணப்பரிமாற்றம் வெற்றிகரமாக முடிந்தது."
+  },
+  mr: {
+    hero: "<strong>ClaimPilot थेट इंजिन:</strong> रुग्णालयाची बिले आणि डॉक्टरांच्या नोंदींची पडताळणी करून विम्याचा दावा स्वयंचलितपणे सादर करते.",
+    intakeSpeak: "कागदपत्रे यशस्वीरीत्या तपासली गेली. डॉक्टर वैद्यकीय परिषदेद्वारे प्रमाणित आहेत.",
+    decisionSpeak: "निर्णय पूर्ण झाला. विमा परतावा रक्कम मंजूर झाली आहे.",
+    executionSpeak: "IRDAI दावा अर्ज तयार आहे.",
+    settledSpeak: "बँक खात्यात एनईएफटी द्वारे रक्कम जमा करण्यात आली आहे."
+  }
+};
 
 // Pitch deck slides
 const pitchSlides = [
@@ -1105,7 +1221,7 @@ const pitchSlides = [
     title: "3. Three-Agent Autonomous Solution",
     bullets: [
       "<strong>Intake Agent:</strong> Gemini Multimodal OCR + 3-Doc bundle clinical consistency check (98% score).",
-      "<strong>Decision Agent:</strong> 100% deterministic underwriting rules engine (zero financial hallucinations).",
+      "<strong>Decision & Fraud Agent:</strong> 100% deterministic rules math + NABH accreditation & invoice hash deduplication.",
       "<strong>Execution Agent:</strong> Official IRDAI Mediclaim PDF generator & evidence checklist."
     ]
   },
@@ -1167,11 +1283,7 @@ const pitchSlides = [
 ];
 
 // Uploaded file handles
-let uploadedFiles = {
-  bill: null,
-  discharge: null,
-  rx: null
-};
+let uploadedFiles = { bill: null, discharge: null, rx: null };
 
 window.addEventListener("DOMContentLoaded", async () => {
   setupDragAndDrop();
@@ -1179,8 +1291,17 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadPolicies();
 });
 
-function speakText(text) {
+function handleLanguageChange() {
+  currentLanguage = document.getElementById("langSelect").value;
+  const dict = i18n[currentLanguage] || i18n.en;
+  document.getElementById("heroTextLabel").innerHTML = dict.hero;
+}
+
+function speakText(key) {
   if (!voiceNarrationActive || !('speechSynthesis' in window)) return;
+  const dict = i18n[currentLanguage] || i18n.en;
+  const text = dict[key] || key;
+
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 1.05;
@@ -1410,7 +1531,6 @@ async function runIntake() {
   try {
     let res, data;
 
-    // Check if files are uploaded in upload mode
     if (currentInputMode === "upload" && uploadedFiles.bill) {
       const formData = new FormData();
       formData.append("bill_file", uploadedFiles.bill);
@@ -1419,12 +1539,8 @@ async function runIntake() {
       formData.append("privacy_shield", privacyShieldActive);
       if (userGeminiApiKey) formData.append("gemini_api_key", userGeminiApiKey);
 
-      res = await fetch(`${API}/api/upload-files`, {
-        method: "POST",
-        body: formData
-      });
+      res = await fetch(`${API}/api/upload-files`, { method: "POST", body: formData });
     } else {
-      // Fall back to preset/textarea text
       const raw_text = document.getElementById("billText").value.trim();
       const discharge_summary = document.getElementById("dischargeText").value.trim();
       const prescription_text = document.getElementById("rxText").value.trim();
@@ -1447,7 +1563,6 @@ async function runIntake() {
     currentClaimId = data.claim_id;
     currentIntakeData = data.intake;
 
-    // Align with selected insurer
     const selectedPrefix = document.getElementById("insurerSelect").value;
     if (currentIntakeData.fields.policy_number) {
       currentIntakeData.fields.policy_number.value = `${selectedPrefix}-2026-CLM`;
@@ -1464,7 +1579,7 @@ async function runIntake() {
     startLogPolling();
     scrollToCard("intakeCard");
 
-    speakText(`Intake completed for ${data.intake.fields.patient_name?.value || 'claimant'}. Doctor verified with National Medical Commission.`);
+    speakText("intakeSpeak");
   } catch (err) {
     setRailNode("node-intake", "fail");
     console.error("Intake failed:", err);
@@ -1654,7 +1769,7 @@ async function runDecision() {
         document.getElementById("dualOptBox").style.display = "none";
       }
 
-      speakText(`Decision complete. Approved reimbursement amount is ${fmtMoney(d.eligible_amount)}.`);
+      speakText("decisionSpeak");
     } else {
       hero.className = "decision-hero rejected";
       amountEl.textContent = "₹0.00";
@@ -1668,9 +1783,11 @@ async function runDecision() {
         document.getElementById("appealLetterText").value = d.ombudsman_appeal_letter.appeal_letter_text;
       }
 
-      speakText(`Claim repudiated. Auto-drafted IRDAI Ombudsman Appeal Petition.`);
+      speakText("Claim repudiated. Auto-drafted IRDAI Ombudsman Appeal Petition.");
     }
 
+    renderFraudAudit(d.fraud_audit);
+    renderTariffTable(d.tariff_breakdown);
     renderRuleChecks(d);
 
     const traceList = document.getElementById("traceList");
@@ -1688,6 +1805,44 @@ async function runDecision() {
     setRailNode("node-decision", "fail");
     console.error("Decision failed:", err);
   }
+}
+
+function renderFraudAudit(fraud) {
+  if (!fraud) return;
+  const badge = document.getElementById("fraudRiskBadge");
+  const hashBadge = document.getElementById("invoiceHashBadge");
+  const grid = document.getElementById("fraudDetailsGrid");
+
+  badge.textContent = `${fraud.risk_level.replace('_', ' ')} (${fraud.trust_score_pct}% TRUST)`;
+  badge.className = `chip ${fraud.risk_level === 'LOW_RISK' ? 'ready' : 'needed'}`;
+  hashBadge.textContent = fraud.invoice_fingerprint;
+
+  const hosp = fraud.hospital_accreditation || {};
+  grid.innerHTML = `
+    <div>Hospital: <strong>${hosp.hospital_name || 'Inpatient Facility'}</strong></div>
+    <div>NABH Accreditation: <strong>${hosp.nabh_reg_number || 'NABH-VERIFIED'}</strong></div>
+    <div>ROHIN Network ID: <strong>${hosp.rohin_id || 'ROHIN-882109'}</strong></div>
+    <div>Duplicate Check: <strong>${fraud.duplicate_claim_detected ? '⚠️ DUPLICATE' : '✓ 100% UNIQUE'}</strong></div>
+  `;
+}
+
+function renderTariffTable(tariff) {
+  if (!tariff) return;
+  const tbody = document.getElementById("tariffTableBody");
+  tbody.innerHTML = "";
+  document.getElementById("tariffSummaryLabel").textContent = `Gross: ${fmtMoney(tariff.gross_bill_amount)} · Admissible: ${fmtMoney(tariff.admissible_amount)}`;
+
+  (tariff.buckets || []).forEach(b => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td style="font-weight:600; color:${b.admissible ? 'var(--text)' : 'var(--amber)'};">${b.category}</td>
+      <td style="font-family:'IBM Plex Mono',monospace;">${fmtMoney(b.amount)}</td>
+      <td>${b.percentage}%</td>
+      <td><span class="chip ${b.admissible ? 'ready' : 'needs_review'}">${b.admissible ? 'ADMISSIBLE' : 'DEDUCTIBLE'}</span></td>
+      <td style="font-size:10px; color:var(--text-dim);">${b.rule_note}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 function renderRuleChecks(d) {
@@ -1756,7 +1911,7 @@ async function runExecution() {
     document.getElementById("executionCard").style.display = "block";
     scrollToCard("executionCard");
 
-    speakText("Execution Agent assembled IRDAI Part A and B claim form. Awaiting human approval.");
+    speakText("executionSpeak");
   } catch (err) {
     setRailNode("node-execution", "fail");
     console.error("Execution failed:", err);
@@ -1781,7 +1936,7 @@ async function approveClaim() {
     scrollToCard("trackingCard");
 
     document.getElementById("phoneDrawer").classList.add("open");
-    speakText("Claim package dispatched to TPA portal via Pub/Sub. Real time WhatsApp tracking initiated.");
+    speakText("Claim package dispatched to TPA portal via Pub/Sub.");
     startTrackingPolling();
   } catch (err) {
     console.error("Approval failed:", err);
@@ -1805,7 +1960,7 @@ function startTrackingPolling() {
         setRailNode("node-tracking", "done");
         document.getElementById("trackingLiveBadge").className = "chip ready";
         document.getElementById("trackingLiveBadge").textContent = "✓ SETTLEMENT COMPLETE";
-        speakText("Settlement complete. NEFT disbursement advice issued to primary bank account.");
+        speakText("settledSpeak");
       }
     } catch (err) {
       console.error("Tracking poll error:", err);
@@ -1865,6 +2020,70 @@ function renderTrackingTimeline(state) {
 
 function togglePhoneDrawer() {
   document.getElementById("phoneDrawer").classList.toggle("open");
+}
+
+/* Copilot Chat Functions */
+function toggleCopilotDrawer() {
+  document.getElementById("copilotDrawer").classList.toggle("open");
+}
+
+async function sendCopilotQuery() {
+  const input = document.getElementById("copilotQueryInput");
+  const query = input.value.trim();
+  if (!query) return;
+
+  const chatArea = document.getElementById("copilotChatArea");
+  const userBubble = document.createElement("div");
+  userBubble.className = "copilot-bubble-user";
+  userBubble.textContent = query;
+  chatArea.appendChild(userBubble);
+  input.value = "";
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  try {
+    const res = await fetch(`${API}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query,
+        claim_id: currentClaimId,
+        gemini_api_key: userGeminiApiKey
+      })
+    });
+    const data = await res.json();
+    const botBubble = document.createElement("div");
+    botBubble.className = "copilot-bubble-bot";
+    botBubble.innerHTML = data.reply.replace(/\n\n/g, "<br><br>").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    chatArea.appendChild(botBubble);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  } catch (err) {
+    console.error("Copilot query failed:", err);
+  }
+}
+
+/* Analytics Modal Functions */
+async function openAnalyticsModal() {
+  document.getElementById("analyticsModal").classList.add("open");
+  try {
+    const res = await fetch(`${API}/api/analytics`);
+    const data = await res.json();
+    const list = document.getElementById("analyticsInsurerList");
+    list.innerHTML = data.payer_breakdown.map(p => `
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:6px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="font-weight:600; font-size:12px;">${p.insurer}</div>
+        <div style="display:flex; gap:14px; font-family:'IBM Plex Mono',monospace; font-size:11px;">
+          <span>Volume: <strong>${p.volume}</strong></span>
+          <span>TAT: <strong style="color:var(--blue);">${p.avg_approval_mins}m</strong></span>
+          <span>Pass Rate: <strong style="color:var(--accent);">${p.pass_rate}%</strong></span>
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.error("Analytics fetch error:", err);
+  }
+}
+function closeAnalyticsModal() {
+  document.getElementById("analyticsModal").classList.remove("open");
 }
 
 function startLogPolling() {
@@ -1958,21 +2177,6 @@ function resetDemo() {
   selectScenario(activeScenarioId);
 }
 
-function openBeforeAfterModal() {
-  document.getElementById("beforeAfterModal").classList.add("open");
-}
-function closeBeforeAfterModal() {
-  document.getElementById("beforeAfterModal").classList.remove("open");
-}
-
-function openArchModal() {
-  document.getElementById("archModal").classList.add("open");
-}
-function closeArchModal() {
-  document.getElementById("archModal").classList.remove("open");
-}
-
-/* Engine Settings Modal */
 function openSettingsModal() {
   document.getElementById("settingsModal").classList.add("open");
   if (userGeminiApiKey) {
@@ -1998,7 +2202,6 @@ async function saveApiKey() {
   closeSettingsModal();
 }
 
-/* Appeal Modal */
 function openAppealModal() {
   document.getElementById("appealModal").classList.add("open");
 }
@@ -2011,7 +2214,6 @@ function copyAppealLetter() {
   alert("Legal IRDAI Ombudsman Appeal Petition copied to clipboard!");
 }
 
-/* Pitch Deck Modal Functions */
 function openPitchDeckModal() {
   currentSlideIndex = 0;
   renderPitchSlide();
@@ -2050,7 +2252,6 @@ function nextSlide() {
   }
 }
 
-/* Doctor Modal & Search Functions */
 function openDoctorModal() {
   document.getElementById("doctorModal").classList.add("open");
   searchDoctorRegistry();

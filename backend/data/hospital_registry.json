@@ -1,0 +1,62 @@
+[
+  {
+    "hospital_name": "City Care Multispeciality Hospital",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "nabh_accredited": true,
+    "nabh_reg_number": "NABH-HOSP-2021-0842",
+    "gstin": "27AABCC1234F1Z9",
+    "rohin_id": "ROHIN-882109",
+    "gipsa_network": true,
+    "tier": "Tier-1",
+    "trust_score": 98.5
+  },
+  {
+    "hospital_name": "Apollo Hospitals Enterprise Ltd.",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "nabh_accredited": true,
+    "nabh_reg_number": "NABH-HOSP-2019-0112",
+    "gstin": "33AAACA1234F1Z1",
+    "rohin_id": "ROHIN-100293",
+    "gipsa_network": true,
+    "tier": "Tier-1",
+    "trust_score": 99.2
+  },
+  {
+    "hospital_name": "Max Super Speciality Hospital",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "nabh_accredited": true,
+    "nabh_reg_number": "NABH-HOSP-2020-0442",
+    "gstin": "07AAACM4421P1ZT",
+    "rohin_id": "ROHIN-339102",
+    "gipsa_network": true,
+    "tier": "Tier-1",
+    "trust_score": 98.9
+  },
+  {
+    "hospital_name": "Fortis Healthcare Hospital",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "nabh_accredited": true,
+    "nabh_reg_number": "NABH-HOSP-2022-0914",
+    "gstin": "29AAACF5519L1Z5",
+    "rohin_id": "ROHIN-551920",
+    "gipsa_network": true,
+    "tier": "Tier-1",
+    "trust_score": 98.7
+  },
+  {
+    "hospital_name": "Medanta The Medicity",
+    "city": "Gurugram",
+    "state": "Haryana",
+    "nabh_accredited": true,
+    "nabh_reg_number": "NABH-HOSP-2018-0056",
+    "gstin": "06AAACM9910Q1ZZ",
+    "rohin_id": "ROHIN-991044",
+    "gipsa_network": true,
+    "tier": "Tier-1",
+    "trust_score": 99.4
+  }
+]
