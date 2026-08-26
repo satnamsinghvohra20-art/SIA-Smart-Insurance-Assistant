@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+reportlab
+pdfplumber
+python-multipart
+apscheduler
+pydantic

@@ -1,0 +1,31 @@
+CITY CARE MULTISPECIALITY HOSPITAL
+201, Linking Road, Bandra West, Mumbai - 400050
+GSTIN: 27ABCDE1234F1Z5
+
+FINAL HOSPITAL BILL
+
+Bill No: CCH/2026/08/1147
+Bill Date: 18-08-2026
+Patient Name: Satnam Singh
+Age/Sex: 27 / Male
+Admission Date: 14-08-2026
+Discharge Date: 17-08-2026
+Treating Doctor: Dr. R. Mehta (General Surgery)
+Diagnosis: Acute Appendicitis - Laparoscopic Appendectomy
+Policy Number: STAR-HEALTH-FAMILY-2024
+
+CHARGES BREAKUP
+-----------------------------------------
+Room Rent (3 nights @ Rs 3500)      10500.00
+Surgeon Fee                         25000.00
+Anaesthetist Fee                     8000.00
+OT Charges                          15000.00
+Investigations (Blood/Imaging)       6200.00
+Pharmacy & Consumables               9800.00
+Nursing Charges                      3000.00
+-----------------------------------------
+TOTAL BILL AMOUNT                   77500.00
+Amount Paid by Patient               77500.00
+Balance Due                             0.00
+
+This is a computer generated bill.

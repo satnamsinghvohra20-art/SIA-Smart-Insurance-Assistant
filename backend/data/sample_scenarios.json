@@ -1,0 +1,44 @@
+{
+  "scenarios": [
+    {
+      "id": "happy_path",
+      "title": "Happy Path: Laparoscopic Appendectomy",
+      "subtitle": "Star Health Family Floater · Eligible Claim with 10% Co-pay",
+      "tag": "ELIGIBLE",
+      "tag_color": "emerald",
+      "policy_id": "STAR-HEALTH-FAMILY-2024",
+      "bill_text": "CITY CARE MULTISPECIALITY HOSPITAL\n201, Linking Road, Bandra West, Mumbai - 400050\nGSTIN: 27ABCDE1234F1Z5 | Reg No: MH/MUM/2019/8834\n------------------------------------------------------------\nFINAL INPATIENT HOSPITAL BILL & DISCHARGE BILL\n------------------------------------------------------------\nBill No: CCH/2026/08/1147\nBill Date: 18-08-2026\nPatient Name: Satnam Singh\nAge / Gender: 27 Y / Male\nAdmission Date: 14-08-2026\nDischarge Date: 17-08-2026\nTreating Consultant: Dr. Rajesh Mehta, MS (General Surgery)\nDiagnosis: Acute Appendicitis with localized peritonitis\nProcedure: Laparoscopic Appendectomy (ICD-10: K35.80)\nPolicy Number: STAR-HEALTH-FAMILY-2024\n\nCHARGES BREAKUP (INR):\n1. Room Rent & Nursing (3 nights @ Rs 3,500/night):     10,500.00\n2. Surgeon & OT Charges:                                32,000.00\n3. Anaesthetist & Monitored Care:                        8,000.00\n4. Laboratory & Pre-op Imaging (USG Abdomen, CBC):       7,200.00\n5. Pharmacy, Surgical Consumables & Antibiotics:        16,800.00\n6. Post-op Dressing & Hospital Services:                 3,000.00\n------------------------------------------------------------\nTOTAL BILL AMOUNT:                                      77,500.00\nAmount Paid by Patient via UPI / Card:                  77,500.00\nBalance Outstanding:                                         0.00\n------------------------------------------------------------\nAuthorized Signatory: Dr. R. Mehta | City Care Billing Desk\n(System Generated Tax Invoice for Insurance Reimbursement)",
+      "expected_outcome": "Eligible for ₹69,750 (₹77,500 less 10% co-pay ₹7,750). Within 30-day filing window."
+    },
+    {
+      "id": "excluded_procedure",
+      "title": "Edge Case: Cosmetic Rhinoplasty (Excluded)",
+      "subtitle": "ICICI Lombard Health Shield · Excluded Aesthetic Procedure",
+      "tag": "EXCLUDED",
+      "tag_color": "crimson",
+      "policy_id": "ICICI-LOMBARD-HEALTH-2024",
+      "bill_text": "APOLLO SPECTRA HOSPITALS\n143, 8th Main, Koramangala 4th Block, Bengaluru - 560034\nGSTIN: 29AAACA5566G1Z2 | ROHINI Hospital ID: 8900452\n------------------------------------------------------------\nINPATIENT FINAL REIMBURSEMENT BILL\n------------------------------------------------------------\nBill No: ASH/BLR/2026/08/9021\nBill Date: 19-08-2026\nPatient Name: Ananya Sharma\nAge / Gender: 31 Y / Female\nAdmission Date: 17-08-2026\nDischarge Date: 18-08-2026\nTreating Consultant: Dr. Vikram Malhotra, MCh (Plastic Surgery)\nDiagnosis: Aesthetic Rhinoplasty with Dorsal Hump Correction\nProcedure: Elective Cosmetic Rhinoplasty (ICD-10: Z41.1)\nPolicy Number: ICICI-LOMBARD-HEALTH-2024\n\nCHARGES BREAKUP (INR):\n1. Daycare Deluxe Suite Charges:                        18,000.00\n2. Cosmetic Surgeon & Grafting Fees:                    45,000.00\n3. General Anaesthesia & Monitoring:                    12,000.00\n4. Surgical Implants & Consumables:                     14,500.00\n5. Post-op Medications & Dressing:                       5,500.00\n------------------------------------------------------------\nTOTAL BILL AMOUNT:                                      95,000.00\nAmount Paid by Patient:                                 95,000.00\nBalance Due:                                                 0.00\n------------------------------------------------------------\nAuthorized Signatory: Apollo Spectra Billing Dept.",
+      "expected_outcome": "Claim rejected gracefully. Policy explicitly excludes elective cosmetic or aesthetic rhinoplasty procedures under Clause 4.2."
+    },
+    {
+      "id": "expired_deadline",
+      "title": "Edge Case: Dengue Fever (Filing Window Expired)",
+      "subtitle": "HDFC ERGO Corporate · Discharged 65 Days Ago (Limit 45 Days)",
+      "tag": "EXPIRED",
+      "tag_color": "amber",
+      "policy_id": "HDFC-ERGO-CORP-2024",
+      "bill_text": "FORTIS ESCORTS HOSPITAL\nOkhla Road, Sukhdev Vihar, New Delhi - 110025\nGSTIN: 07AABCF1290K1Z9 | Reg No: DL/SED/2018/104\n------------------------------------------------------------\nFINAL DISCHARGE BILL\n------------------------------------------------------------\nBill No: FEH/DEL/2026/06/4412\nBill Date: 22-06-2026\nPatient Name: Rahul Verma\nAge / Gender: 45 Y / Male\nAdmission Date: 15-06-2026\nDischarge Date: 21-06-2026\nTreating Consultant: Dr. Sunita Kapoor, MD (Internal Medicine)\nDiagnosis: Severe Dengue Fever with Thrombocytopenia\nProcedure: Inpatient IV Hydration, Platelet Transfusion & Monitoring\nPolicy Number: HDFC-ERGO-CORP-2024\n\nCHARGES BREAKUP (INR):\n1. HDU & Isolation Bed (6 nights @ Rs 4,500):           27,000.00\n2. Physician Consultations:                             12,000.00\n3. Blood Bank (Platelet Concentrate 4 units):           16,000.00\n4. Serial CBC, NS1 Antigen & Serology:                   8,500.00\n5. Inpatient Pharmacy & IV Fluids:                       9,500.00\n------------------------------------------------------------\nTOTAL BILL AMOUNT:                                      73,000.00\nAmount Paid by Patient:                                 73,000.00\nBalance Due:                                                 0.00\n------------------------------------------------------------\nAuthorized Signatory: Fortis Escorts Hospital Desk",
+      "expected_outcome": "Filing deadline expired. Claim submitted >45 days after discharge. Policy requires submission within 45 days."
+    },
+    {
+      "id": "low_confidence_scan",
+      "title": "Low Confidence Scan: Cholecystectomy (Human Review Needed)",
+      "subtitle": "Care Health Advantage · Blurry OCR Scanned Bill Flagging Uncertain Fields",
+      "tag": "REVIEW NEEDED",
+      "tag_color": "purple",
+      "policy_id": "CARE-ADVANTAGE-2024",
+      "bill_text": "MAX SUPER SPECIALITY HOSPITAL\nSector 19, HUDA City Centre, Gurugram, Haryana - 122001\nGSTIN: 06AABCM8890P1Z1 [Partial Smudge on Stamp]\n------------------------------------------------------------\nINPATIENT INVOICE & DISCHARGE SUMMARY BILL\n------------------------------------------------------------\nBill No: MSSH/GUR/2026/08/3309\nBill Date: 15-08-2026\nPatient Name: Vikramaditya Roy\nAge / Gender: 38 Y / Male\nAdmission Date: 12-08-2026\nDischarge Date: 14-08-2026\nTreating Consultant: Dr. K. N. Iyer, MS\nDiagnosis: Symptomatic Gallstone Disease - Laparoscopic Cholecystectomy\nPolicy Number: CARE-ADVANTAGE-2024\n\nCHARGES BREAKUP (INR):\n1. Twin Sharing Room (2 nights @ Rs 4,200):              8,400.00\n2. Laparoscopic Surgery OT Charges:                     38,000.00\n3. Anaesthesia Charges:                                  9,000.00\n4. Pre-op Liver Function Test & Ultrasound:              6,500.00\n5. Pharmacy & Surgical Disposables:                     11,200.00\n------------------------------------------------------------\nTOTAL BILL AMOUNT:                                      73,100.00\nAmount Paid by Patient:                                 73,100.00\nBalance Outstanding:                                         0.00\n------------------------------------------------------------\nMax Healthcare Billing Counter (Stamp blurred)",
+      "expected_outcome": "Intake agent flags low OCR confidence on diagnosis and bill date due to scan artifacts, prompting human confirmation in orange."
+    }
+  ]
+}
