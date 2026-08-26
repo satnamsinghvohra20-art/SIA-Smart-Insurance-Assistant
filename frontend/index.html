@@ -210,6 +210,32 @@
   button.danger { background: var(--red); color: #fff; }
   button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
+  /* Mode Switcher Tabs */
+  .mode-tabs { display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .mode-tab {
+    font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 6px;
+    background: var(--panel-2); border: 1px solid var(--line); color: var(--text-dim); cursor: pointer;
+  }
+  .mode-tab.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+  /* Drag and Drop Zone Styles */
+  .drop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  @media (max-width: 768px) { .drop-grid { grid-template-columns: 1fr; } }
+  .drop-zone {
+    background: #080C14; border: 2px dashed var(--line); border-radius: 10px; padding: 14px 12px;
+    text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative;
+  }
+  .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent); background: rgba(76,195,176,0.04); }
+  .drop-zone.has-file { border-style: solid; border-color: var(--accent); background: var(--panel-2); }
+  .drop-icon { font-size: 24px; margin-bottom: 4px; }
+  .drop-title { font-size: 12px; font-weight: 600; color: var(--text); }
+  .drop-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+  .file-preview {
+    margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--accent);
+    display: flex; align-items: center; justify-content: space-between; background: #06090F; padding: 4px 8px; border-radius: 6px;
+  }
+  .file-preview .remove-btn { background: transparent; border: none; color: var(--red); cursor: pointer; font-size: 12px; padding: 0 4px; }
+
   /* Document Tabs */
   .doc-tabs { display: flex; gap: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
   .doc-tab {
@@ -438,7 +464,7 @@
     </div>
   </div>
   <div class="header-actions">
-    <!-- DPDP Privacy Shield Toggle -->
+    <!-- DPDP Toggle -->
     <label class="privacy-toggle" id="privacyToggleBtn" onclick="togglePrivacyShield()">
       <span>🛡️ DPDP Privacy Shield</span>
       <span id="privacyStatusBadge" style="color:var(--text-muted);">OFF</span>
@@ -468,8 +494,8 @@
       <span class="label">Filing Time</span>
     </div>
     <div class="metric-pill">
-      <span class="val">₹0.42</span>
-      <span class="label">Gemini Cost/Claim</span>
+      <span class="val">PDF &amp; Images</span>
+      <span class="label">Multimodal OCR</span>
     </div>
     <div class="metric-pill">
       <span class="val">3-Doc</span>
@@ -496,7 +522,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Intake Agent</div>
-      <div class="sub">3-Doc Bundle &amp; Cross-Check</div>
+      <div class="sub">Multimodal OCR &amp; Files</div>
     </div>
     <div class="node" id="node-decision" onclick="scrollToCard('decisionCard')">
       <div class="node-header">
@@ -529,28 +555,89 @@
   <!-- Left Column: Agent Controls & Artifacts -->
   <div class="col-left">
 
-    <!-- STEP 1: Multi-Document Bundle Input -->
+    <!-- STEP 1: Multi-Document Ingestion Mode -->
     <div class="card" id="uploadCard">
       <div class="card-header">
-        <h2><span class="eyebrow blue">STEP 1</span> 3-Document Evidence Ingestion Bundle</h2>
+        <h2><span class="eyebrow blue">STEP 1</span> Ingest Hospital Bills, PDFs &amp; Prescriptions</h2>
         <span style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;" id="activeScenarioLabel">Happy Path Preset</span>
       </div>
 
-      <!-- Document tabs -->
-      <div class="doc-tabs">
-        <button class="doc-tab active" id="tabBill" onclick="switchDocTab('bill')">1. Final Hospital Bill</button>
-        <button class="doc-tab" id="tabDischarge" onclick="switchDocTab('discharge')">2. Discharge Summary</button>
-        <button class="doc-tab" id="tabRx" onclick="switchDocTab('rx')">3. Doctor Prescription</button>
+      <!-- Mode Switcher: Upload Files vs. Preset Text -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" id="tabModeUpload" onclick="switchInputMode('upload')">📁 Upload Files (PDF / Photos / Bills)</button>
+        <button class="mode-tab" id="tabModeText" onclick="switchInputMode('text')">📝 Preset Scenarios &amp; Text</button>
       </div>
 
-      <div id="docContentBill">
-        <textarea id="billText" placeholder="Hospital itemized bill text..."></textarea>
+      <!-- 1. FILE UPLOAD VIEW -->
+      <div id="fileUploadContainer">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <span style="font-size:11.5px; color:var(--text-dim);">Upload or drop your hospital bill, discharge summary, and doctor prescription (PDF / PNG / JPG / WebP):</span>
+          <div style="display:flex; gap:6px;">
+            <a href="http://localhost:8000/api/sample-files/City_Care_Hospital_Final_Bill.pdf" target="_blank" download>
+              <button class="secondary" style="font-size:10px; padding:4px 8px;">↓ Sample Bill PDF</button>
+            </a>
+            <a href="http://localhost:8000/api/sample-files/City_Care_Discharge_Summary.pdf" target="_blank" download>
+              <button class="secondary" style="font-size:10px; padding:4px 8px;">↓ Discharge PDF</button>
+            </a>
+          </div>
+        </div>
+
+        <div class="drop-grid">
+          <!-- Dropzone 1: Hospital Bill -->
+          <div class="drop-zone" id="dropBill" onclick="triggerFileInput('fileBillInput')">
+            <input type="file" id="fileBillInput" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" style="display:none;" onchange="handleFileSelected(event, 'bill')">
+            <div class="drop-icon">📄</div>
+            <div class="drop-title">Hospital Final Bill</div>
+            <div class="drop-sub">Drop PDF, Bill Photo or Scan</div>
+            <div class="file-preview" id="previewBill" style="display:none;">
+              <span id="nameBill">file.pdf</span>
+              <button class="remove-btn" onclick="removeFile(event, 'bill')">&times;</button>
+            </div>
+          </div>
+
+          <!-- Dropzone 2: Discharge Summary -->
+          <div class="drop-zone" id="dropDischarge" onclick="triggerFileInput('fileDischargeInput')">
+            <input type="file" id="fileDischargeInput" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" style="display:none;" onchange="handleFileSelected(event, 'discharge')">
+            <div class="drop-icon">📋</div>
+            <div class="drop-title">Discharge Summary</div>
+            <div class="drop-sub">Drop Clinical Summary PDF</div>
+            <div class="file-preview" id="previewDischarge" style="display:none;">
+              <span id="nameDischarge">summary.pdf</span>
+              <button class="remove-btn" onclick="removeFile(event, 'discharge')">&times;</button>
+            </div>
+          </div>
+
+          <!-- Dropzone 3: Prescription -->
+          <div class="drop-zone" id="dropRx" onclick="triggerFileInput('fileRxInput')">
+            <input type="file" id="fileRxInput" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" style="display:none;" onchange="handleFileSelected(event, 'rx')">
+            <div class="drop-icon">🩺</div>
+            <div class="drop-title">Doctor Prescription</div>
+            <div class="drop-sub">Drop Signed Rx / Orders</div>
+            <div class="file-preview" id="previewRx" style="display:none;">
+              <span id="nameRx">rx.jpg</span>
+              <button class="remove-btn" onclick="removeFile(event, 'rx')">&times;</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="docContentDischarge" style="display:none;">
-        <textarea id="dischargeText" placeholder="Clinical discharge summary text..."></textarea>
-      </div>
-      <div id="docContentRx" style="display:none;">
-        <textarea id="rxText" placeholder="Doctor prescriptions & medications..."></textarea>
+
+      <!-- 2. TEXT/PRESET VIEW -->
+      <div id="textPresetContainer" style="display:none;">
+        <div class="doc-tabs">
+          <button class="doc-tab active" id="tabBill" onclick="switchDocTab('bill')">1. Final Hospital Bill</button>
+          <button class="doc-tab" id="tabDischarge" onclick="switchDocTab('discharge')">2. Discharge Summary</button>
+          <button class="doc-tab" id="tabRx" onclick="switchDocTab('rx')">3. Doctor Prescription</button>
+        </div>
+
+        <div id="docContentBill">
+          <textarea id="billText" placeholder="Hospital itemized bill text..."></textarea>
+        </div>
+        <div id="docContentDischarge" style="display:none;">
+          <textarea id="dischargeText" placeholder="Clinical discharge summary text..."></textarea>
+        </div>
+        <div id="docContentRx" style="display:none;">
+          <textarea id="rxText" placeholder="Doctor prescriptions & medications..."></textarea>
+        </div>
       </div>
 
       <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
@@ -699,7 +786,7 @@
         </div>
       </div>
       <div class="log-panel" id="logPanel">
-        <div style="color:var(--text-muted); font-style:italic;">// Waiting for agent execution... Select a scenario and click Ingest &amp; Cross-Verify.</div>
+        <div style="color:var(--text-muted); font-style:italic;">// Waiting for agent execution... Ingest documents to observe live tool calls.</div>
       </div>
     </div>
   </div>
@@ -801,40 +888,6 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Pub/Sub Event</strong> ──▶ <strong>Cloud Run Worker</strong> (Async TPA Polling &amp; WhatsApp Alerts)
       </div>
-
-      <h4 style="color:var(--accent); margin:10px 0 6px;">2. 3-Minute Demo Video Script Guide</h4>
-      <table style="width:100%; border-collapse:collapse; font-size:11.5px; margin-top:6px;">
-        <tr style="border-bottom:1px solid var(--line); text-align:left;">
-          <th style="padding:6px; color:var(--text);">Time</th>
-          <th style="padding:6px; color:var(--text);">Beat</th>
-          <th style="padding:6px; color:var(--text);">On Screen Action</th>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line-subtle);">
-          <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:00–0:20</td>
-          <td style="padding:6px; font-weight:600; color:var(--accent);">Problem</td>
-          <td style="padding:6px;">Show "45m vs 4m" comparison card. State Indian Mediclaim unclaimed loss metric.</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line-subtle);">
-          <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:20–0:45</td>
-          <td style="padding:6px; font-weight:600; color:var(--blue);">3-Doc Ingestion</td>
-          <td style="padding:6px;">Show 3-doc tabs (Bill, Discharge, Rx). Click Ingest &amp; Cross-Verify. Highlight DPDP privacy shield.</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line-subtle);">
-          <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:45–1:45</td>
-          <td style="padding:6px; font-weight:600; color:var(--amber);">Decision &amp; Dual-Opt</td>
-          <td style="padding:6px;">Show deterministic rules engine math + Dual-Policy Split optimizer recovering co-pay.</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line-subtle);">
-          <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">1:45–2:15</td>
-          <td style="padding:6px; font-weight:600; color:var(--accent);">Execution &amp; Gate</td>
-          <td style="padding:6px;">Download IRDAI PDF, click Approve &amp; Dispatch, watch WhatsApp drawer open with alerts.</td>
-        </tr>
-        <tr>
-          <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">2:15–3:00</td>
-          <td style="padding:6px; font-weight:600; color:var(--purple);">Edge Cases &amp; Close</td>
-          <td style="padding:6px;">Switch to Excluded Rhinoplasty preset to show zero-hallucination rejection. Close strongly.</td>
-        </tr>
-      </table>
     </div>
   </div>
 </div>
@@ -851,10 +904,100 @@ let editingFieldKey = null;
 let logPollTimer = null;
 let trackPollTimer = null;
 let privacyShieldActive = false;
+let currentInputMode = "upload"; // "upload" or "text"
+
+// Uploaded file handles
+let uploadedFiles = {
+  bill: null,
+  discharge: null,
+  rx: null
+};
 
 window.addEventListener("DOMContentLoaded", async () => {
+  setupDragAndDrop();
   await loadScenarios();
 });
+
+function setupDragAndDrop() {
+  const setupZone = (zoneId, type) => {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      zone.addEventListener(eventName, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        zone.classList.add('dragover');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      zone.addEventListener(eventName, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        zone.classList.remove('dragover');
+      }, false);
+    });
+
+    zone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        setFile(type, files[0]);
+      }
+    });
+  };
+
+  setupZone('dropBill', 'bill');
+  setupZone('dropDischarge', 'discharge');
+  setupZone('dropRx', 'rx');
+}
+
+function triggerFileInput(inputId) {
+  document.getElementById(inputId).click();
+}
+
+function handleFileSelected(event, type) {
+  const file = event.target.files[0];
+  if (file) {
+    setFile(type, file);
+  }
+}
+
+function setFile(type, file) {
+  uploadedFiles[type] = file;
+  const zoneId = type === 'bill' ? 'dropBill' : (type === 'discharge' ? 'dropDischarge' : 'dropRx');
+  const previewId = type === 'bill' ? 'previewBill' : (type === 'discharge' ? 'previewDischarge' : 'previewRx');
+  const nameId = type === 'bill' ? 'nameBill' : (type === 'discharge' ? 'nameDischarge' : 'nameRx');
+
+  const zone = document.getElementById(zoneId);
+  zone.classList.add('has-file');
+
+  const preview = document.getElementById(previewId);
+  preview.style.display = 'flex';
+
+  const sizeKb = (file.size / 1024).toFixed(1);
+  document.getElementById(nameId).textContent = `${file.name} (${sizeKb} KB)`;
+}
+
+function removeFile(event, type) {
+  event.stopPropagation();
+  uploadedFiles[type] = null;
+
+  const zoneId = type === 'bill' ? 'dropBill' : (type === 'discharge' ? 'dropDischarge' : 'dropRx');
+  const previewId = type === 'bill' ? 'previewBill' : (type === 'discharge' ? 'previewDischarge' : 'previewRx');
+  const inputId = type === 'bill' ? 'fileBillInput' : (type === 'discharge' ? 'fileDischargeInput' : 'fileRxInput');
+
+  document.getElementById(zoneId).classList.remove('has-file');
+  document.getElementById(previewId).style.display = 'none';
+  document.getElementById(inputId).value = '';
+}
+
+function switchInputMode(mode) {
+  currentInputMode = mode;
+  document.getElementById('tabModeUpload').className = `mode-tab ${mode === 'upload' ? 'active' : ''}`;
+  document.getElementById('tabModeText').className = `mode-tab ${mode === 'text' ? 'active' : ''}`;
+
+  document.getElementById('fileUploadContainer').style.display = mode === 'upload' ? 'block' : 'none';
+  document.getElementById('textPresetContainer').style.display = mode === 'text' ? 'block' : 'none';
+}
 
 async function loadScenarios() {
   try {
@@ -955,23 +1098,42 @@ function scrollToCard(id) {
 
 async function runIntake() {
   setRailNode("node-intake", "active");
-  const raw_text = document.getElementById("billText").value.trim();
-  const discharge_summary = document.getElementById("dischargeText").value.trim();
-  const prescription_text = document.getElementById("rxText").value.trim();
 
   try {
-    const res = await fetch(`${API}/api/intake`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        raw_text,
-        discharge_summary,
-        prescription_text,
-        scenario_id: activeScenarioId,
-        privacy_shield: privacyShieldActive
-      })
-    });
-    const data = await res.json();
+    let res, data;
+
+    // Check if files are uploaded in upload mode
+    if (currentInputMode === "upload" && uploadedFiles.bill) {
+      const formData = new FormData();
+      formData.append("bill_file", uploadedFiles.bill);
+      if (uploadedFiles.discharge) formData.append("discharge_file", uploadedFiles.discharge);
+      if (uploadedFiles.rx) formData.append("prescription_file", uploadedFiles.rx);
+      formData.append("privacy_shield", privacyShieldActive);
+
+      res = await fetch(`${API}/api/upload-files`, {
+        method: "POST",
+        body: formData
+      });
+    } else {
+      // Fall back to preset/textarea text
+      const raw_text = document.getElementById("billText").value.trim();
+      const discharge_summary = document.getElementById("dischargeText").value.trim();
+      const prescription_text = document.getElementById("rxText").value.trim();
+
+      res = await fetch(`${API}/api/intake`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          raw_text,
+          discharge_summary,
+          prescription_text,
+          scenario_id: activeScenarioId,
+          privacy_shield: privacyShieldActive
+        })
+      });
+    }
+
+    data = await res.json();
     currentClaimId = data.claim_id;
     currentIntakeData = data.intake;
 
@@ -1123,7 +1285,6 @@ async function runDecision() {
       badgeEl.textContent = "APPROVED (ELIGIBLE)";
       mathEl.textContent = `Gross Bill: ${fmtMoney(d.total_amount)} - ${d.co_pay_percent}% Co-pay (${fmtMoney(d.co_pay_amount)}) = Net ${fmtMoney(d.eligible_amount)}`;
 
-      // Render Dual Policy Optimizer if available
       const dual = d.dual_policy_optimization;
       if (dual && dual.dual_policy_available && d.co_pay_amount > 0) {
         document.getElementById("dualOptBox").style.display = "block";

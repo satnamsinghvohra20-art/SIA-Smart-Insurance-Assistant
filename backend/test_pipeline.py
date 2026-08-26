@@ -1,7 +1,7 @@
 """
 Automated end-to-end pipeline test script for ClaimPilot.
 Tests all 4 scenario presets across 3-document bundle Intake, Cross-Doc Verification,
-Decision (with Dual-Policy Optimization), Execution, and WhatsApp Tracking.
+File Upload parsing (PDF & Images), Decision (with Dual-Policy Optimization), Execution, and WhatsApp Tracking.
 """
 import sys
 from pathlib import Path
@@ -13,18 +13,30 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 import json
 from agents import intake_agent, decision_agent, execution_agent
-from services import async_tracker, audit_log
+from services import async_tracker, audit_log, document_parser, sample_pdf_generator
 
 
 def run_tests():
+    sample_pdf_generator.ensure_sample_files()
     scenarios_path = Path(__file__).parent / "data" / "sample_scenarios.json"
     with open(scenarios_path, encoding="utf-8") as f:
         scenarios = json.load(f)["scenarios"]
 
     print("==================================================================")
-    print(" CLAIM PILOT - ADVANCED MULTI-AGENT TEST SUITE (3-DOC BUNDLE) ")
+    print(" CLAIM PILOT - ADVANCED MULTI-AGENT & FILE UPLOAD TEST SUITE ")
     print("==================================================================")
 
+    # 1. Test File Upload PDF Parsing
+    print("\n[File Upload Test] Testing PDF Parsing with pdfplumber...")
+    sample_pdf_path = Path(__file__).parent / "data" / "sample_files" / "City_Care_Hospital_Final_Bill.pdf"
+    assert sample_pdf_path.exists(), "Sample PDF missing"
+    pdf_bytes = sample_pdf_path.read_bytes()
+    extracted_pdf_text = document_parser.parse_uploaded_file(pdf_bytes, "City_Care_Hospital_Final_Bill.pdf")
+    print(f"  [OK] Successfully parsed {len(extracted_pdf_text)} characters from sample PDF bill.")
+    assert "CITY CARE" in extracted_pdf_text
+    assert "77,500.00" in extracted_pdf_text or "77500" in extracted_pdf_text
+
+    # 2. Test All 4 Scenarios
     for idx, sc in enumerate(scenarios, 1):
         sc_id = sc["id"]
         title = sc["title"]
@@ -36,7 +48,7 @@ def run_tests():
         print(f"\n[Test {idx}/4] Scenario: {title} ({sc_id})")
         print("-" * 65)
 
-        # 1. Intake with 3-Doc Bundle & DPDP Masking
+        # Intake with 3-Doc Bundle & DPDP Masking
         intake_res = intake_agent.run_intake(
             claim_id,
             bill_text,
@@ -53,7 +65,7 @@ def run_tests():
         print(f"       Aadhaar: {fields.get('aadhaar_number', {}).get('value')} | PAN: {fields.get('pan_number', {}).get('value')}")
         print(f"       Cross-Doc Consistency: {cross_doc['status']} ({cross_doc['consistency_score']}%)")
 
-        # 2. Decision with Dual Policy Optimizer
+        # Decision with Dual Policy Optimizer
         decision_res = decision_agent.run_decision(claim_id, intake_res)
         eligible = decision_res["eligible"]
         status = decision_res["status"]
@@ -65,7 +77,7 @@ def run_tests():
         if dual_opt.get("dual_policy_available") and eligible:
             print(f"       Dual-Policy Optimizer: Recover additional Rs. {dual_opt['optimization_gain_inr']:,.2f} from corporate policy!")
 
-        # 3. Execution
+        # Execution
         exec_res = execution_agent.run_execution(claim_id, intake_res, decision_res)
         print(f"  [OK] Execution Agent: Status={exec_res['status']}")
         if exec_res["form_path"]:
@@ -73,12 +85,12 @@ def run_tests():
             assert pdf_path.exists()
             print(f"       Generated IRDAI Claim Form PDF: {pdf_path.name}")
 
-        # 4. Audit Log
+        # Audit Log
         logs = audit_log.get_log(claim_id)
         print(f"  [OK] Audit Log: {len(logs)} structured event records logged.")
 
     print("\n==================================================================")
-    print(" ALL ADVANCED MULTI-AGENT SCENARIOS PASSED WITH 100% SUCCESS! ")
+    print(" ALL ADVANCED MULTI-AGENT SCENARIOS & FILE PARSERS PASSED 100%! ")
     print("==================================================================")
 
 
