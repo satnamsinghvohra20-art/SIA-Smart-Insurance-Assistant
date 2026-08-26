@@ -15,6 +15,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from services.audit_log import log_event
+from services.appeal_generator import generate_ombudsman_appeal_letter
 
 RULES_PATH = Path(__file__).parent.parent / "data" / "policy_rules.json"
 
@@ -337,6 +338,22 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
         latency_ms=latency_ms,
     )
 
+    # Generate Legal Appeal Letter if claim is rejected or disputed
+    appeal_letter = None
+    if not is_eligible:
+        appeal_letter = generate_ombudsman_appeal_letter(
+            claim_id=claim_id,
+            patient_name=fields.get("patient_name", "Satnam Singh"),
+            policy_number=policy_number,
+            insurer_name=policy.get("name", "Health Insurance Underwriter"),
+            hospital_name=fields.get("hospital_name", "City Care Hospital"),
+            bill_amount=total_amount,
+            rejection_reason=primary_reason,
+            clinical_diagnosis=fields.get("diagnosis", "Inpatient Care"),
+            procedure_performed=fields.get("procedure", "Medical Treatment"),
+        )
+        reasoning_trace.append(f"LEGAL AGENT: Auto-drafted IRDAI Ombudsman Grievance Petition for claimant appeal.")
+
     return {
         "eligible": is_eligible,
         "status": "APPROVED" if is_eligible else "REJECTED",
@@ -352,9 +369,10 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
         ],
         "checks": checks,
         "dual_policy_optimization": dual_optimization,
+        "ombudsman_appeal_letter": appeal_letter,
         "policy_summary": {
             "policy_id": policy.get("policy_id", policy_number),
-            "insurer": policy.get("insurer"),
+            "insurer": policy.get("name") or policy.get("insurer"),
             "policy_type": policy.get("policy_type"),
             "tpa_name": policy.get("tpa_name"),
             "sum_insured": sum_insured,

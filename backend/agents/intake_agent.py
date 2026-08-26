@@ -13,6 +13,7 @@ from services.audit_log import log_event
 from services.doctor_verifier import verify_doctor, extract_doctor_reg_number
 from services.universal_parser import parse_any_medical_document
 from services.gemini_extractor import extract_with_gemini_live
+from services.abha_verifier import verify_abha_identity
 
 
 def mask_pii(text: str) -> str:
@@ -127,13 +128,18 @@ def run_intake(
     hosp_name = fields.get("hospital_name", {}).get("value")
     doctor_verification = verify_doctor(doc_name, doc_reg, hosp_name, proc_name, claim_id=claim_id)
 
+    # ABHA / ABDM Patient Identity Verification
+    pat_name = fields.get("patient_name", {}).get("value")
+    aadh_masked = fields.get("aadhaar_number", {}).get("value")
+    abha_verification = verify_abha_identity(pat_name, aadh_masked)
+
     latency = round((time.time() - start_time) * 1000, 2)
 
     log_event(
         claim_id,
         "intake_agent",
         "ingest_3doc_bundle",
-        f"Ingested 3-document clinical bundle: extracted {len(fields)} structured fields with {cross_doc_verification['consistency_score']}% clinical consistency. Privacy Shield: {'ACTIVE' if privacy_shield else 'OFF'}.",
+        f"Ingested 3-document clinical bundle: extracted {len(fields)} structured fields with {cross_doc_verification['consistency_score']}% clinical consistency. ABHA ID: {abha_verification['abha_address']}. Privacy Shield: {'ACTIVE' if privacy_shield else 'OFF'}.",
         tool_call="gemini_3doc_bundle_parser",
         latency_ms=latency,
         payload={
@@ -141,6 +147,7 @@ def run_intake(
             "low_confidence_fields": low_conf,
             "doctor_verified": doctor_verification["verified"],
             "doctor_reg": doctor_verification["reg_number"],
+            "abha_address": abha_verification["abha_address"],
             "privacy_shield": privacy_shield,
         },
     )
@@ -151,6 +158,7 @@ def run_intake(
         "low_confidence_fields": low_conf,
         "cross_document_verification": cross_doc_verification,
         "doctor_verification": doctor_verification,
+        "abha_verification": abha_verification,
         "privacy_shield_active": privacy_shield,
         "latency_ms": latency,
     }
