@@ -264,6 +264,25 @@
   }
   .cross-doc-item:first-child { border-top: none; }
 
+  /* Doctor Verification Badge Card */
+  .doctor-card {
+    background: linear-gradient(135deg, rgba(76,195,176,0.08) 0%, rgba(18,24,36,0.9) 100%);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .doctor-card.unverified {
+    background: linear-gradient(135deg, rgba(255,92,92,0.08) 0%, rgba(18,24,36,0.9) 100%);
+    border-color: var(--red);
+  }
+  .doctor-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .doctor-title { font-size: 12.5px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .doctor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px; margin-top: 6px; }
+  @media (max-width: 600px) { .doctor-grid { grid-template-columns: 1fr; } }
+  .doctor-grid-item { color: var(--text-dim); }
+  .doctor-grid-item strong { color: var(--text); }
+
   /* Dual Policy Optimizer Box */
   .dual-opt-box {
     background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(18,24,36,0.9) 100%);
@@ -391,7 +410,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 820px;
+    height: 840px;
     position: sticky;
     top: 76px;
   }
@@ -464,6 +483,11 @@
     </div>
   </div>
   <div class="header-actions">
+    <!-- Doctor Lookup Modal Button -->
+    <button class="secondary" onclick="openDoctorModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>🩺 NMC Doctor Registry</span>
+    </button>
+
     <!-- DPDP Toggle -->
     <label class="privacy-toggle" id="privacyToggleBtn" onclick="togglePrivacyShield()">
       <span>🛡️ DPDP Privacy Shield</span>
@@ -474,7 +498,7 @@
       <span>⚡ 45m vs 4m</span>
     </button>
     <button class="secondary" onclick="openArchModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>📐 Blueprint &amp; Script</span>
+      <span>📐 Blueprint</span>
     </button>
     <div class="claim-badge" id="claimBadge">
       <div class="dot"></div>
@@ -494,12 +518,12 @@
       <span class="label">Filing Time</span>
     </div>
     <div class="metric-pill">
-      <span class="val">PDF &amp; Images</span>
-      <span class="label">Multimodal OCR</span>
+      <span class="val">NMC / SMC</span>
+      <span class="label">Doctor Verification</span>
     </div>
     <div class="metric-pill">
-      <span class="val">3-Doc</span>
-      <span class="label">Cross-Verification</span>
+      <span class="val">PDF &amp; Images</span>
+      <span class="label">Multimodal OCR</span>
     </div>
     <div class="metric-pill">
       <span class="val">100%</span>
@@ -522,7 +546,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Intake Agent</div>
-      <div class="sub">Multimodal OCR &amp; Files</div>
+      <div class="sub">OCR &amp; Doctor Verification</div>
     </div>
     <div class="node" id="node-decision" onclick="scrollToCard('decisionCard')">
       <div class="node-header">
@@ -643,7 +667,7 @@
       <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
         <div style="display:flex; gap:10px;">
           <button onclick="runIntake()" id="btnIntake">
-            <span>⚡ Ingest &amp; Cross-Verify</span>
+            <span>⚡ Ingest &amp; Verify Doctor</span>
           </button>
           <button class="secondary" onclick="runFullPipeline()" id="btnFullPipeline">
             <span>🚀 Run Full Pipeline (Auto)</span>
@@ -653,11 +677,23 @@
       </div>
     </div>
 
-    <!-- STEP 2: Intake Agent & Cross-Doc Verification -->
+    <!-- STEP 2: Intake Agent, Cross-Doc & Doctor Verification -->
     <div class="card" id="intakeCard" style="display:none;">
       <div class="card-header">
-        <h2><span class="eyebrow blue">INTAKE AGENT</span> Cross-Document Clinical Verification</h2>
+        <h2><span class="eyebrow blue">INTAKE AGENT</span> Extraction &amp; Medical Verification</h2>
         <span id="intakeStats" style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
+      </div>
+
+      <!-- Doctor Verification Box -->
+      <div class="doctor-card" id="doctorCard">
+        <div class="doctor-header">
+          <span class="doctor-title">
+            <span>🩺 Treating Doctor Authentication:</span>
+            <span id="docStatusBadge" class="chip ready">✓ NMC VERIFIED</span>
+          </span>
+          <span id="docHprBadge" style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--accent);">ABDM HPR ID</span>
+        </div>
+        <div class="doctor-grid" id="doctorGrid"></div>
       </div>
 
       <!-- Cross-Doc Verification Box -->
@@ -809,6 +845,26 @@
   </div>
 </div>
 
+<!-- NMC Doctor Registry Lookup Modal -->
+<div class="modal-overlay" id="doctorModal">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header">
+      <h3>🩺 National Medical Commission (NMC) Registry Lookup</h3>
+      <button class="modal-close" onclick="closeDoctorModal()">&times;</button>
+    </div>
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:12px;">
+      Search registered medical practitioners across State Medical Councils (MMC, DMC, KMC, etc.) to verify license status and prevent fraudulent claim submissions.
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:14px;">
+      <input type="text" id="searchDoctorInput" placeholder="Enter Doctor Name or Reg No (e.g. MMC-2012-08-2910, Dr. Rajesh Mehta)..." style="flex:1; padding:9px 12px; background:#080C14; border:1px solid var(--line); border-radius:6px; color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:12px;">
+      <button onclick="searchDoctorRegistry()">Search</button>
+    </div>
+
+    <div id="doctorSearchResults" style="display:flex; flex-direction:column; gap:8px;"></div>
+  </div>
+</div>
+
 <!-- Field Edit Modal -->
 <div class="modal-overlay" id="editModal">
   <div class="modal">
@@ -854,6 +910,7 @@
         </div>
         <ul style="list-style:none; padding:0; margin:0; font-size:12px; line-height:1.6; color:#D1D5DB;">
           <li>⏱️ <strong>3.8 minutes</strong> autonomous processing</li>
+          <li>🩺 <strong>NMC / SMC doctor verification</strong> prevents fraud</li>
           <li>📄 <strong>IRDAI standard PDF</strong> auto-filled from 3-doc bundle</li>
           <li>🔬 <strong>100% deterministic rules</strong> (zero hallucinations)</li>
           <li>📱 <strong>Proactive WhatsApp updates</strong> via Pub/Sub</li>
@@ -874,7 +931,7 @@
     <div style="font-size:12.5px; line-height:1.6; color:var(--text-dim);">
       <h4 style="color:var(--accent); margin:10px 0 6px;">1. Three-Agent Architecture (Google Cloud Native)</h4>
       <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-bottom:14px;">
-        [3-Doc Bundle (Bill + Summary + Rx)] ──▶ <strong>Intake Agent</strong> (Gemini 3.5 Multimodal + Cross-Verification)<br>
+        [3-Doc Bundle (Bill + Summary + Rx)] ──▶ <strong>Intake Agent</strong> (Gemini Multimodal + NMC Doctor Verifier)<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Writes structured fields to Firestore &amp; DPDP redaction)<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Decision Agent</strong> (Deterministic Rules Engine + Dual-Policy Split)<br>
@@ -1141,6 +1198,7 @@ async function runIntake() {
     document.getElementById("claimIdText").textContent = currentClaimId;
     setRailNode("node-intake", "done");
 
+    renderDoctorVerification(data.intake.doctor_verification);
     renderCrossDocMatrix(data.intake.cross_document_verification);
     renderIntakeFields(data.intake);
     document.getElementById("intakeCard").style.display = "block";
@@ -1150,6 +1208,34 @@ async function runIntake() {
     setRailNode("node-intake", "fail");
     console.error("Intake failed:", err);
   }
+}
+
+function renderDoctorVerification(doc) {
+  if (!doc) return;
+  const card = document.getElementById("doctorCard");
+  const badge = document.getElementById("docStatusBadge");
+  const hprBadge = document.getElementById("docHprBadge");
+  const grid = document.getElementById("doctorGrid");
+
+  const isVerified = doc.verified;
+  if (isVerified) {
+    card.className = "doctor-card";
+    badge.className = "chip ready";
+    badge.textContent = `✓ ${doc.status}`;
+    hprBadge.textContent = `ABDM HPR: ${doc.hpr_id}`;
+  } else {
+    card.className = "doctor-card unverified";
+    badge.className = "chip needed";
+    badge.textContent = `⚠️ ${doc.status}`;
+    hprBadge.textContent = "FRAUD RISK: HIGH";
+  }
+
+  grid.innerHTML = `
+    <div class="doctor-grid-item">Doctor: <strong>${doc.doctor_name}</strong></div>
+    <div class="doctor-grid-item">NMC Reg No: <strong>${doc.reg_number}</strong></div>
+    <div class="doctor-grid-item">Medical Council: <strong>${doc.medical_council}</strong></div>
+    <div class="doctor-grid-item">Specialty: <strong>${doc.specialty || 'General Surgery'}</strong></div>
+  `;
 }
 
 function renderCrossDocMatrix(crossDoc) {
@@ -1190,7 +1276,7 @@ function renderIntakeFields(intake) {
   const fieldKeys = [
     "patient_name", "aadhaar_number", "pan_number", "policy_number", "total_amount", "diagnosis",
     "procedure", "hospital_name", "admission_date", "discharge_date",
-    "treating_doctor", "hospital_gstin", "bill_date"
+    "treating_doctor", "doctor_reg_number", "hospital_gstin", "bill_date"
   ];
 
   fieldKeys.forEach(k => {
@@ -1330,10 +1416,10 @@ function renderRuleChecks(d) {
   const checks = d.checks || {};
 
   const items = [
+    { title: "Doctor NMC License Status", check: checks.doctor_license },
     { title: "Waiting Period Rule", check: checks.waiting_period },
     { title: "Exclusion Clause Rule", check: checks.exclusions },
     { title: "Filing Window Deadline", check: checks.filing_window },
-    { title: "Sum Insured Capping", check: { passed: true, detail: `Policy Cap: ${fmtMoney(d.policy_summary?.sum_insured)}` } }
   ];
 
   items.forEach(it => {
@@ -1602,6 +1688,52 @@ function openArchModal() {
 }
 function closeArchModal() {
   document.getElementById("archModal").classList.remove("open");
+}
+
+/* Doctor Modal & Search Functions */
+function openDoctorModal() {
+  document.getElementById("doctorModal").classList.add("open");
+  searchDoctorRegistry(); // Load initial practitioners
+}
+function closeDoctorModal() {
+  document.getElementById("doctorModal").classList.remove("open");
+}
+
+async function searchDoctorRegistry() {
+  const query = (document.getElementById("searchDoctorInput").value || "").trim().toLowerCase();
+  const resultsContainer = document.getElementById("doctorSearchResults");
+  resultsContainer.innerHTML = `<div style="color:var(--text-muted); font-size:11px;">Searching NMC Registry...</div>`;
+
+  try {
+    const res = await fetch(`${API}/api/doctors`);
+    const docs = await res.json();
+
+    const filtered = query
+      ? docs.filter(d => d.doctor_name.toLowerCase().includes(query) || d.reg_number.toLowerCase().includes(query) || d.specialty.toLowerCase().includes(query))
+      : docs;
+
+    if (filtered.length === 0) {
+      resultsContainer.innerHTML = `<div style="color:var(--amber); font-size:11.5px; padding:10px; background:var(--panel-2); border-radius:6px;">⚠️ No verified practitioner found matching '${query}'. Unverified practitioners will trigger fraud alerts during claim adjudication.</div>`;
+      return;
+    }
+
+    resultsContainer.innerHTML = filtered.map(d => {
+      const isVerified = d.license_status === "ACTIVE_VERIFIED";
+      return `
+        <div style="background:var(--panel-2); border:1px solid ${isVerified ? 'var(--line)' : 'var(--red)'}; border-radius:8px; padding:10px 12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+            <div style="font-weight:700; font-size:13px; color:var(--text);">${d.doctor_name}</div>
+            <span class="chip ${isVerified ? 'ready' : 'needed'}">${d.license_status}</span>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent);">NMC Reg: ${d.reg_number} · ${d.medical_council}</div>
+          <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">${d.specialty} · ${d.qualifications.join(", ")}</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-muted); margin-top:2px;">ABDM HPR: ${d.hpr_id}</div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    resultsContainer.innerHTML = `<div style="color:var(--red); font-size:11px;">Failed to query doctor registry.</div>`;
+  }
 }
 </script>
 </body>

@@ -1,0 +1,79 @@
+{
+  "practitioners": [
+    {
+      "doctor_id": "DOC-MMC-2910",
+      "doctor_name": "Dr. Rajesh Mehta",
+      "aliases": ["Dr. R. Mehta", "Dr. Rajesh Mehta, MS", "Dr. Rajesh Mehta, MS, FMAS"],
+      "reg_number": "MMC-2012-08-2910",
+      "medical_council": "Maharashtra Medical Council (MMC)",
+      "nmc_uid": "NMC-IND-2012-88390",
+      "hpr_id": "dr.rajesh.mehta@hpr.abdm",
+      "qualifications": ["MBBS (KEM Hospital Mumbai)", "MS (General Surgery)", "FMAS (Minimal Access Surgery)"],
+      "specialty": "General & Laparoscopic Surgery",
+      "associated_hospitals": ["City Care Multispeciality Hospital", "Lilavati Hospital Mumbai"],
+      "license_status": "ACTIVE_VERIFIED",
+      "good_standing": true,
+      "valid_upto": "2032-12-31"
+    },
+    {
+      "doctor_id": "DOC-KMC-7714",
+      "doctor_name": "Dr. Vikram Malhotra",
+      "aliases": ["Dr. Vikram Malhotra, MCh", "Dr. V. Malhotra"],
+      "reg_number": "KMC-2015-09-7714",
+      "medical_council": "Karnataka Medical Council (KMC)",
+      "nmc_uid": "NMC-IND-2015-44910",
+      "hpr_id": "dr.vikram.malhotra@hpr.abdm",
+      "qualifications": ["MBBS (Bangalore Medical College)", "MS (General Surgery)", "MCh (Plastic & Reconstructive Surgery)"],
+      "specialty": "Plastic & Cosmetic Surgery",
+      "associated_hospitals": ["Apollo Spectra Hospitals Bengaluru", "Manipal Hospital"],
+      "license_status": "ACTIVE_VERIFIED",
+      "good_standing": true,
+      "valid_upto": "2030-08-31"
+    },
+    {
+      "doctor_id": "DOC-DMC-4412",
+      "doctor_name": "Dr. Sunita Kapoor",
+      "aliases": ["Dr. Sunita Kapoor, MD", "Dr. S. Kapoor"],
+      "reg_number": "DMC/R/2010/4412",
+      "medical_council": "Delhi Medical Council (DMC)",
+      "nmc_uid": "NMC-IND-2010-33290",
+      "hpr_id": "dr.sunita.kapoor@hpr.abdm",
+      "qualifications": ["MBBS (AIIMS New Delhi)", "MD (Internal Medicine)"],
+      "specialty": "Internal Medicine & Critical Care",
+      "associated_hospitals": ["Fortis Escorts Hospital New Delhi", "Max Healthcare"],
+      "license_status": "ACTIVE_VERIFIED",
+      "good_standing": true,
+      "valid_upto": "2035-05-31"
+    },
+    {
+      "doctor_id": "DOC-HNMC-8830",
+      "doctor_name": "Dr. K. N. Iyer",
+      "aliases": ["Dr. K. N. Iyer, MS", "Dr. Krishnan Iyer"],
+      "reg_number": "HNMC-2008-8830",
+      "medical_council": "Haryana State Medical Council (HNMC)",
+      "nmc_uid": "NMC-IND-2008-11920",
+      "hpr_id": "dr.kn.iyer@hpr.abdm",
+      "qualifications": ["MBBS", "MS (General Surgery)", "FIAGES"],
+      "specialty": "Gastrointestinal & Laparoscopic Surgery",
+      "associated_hospitals": ["Max Super Speciality Hospital Gurugram", "Medanta The Medicity"],
+      "license_status": "ACTIVE_VERIFIED",
+      "good_standing": true,
+      "valid_upto": "2028-11-30"
+    },
+    {
+      "doctor_id": "DOC-FAKE-9999",
+      "doctor_name": "Dr. Ramesh Kumar (Unregistered)",
+      "aliases": ["Dr. Ramesh Kumar", "Dr. R. Kumar Quack"],
+      "reg_number": "MMC-0000-FAKE",
+      "medical_council": "Invalid Council",
+      "nmc_uid": "UNREGISTERED",
+      "hpr_id": "none",
+      "qualifications": ["Bogus BEMS"],
+      "specialty": "Unlicensed Practitioner",
+      "associated_hospitals": ["Fake Clinic"],
+      "license_status": "REVOKED_FRAUDULENT",
+      "good_standing": false,
+      "valid_upto": "EXPIRED"
+    }
+  ]
+}

@@ -241,6 +241,23 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
     total_amount = float(fields.get("total_amount") or 0.0)
     co_pay_pct = policy.get("co_pay_percent", 0)
     co_pay_amount = round(total_amount * (co_pay_pct / 100.0), 2)
+    
+    # 4. Check Doctor Medical License Validity
+    doc_ver = intake_result.get("doctor_verification", {})
+    doc_passed = doc_ver.get("verified", True)
+    checks["doctor_license"] = {
+        "passed": doc_passed,
+        "detail": doc_ver.get("verification_summary", f"Treating doctor license status: {doc_ver.get('status')}"),
+        "council": doc_ver.get("medical_council", "NMC"),
+        "reg_no": doc_ver.get("reg_number", "N/A"),
+    }
+    if not doc_passed:
+        is_eligible = False
+        primary_reason = f"Medical practitioner '{doc_ver.get('doctor_name')}' is unverified or suspended in National Medical Commission (NMC) registry."
+        reasoning_trace.append(f"REJECTED: Doctor verification failed. {doc_ver.get('verification_summary')}")
+    else:
+        reasoning_trace.append(f"PASSED: Doctor '{doc_ver.get('doctor_name')}' verified with {doc_ver.get('medical_council')} (Reg: {doc_ver.get('reg_number')}).")
+
     sum_insured = policy.get("sum_insured", 500000)
 
     net_payable = round(total_amount - co_pay_amount, 2)

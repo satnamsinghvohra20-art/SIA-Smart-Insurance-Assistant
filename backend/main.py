@@ -4,6 +4,7 @@ Intake Agent → Decision Agent → Execution Agent.
 
 Features:
 - Multi-document file uploader supporting PDF bills, discharge summaries, photos, and scans.
+- Doctor & Medical Practitioner Verification against National Medical Commission (NMC) / ABDM HPR Registry.
 - 4 realistic Indian insurance reimbursement scenario presets.
 - Cross-document consistency verification (Bill ↔ Discharge ↔ Rx).
 - DPDP Act 2023 compliant privacy shield (PII masking).
@@ -30,11 +31,12 @@ from services import async_tracker
 from services.audit_log import get_log, get_telemetry
 from services.document_parser import parse_uploaded_file
 from services.sample_pdf_generator import ensure_sample_files
+from services.doctor_verifier import verify_doctor, load_doctor_registry
 
 app = FastAPI(
     title="ClaimPilot Multi-Agent API",
     description="Autonomous Health Insurance Claim Reimbursement Pipeline for India",
-    version="2.1.0",
+    version="2.2.0",
 )
 
 app.add_middleware(
@@ -74,6 +76,12 @@ class ApproveRequest(BaseModel):
     claim_id: str
 
 
+class DoctorVerifyRequest(BaseModel):
+    doctor_name: str | None = None
+    reg_number: str | None = None
+    procedure: str | None = None
+
+
 @app.get("/api/scenarios")
 def list_scenarios():
     """Lists available realistic Indian demo scenarios."""
@@ -104,6 +112,22 @@ def list_policies():
         raise HTTPException(404, "Policy rules not found")
     with open(RULES_PATH, encoding="utf-8") as f:
         return json.load(f)
+
+
+@app.get("/api/doctors")
+def list_doctors():
+    """Returns the National Medical Commission (NMC) / State Council doctor registry."""
+    return load_doctor_registry()
+
+
+@app.post("/api/verify-doctor")
+def verify_doctor_endpoint(req: DoctorVerifyRequest):
+    """Verifies a doctor on demand against NMC/State Medical Council registries."""
+    return verify_doctor(
+        doctor_name=req.doctor_name,
+        reg_number=req.reg_number,
+        procedure_name=req.procedure,
+    )
 
 
 @app.get("/api/sample-files/{filename}")
@@ -191,7 +215,7 @@ async def upload_files(
 
 @app.post("/api/intake")
 def intake(req: IntakeRequest):
-    """Intake Agent: extracts structured fields with confidence scores from 3-doc text bundle."""
+    """Intake Agent: extracts structured fields with confidence scores, cross-verification, and doctor NMC check."""
     claim_id = f"CLM-{uuid.uuid4().hex[:8].upper()}"
 
     raw_text = req.raw_text
@@ -252,7 +276,7 @@ def update_intake_fields(claim_id: str, overrides: dict):
 
 @app.post("/api/decision/{claim_id}")
 def decision(claim_id: str):
-    """Decision Agent: evaluates policy rules, sub-limits, exclusions, co-pay, and dual-policy split deterministically."""
+    """Decision Agent: evaluates policy rules, doctor license, exclusions, co-pay, and dual-policy split deterministically."""
     if claim_id not in CLAIMS or "intake" not in CLAIMS[claim_id]:
         raise HTTPException(404, "Run intake step first")
 
@@ -335,4 +359,4 @@ def serve_index():
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "ClaimPilot Multi-Agent Pipeline", "version": "2.1.0"}
+    return {"status": "ok", "service": "ClaimPilot Multi-Agent Pipeline", "version": "2.2.0"}
