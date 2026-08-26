@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClaimPilot — Autonomous Multi-Agent Insurance Reimbursement Suite</title>
+<title>ClaimPilot — Autonomous Multi-Agent Insurance Reimbursement Suite (Live Engine)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -71,20 +71,20 @@
     background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent);
     font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 2px 7px; border-radius: 12px; font-weight: 600;
   }
-  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
   /* DPDP Toggle */
   .privacy-toggle {
-    display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-family: 'IBM Plex Mono', monospace;
-    background: var(--panel-2); border: 1px solid var(--line); padding: 5px 12px; border-radius: 20px;
+    display: flex; align-items: center; gap: 8px; font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+    background: var(--panel-2); border: 1px solid var(--line); padding: 5px 10px; border-radius: 20px;
     cursor: pointer; transition: all 0.2s ease;
   }
   .privacy-toggle.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
   .privacy-toggle input { display: none; }
 
   .claim-badge {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim);
-    background: var(--panel-2); border: 1px solid var(--line); padding: 6px 14px; border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--text-dim);
+    background: var(--panel-2); border: 1px solid var(--line); padding: 5px 12px; border-radius: 20px;
     display: flex; align-items: center; gap: 8px;
   }
   .claim-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
@@ -94,35 +94,35 @@
   .hero-strip {
     background: linear-gradient(90deg, rgba(76,195,176,0.08) 0%, rgba(56,189,248,0.05) 50%, rgba(167,139,250,0.08) 100%);
     border-bottom: 1px solid var(--line);
-    padding: 12px 28px;
+    padding: 10px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
   }
-  .hero-text { font-size: 13.5px; color: var(--text-dim); max-width: 650px; line-height: 1.45; }
+  .hero-text { font-size: 13px; color: var(--text-dim); max-width: 650px; line-height: 1.4; }
   .hero-text strong { color: var(--text); font-weight: 600; }
   .metrics-pill-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .metric-pill {
     background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 5px 10px; display: flex; align-items: center; gap: 6px; font-size: 11.5px;
+    padding: 4px 9px; display: flex; align-items: center; gap: 6px; font-size: 11px;
   }
   .metric-pill .val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--accent); }
-  .metric-pill .label { color: var(--text-dim); font-size: 10.5px; }
+  .metric-pill .label { color: var(--text-dim); font-size: 10px; }
 
   /* ---- Scenario Switcher Bar ---- */
   .scenario-bar {
-    padding: 12px 28px 4px;
+    padding: 10px 28px 2px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     overflow-x: auto;
   }
   .scenario-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; white-space: nowrap; }
   .scenario-btn {
     background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 7px 12px; font-size: 12px; color: var(--text-dim); cursor: pointer;
+    padding: 6px 11px; font-size: 11.5px; color: var(--text-dim); cursor: pointer;
     transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap;
   }
   .scenario-btn:hover { border-color: var(--line); color: var(--text); background: var(--panel-2); }
@@ -139,7 +139,7 @@
   .tag-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
 
   /* ---- Pipeline Rail ---- */
-  .rail-wrap { padding: 14px 28px 6px; }
+  .rail-wrap { padding: 12px 28px 4px; }
   .rail {
     display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1350px; margin: 0 auto; gap: 10px;
   }
@@ -165,7 +165,7 @@
     grid-template-columns: 1.15fr 0.85fr;
     gap: 16px;
     max-width: 1440px;
-    margin: 10px auto;
+    margin: 8px auto;
     padding: 0 28px 40px;
   }
   @media (max-width: 1080px) { main { grid-template-columns: 1fr; } }
@@ -209,6 +209,13 @@
   button.outline-accent:hover { background: var(--accent-soft); }
   button.danger { background: var(--red); color: #fff; }
   button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Select Box */
+  select {
+    background: #080C14; color: var(--text); border: 1px solid var(--line); border-radius: 6px;
+    padding: 7px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; outline: none;
+  }
+  select:focus { border-color: var(--accent); }
 
   /* Mode Switcher Tabs */
   .mode-tabs { display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
@@ -478,14 +485,19 @@
     <div>
       <div style="display:flex; align-items:center; gap:8px;">
         <h1>ClaimPilot</h1>
-        <span class="badge">AUTONOMOUS MULTI-AGENT</span>
+        <span class="badge">LIVE MULTI-AGENT ENGINE</span>
       </div>
     </div>
   </div>
   <div class="header-actions">
+    <!-- Engine Settings Modal Button -->
+    <button class="secondary" onclick="openSettingsModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>⚙️ Engine Settings</span>
+    </button>
+
     <!-- Doctor Lookup Modal Button -->
     <button class="secondary" onclick="openDoctorModal()" style="font-size:11.5px; padding:6px 11px;">
-      <span>🩺 NMC Doctor Registry</span>
+      <span>🩺 Doctor Registry</span>
     </button>
 
     <!-- DPDP Toggle -->
@@ -510,31 +522,31 @@
 <!-- Hero Strip / Value Prop -->
 <div class="hero-strip">
   <div class="hero-text">
-    <strong>ClaimPilot:</strong> The autonomous multi-agent system that finds the health insurance money you're already entitled to — and does the paperwork for you.
+    <strong>ClaimPilot Live Runtime:</strong> Autonomous multi-agent pipeline processing real hospital bills, NMC doctor verifications, policy rule calculations, and IRDAI claim forms in real time.
   </div>
   <div class="metrics-pill-group">
     <div class="metric-pill">
-      <span class="val">45m → 3.8m</span>
-      <span class="label">Filing Time</span>
+      <span class="val">Live Runtime</span>
+      <span class="label">Zero Delay</span>
+    </div>
+    <div class="metric-pill">
+      <span class="val">9 Insurers</span>
+      <span class="label">India Rules</span>
     </div>
     <div class="metric-pill">
       <span class="val">NMC / SMC</span>
-      <span class="label">Doctor Verification</span>
-    </div>
-    <div class="metric-pill">
-      <span class="val">PDF &amp; Images</span>
-      <span class="label">Multimodal OCR</span>
+      <span class="label">Verified</span>
     </div>
     <div class="metric-pill">
       <span class="val">100%</span>
-      <span class="label">Deterministic Math</span>
+      <span class="label">Deterministic</span>
     </div>
   </div>
 </div>
 
 <!-- Scenario Presets Switcher -->
 <div class="scenario-bar" id="scenarioBar">
-  <span class="scenario-title">Demo Presets:</span>
+  <span class="scenario-title">Quick Presets:</span>
 </div>
 
 <!-- Pipeline Rail -->
@@ -546,7 +558,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Intake Agent</div>
-      <div class="sub">OCR &amp; Doctor Verification</div>
+      <div class="sub">Live OCR &amp; Doctor Check</div>
     </div>
     <div class="node" id="node-decision" onclick="scrollToCard('decisionCard')">
       <div class="node-header">
@@ -583,19 +595,40 @@
     <div class="card" id="uploadCard">
       <div class="card-header">
         <h2><span class="eyebrow blue">STEP 1</span> Ingest Hospital Bills, PDFs &amp; Prescriptions</h2>
-        <span style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;" id="activeScenarioLabel">Happy Path Preset</span>
+        <span style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;" id="activeScenarioLabel">Live Ingestion Mode</span>
+      </div>
+
+      <!-- Insurer Policy Selector Dropdown -->
+      <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <div>
+          <label style="font-size:10px; text-transform:uppercase; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; font-weight:600; display:block; margin-bottom:3px;">Select Health Insurance Provider &amp; Plan:</label>
+          <select id="insurerSelect" style="min-width:320px;" onchange="handlePolicyChanged()">
+            <option value="STAR-HEALTH">Star Health — Family Health Optima (10% Co-pay · 30 Days)</option>
+            <option value="HDFC-ERGO">HDFC ERGO — Optima Secure Corporate (0% Co-pay · 45 Days)</option>
+            <option value="ICICI-LOMBARD">ICICI Lombard — Health AdvantEdge Complete (5% Co-pay)</option>
+            <option value="CARE-HEALTH">Care Health — Care Supreme Plan (0% Co-pay · 30 Days)</option>
+            <option value="NIVA-BUPA">Niva Bupa — ReAssure 2.0 Titanium (0% Co-pay)</option>
+            <option value="TATA-AIG">Tata AIG — MediCare Premier (0% Co-pay)</option>
+            <option value="BAJAJ-ALLIANZ">Bajaj Allianz — Health Guard Gold (10% Co-pay)</option>
+            <option value="NEW-INDIA">New India Assurance — Premier Mediclaim (10% Co-pay)</option>
+            <option value="SBI-GENERAL">SBI General — Arogya Plus (0% Co-pay)</option>
+          </select>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent);" id="activePolicySummary">
+          Cap: ₹5,00,000 | Co-pay: 10%
+        </div>
       </div>
 
       <!-- Mode Switcher: Upload Files vs. Preset Text -->
       <div class="mode-tabs">
         <button class="mode-tab active" id="tabModeUpload" onclick="switchInputMode('upload')">📁 Upload Files (PDF / Photos / Bills)</button>
-        <button class="mode-tab" id="tabModeText" onclick="switchInputMode('text')">📝 Preset Scenarios &amp; Text</button>
+        <button class="mode-tab" id="tabModeText" onclick="switchInputMode('text')">📝 Direct Text &amp; Presets</button>
       </div>
 
       <!-- 1. FILE UPLOAD VIEW -->
       <div id="fileUploadContainer">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-          <span style="font-size:11.5px; color:var(--text-dim);">Upload or drop your hospital bill, discharge summary, and doctor prescription (PDF / PNG / JPG / WebP):</span>
+          <span style="font-size:11.5px; color:var(--text-dim);">Drop ANY real hospital bill, clinical discharge summary, or doctor prescription:</span>
           <div style="display:flex; gap:6px;">
             <a href="http://localhost:8000/api/sample-files/City_Care_Hospital_Final_Bill.pdf" target="_blank" download>
               <button class="secondary" style="font-size:10px; padding:4px 8px;">↓ Sample Bill PDF</button>
@@ -845,6 +878,27 @@
   </div>
 </div>
 
+<!-- Engine & API Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal" style="max-width:550px;">
+    <div class="modal-header">
+      <h3>⚙️ Engine &amp; AI Key Settings</h3>
+      <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+    </div>
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:14px; line-height:1.5;">
+      ClaimPilot operates in <strong>Live Real-Time Mode</strong>. You can optionally enter a <strong>Google Gemini API Key</strong> for live multimodal extraction, or run with the zero-dependency dynamic engine.
+    </div>
+
+    <label style="font-size:10px; text-transform:uppercase; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; font-weight:600;">Google Gemini API Key (Optional):</label>
+    <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." style="width:100%; margin-top:5px; margin-bottom:12px; padding:9px 11px; background:#080C14; border:1px solid var(--line); border-radius:6px; color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:12px;">
+
+    <div style="display:flex; justify-content:flex-end; gap:8px;">
+      <button class="secondary" onclick="closeSettingsModal()">Close</button>
+      <button onclick="saveApiKey()">Save Key</button>
+    </div>
+  </div>
+</div>
+
 <!-- NMC Doctor Registry Lookup Modal -->
 <div class="modal-overlay" id="doctorModal">
   <div class="modal" style="max-width:700px;">
@@ -952,6 +1006,7 @@
 <script>
 const API = "http://localhost:8000";
 let scenarios = [];
+let policies = [];
 let activeScenarioId = "happy_path";
 let currentClaimId = null;
 let currentIntakeData = null;
@@ -962,6 +1017,7 @@ let logPollTimer = null;
 let trackPollTimer = null;
 let privacyShieldActive = false;
 let currentInputMode = "upload"; // "upload" or "text"
+let userGeminiApiKey = localStorage.getItem("claimpilot_gemini_key") || "";
 
 // Uploaded file handles
 let uploadedFiles = {
@@ -973,6 +1029,7 @@ let uploadedFiles = {
 window.addEventListener("DOMContentLoaded", async () => {
   setupDragAndDrop();
   await loadScenarios();
+  await loadPolicies();
 });
 
 function setupDragAndDrop() {
@@ -1067,9 +1124,32 @@ async function loadScenarios() {
   }
 }
 
+async function loadPolicies() {
+  try {
+    const res = await fetch(`${API}/api/policies`);
+    const data = await res.json();
+    policies = data.policies || [];
+  } catch (err) {
+    console.error("Failed to load policies:", err);
+  }
+}
+
+function handlePolicyChanged() {
+  const select = document.getElementById("insurerSelect");
+  const prefix = select.value;
+  const policy = policies.find(p => p.policy_number_prefix === prefix);
+  const summaryEl = document.getElementById("activePolicySummary");
+  if (policy) {
+    summaryEl.textContent = `Cap: ${fmtMoney(policy.sum_insured)} | Co-pay: ${policy.co_pay_percent}%`;
+    if (currentIntakeData && currentIntakeData.fields && currentIntakeData.fields.policy_number) {
+      currentIntakeData.fields.policy_number.value = `${prefix}-ACTIVE-2026`;
+    }
+  }
+}
+
 function renderScenarioButtons() {
   const container = document.getElementById("scenarioBar");
-  container.innerHTML = `<span class="scenario-title">Demo Presets:</span>`;
+  container.innerHTML = `<span class="scenario-title">Quick Presets:</span>`;
   scenarios.forEach(sc => {
     const btn = document.createElement("button");
     btn.className = `scenario-btn ${sc.id === activeScenarioId ? "active" : ""}`;
@@ -1166,6 +1246,7 @@ async function runIntake() {
       if (uploadedFiles.discharge) formData.append("discharge_file", uploadedFiles.discharge);
       if (uploadedFiles.rx) formData.append("prescription_file", uploadedFiles.rx);
       formData.append("privacy_shield", privacyShieldActive);
+      if (userGeminiApiKey) formData.append("gemini_api_key", userGeminiApiKey);
 
       res = await fetch(`${API}/api/upload-files`, {
         method: "POST",
@@ -1185,7 +1266,8 @@ async function runIntake() {
           discharge_summary,
           prescription_text,
           scenario_id: activeScenarioId,
-          privacy_shield: privacyShieldActive
+          privacy_shield: privacyShieldActive,
+          gemini_api_key: userGeminiApiKey
         })
       });
     }
@@ -1193,6 +1275,12 @@ async function runIntake() {
     data = await res.json();
     currentClaimId = data.claim_id;
     currentIntakeData = data.intake;
+
+    // Align with selected insurer
+    const selectedPrefix = document.getElementById("insurerSelect").value;
+    if (currentIntakeData.fields.policy_number) {
+      currentIntakeData.fields.policy_number.value = `${selectedPrefix}-2026-CLM`;
+    }
 
     document.getElementById("claimBadge").className = "claim-badge active";
     document.getElementById("claimIdText").textContent = currentClaimId;
@@ -1690,10 +1778,36 @@ function closeArchModal() {
   document.getElementById("archModal").classList.remove("open");
 }
 
+/* Engine Settings Modal */
+function openSettingsModal() {
+  document.getElementById("settingsModal").classList.add("open");
+  if (userGeminiApiKey) {
+    document.getElementById("geminiApiKeyInput").value = userGeminiApiKey;
+  }
+}
+function closeSettingsModal() {
+  document.getElementById("settingsModal").classList.remove("open");
+}
+async function saveApiKey() {
+  const key = document.getElementById("geminiApiKeyInput").value.trim();
+  userGeminiApiKey = key;
+  localStorage.setItem("claimpilot_gemini_key", key);
+  try {
+    await fetch(`${API}/api/set-api-key`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: key })
+    });
+  } catch (err) {
+    console.log("Key stored locally.");
+  }
+  closeSettingsModal();
+}
+
 /* Doctor Modal & Search Functions */
 function openDoctorModal() {
   document.getElementById("doctorModal").classList.add("open");
-  searchDoctorRegistry(); // Load initial practitioners
+  searchDoctorRegistry();
 }
 function closeDoctorModal() {
   document.getElementById("doctorModal").classList.remove("open");

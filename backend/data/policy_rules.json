@@ -1,163 +1,153 @@
 {
-  "policies": {
-    "STAR-HEALTH-FAMILY-2024": {
-      "policy_id": "STAR-HEALTH-FAMILY-2024",
-      "insurer": "Star Health & Allied Insurance Co. Ltd.",
-      "policy_type": "Family Health Optima Insurance Plan",
-      "tpa_name": "Star Health In-House TPA",
-      "sum_insured": 500000,
-      "policy_start_date": "2024-04-01",
-      "policy_end_date": "2027-03-31",
-      "waiting_period_days": {
-        "general": 30,
-        "pre_existing_disease": 730,
-        "specific_illness": 90
-      },
+  "policies": [
+    {
+      "id": "star_health_family_optima",
+      "policy_number_prefix": "STAR-HEALTH",
+      "name": "Star Health — Family Health Optima Plan",
+      "tpa_name": "Star Health In-House Claims Administration",
+      "sum_insured": 500000.00,
       "co_pay_percent": 10,
-      "room_rent_sub_limit_percent": 1.0,
-      "icu_sub_limit_percent": 2.0,
-      "sub_limits": {
-        "cataract": 40000,
-        "maternity": 50000,
-        "dental_non_accident": 0,
-        "cosmetic": 0,
-        "joint_replacement": 150000
-      },
-      "exclusions": [
-        "cosmetic or plastic surgery",
-        "rhinoplasty and aesthetic corrections",
-        "dental treatment (non-accidental)",
-        "infertility treatment and assisted reproduction",
-        "obesity or bariatric surgery without medical necessity",
-        "self-inflicted injury or attempted suicide",
-        "hazardous adventure sports injuries",
-        "unproven or experimental treatments"
-      ],
-      "claim_filing_window_days": 30,
-      "required_documents": [
-        "hospital_final_bill",
-        "payment_receipts",
-        "discharge_summary",
-        "doctor_prescriptions",
-        "diagnostic_investigation_reports",
-        "kyc_pan_aadhar_proof",
-        "cancelled_cheque_bank_mandate"
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 730,
+      "filing_window_days": 30,
+      "room_rent_capping": 5000.00,
+      "excluded_procedures": [
+        "cosmetic rhinoplasty",
+        "aesthetic surgery",
+        "hair transplant",
+        "experimental stem cell",
+        "dental treatment (non-accidental)"
       ]
     },
-    "HDFC-ERGO-CORP-2024": {
-      "policy_id": "HDFC-ERGO-CORP-2024",
-      "insurer": "HDFC ERGO General Insurance Co.",
-      "policy_type": "Corporate Group Mediclaim Scheme",
+    {
+      "id": "hdfc_ergo_optima_secure",
+      "policy_number_prefix": "HDFC-ERGO",
+      "name": "HDFC ERGO — Optima Secure & Corporate Health",
       "tpa_name": "Medi Assist Insurance TPA Pvt. Ltd.",
-      "sum_insured": 300000,
-      "policy_start_date": "2024-01-01",
-      "policy_end_date": "2026-12-31",
-      "waiting_period_days": {
-        "general": 0,
-        "pre_existing_disease": 0,
-        "specific_illness": 0
-      },
+      "sum_insured": 300000.00,
       "co_pay_percent": 0,
-      "room_rent_sub_limit_percent": 2.0,
-      "icu_sub_limit_percent": 4.0,
-      "sub_limits": {
-        "cataract": 30000,
-        "maternity": 75000,
-        "dental_non_accident": 0,
-        "cosmetic": 0
-      },
-      "exclusions": [
-        "cosmetic surgery and aesthetic enhancements",
-        "dental treatment (non-accidental)",
-        "obesity treatment",
-        "self-inflicted injury",
-        "unproven treatments"
-      ],
-      "claim_filing_window_days": 45,
-      "required_documents": [
-        "hospital_final_bill",
-        "discharge_summary",
-        "doctor_prescriptions",
-        "kyc_pan_aadhar_proof",
-        "cancelled_cheque_bank_mandate",
-        "employee_id_card_copy"
-      ]
-    },
-    "ICICI-LOMBARD-HEALTH-2024": {
-      "policy_id": "ICICI-LOMBARD-HEALTH-2024",
-      "insurer": "ICICI Lombard General Insurance",
-      "policy_type": "Complete Health Shield — Gold",
-      "tpa_name": "ICICI Lombard In-House Health TPA",
-      "sum_insured": 750000,
-      "policy_start_date": "2024-06-01",
-      "policy_end_date": "2027-05-31",
-      "waiting_period_days": {
-        "general": 30,
-        "pre_existing_disease": 365,
-        "specific_illness": 60
-      },
-      "co_pay_percent": 5,
-      "room_rent_sub_limit_percent": 1.5,
-      "icu_sub_limit_percent": 3.0,
-      "sub_limits": {
-        "cataract": 50000,
-        "maternity": 60000,
-        "dental_non_accident": 0,
-        "cosmetic": 0
-      },
-      "exclusions": [
-        "cosmetic or elective aesthetic procedures",
-        "rhinoplasty without congenital defect proof",
-        "dental treatment (non-accidental)",
-        "stem cell therapy",
-        "self-inflicted injury"
-      ],
-      "claim_filing_window_days": 30,
-      "required_documents": [
-        "hospital_final_bill",
-        "discharge_summary",
-        "doctor_prescriptions",
-        "diagnostic_investigation_reports",
-        "kyc_pan_aadhar_proof",
-        "cancelled_cheque_bank_mandate"
-      ]
-    },
-    "CARE-ADVANTAGE-2024": {
-      "policy_id": "CARE-ADVANTAGE-2024",
-      "insurer": "Care Health Insurance Ltd.",
-      "policy_type": "Care Advantage Comprehensive Floater",
-      "tpa_name": "Raksha Health Insurance TPA Pvt. Ltd.",
-      "sum_insured": 1000000,
-      "policy_start_date": "2024-02-01",
-      "policy_end_date": "2027-01-31",
-      "waiting_period_days": {
-        "general": 30,
-        "pre_existing_disease": 730,
-        "specific_illness": 90
-      },
-      "co_pay_percent": 0,
-      "room_rent_sub_limit_percent": 2.0,
-      "icu_sub_limit_percent": 4.0,
-      "sub_limits": {
-        "cataract": 60000,
-        "maternity": 80000,
-        "dental_non_accident": 0,
-        "cosmetic": 0
-      },
-      "exclusions": [
+      "waiting_period_days": 0,
+      "pre_existing_waiting_days": 0,
+      "filing_window_days": 45,
+      "room_rent_capping": 10000.00,
+      "day_one_coverage_waiver": true,
+      "excluded_procedures": [
         "cosmetic surgery",
-        "dental treatment without trauma",
-        "experimental therapies",
-        "self-inflicted injury"
-      ],
-      "claim_filing_window_days": 30,
-      "required_documents": [
-        "hospital_final_bill",
-        "discharge_summary",
-        "doctor_prescriptions",
-        "kyc_pan_aadhar_proof",
-        "cancelled_cheque_bank_mandate"
+        "unproven experimental therapy"
+      ]
+    },
+    {
+      "id": "icici_lombard_advantedge",
+      "policy_number_prefix": "ICICI-LOMBARD",
+      "name": "ICICI Lombard — Health AdvantEdge Complete",
+      "tpa_name": "ICICI Lombard Health Care In-House TPA",
+      "sum_insured": 750000.00,
+      "co_pay_percent": 5,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 1095,
+      "filing_window_days": 30,
+      "room_rent_capping": 8000.00,
+      "excluded_procedures": [
+        "cosmetic rhinoplasty",
+        "aesthetic surgery",
+        "weight loss bariatric (non-morbid)"
+      ]
+    },
+    {
+      "id": "care_health_supreme",
+      "policy_number_prefix": "CARE-HEALTH",
+      "name": "Care Health — Care Supreme Plan",
+      "tpa_name": "Care Health In-House TPA",
+      "sum_insured": 1000000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 1095,
+      "filing_window_days": 30,
+      "room_rent_capping": 15000.00,
+      "excluded_procedures": [
+        "cosmetic rhinoplasty",
+        "aesthetic surgery"
+      ]
+    },
+    {
+      "id": "niva_bupa_reassure",
+      "policy_number_prefix": "NIVA-BUPA",
+      "name": "Niva Bupa — ReAssure 2.0 Titanium",
+      "tpa_name": "Niva Bupa In-House TPA",
+      "sum_insured": 1000000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 730,
+      "filing_window_days": 30,
+      "room_rent_capping": 20000.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic procedures"
+      ]
+    },
+    {
+      "id": "tata_aig_medicare",
+      "policy_number_prefix": "TATA-AIG",
+      "name": "Tata AIG — MediCare Premier Plan",
+      "tpa_name": "Paramount Health Services & Insurance TPA",
+      "sum_insured": 500000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 730,
+      "filing_window_days": 30,
+      "room_rent_capping": 7500.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic procedures"
+      ]
+    },
+    {
+      "id": "bajaj_allianz_health_guard",
+      "policy_number_prefix": "BAJAJ-ALLIANZ",
+      "name": "Bajaj Allianz — Health Guard Gold Plan",
+      "tpa_name": "Bajaj Allianz In-House Health Administration Team (HAT)",
+      "sum_insured": 500000.00,
+      "co_pay_percent": 10,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 1095,
+      "filing_window_days": 30,
+      "room_rent_capping": 5000.00,
+      "excluded_procedures": [
+        "cosmetic rhinoplasty",
+        "aesthetic procedures"
+      ]
+    },
+    {
+      "id": "new_india_premier",
+      "policy_number_prefix": "NEW-INDIA",
+      "name": "New India Assurance — Premier Mediclaim Policy",
+      "tpa_name": "MDIndia Health Insurance TPA Pvt. Ltd.",
+      "sum_insured": 500000.00,
+      "co_pay_percent": 10,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 1460,
+      "filing_window_days": 30,
+      "room_rent_capping": 5000.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic treatments"
+      ]
+    },
+    {
+      "id": "sbi_general_arogya",
+      "policy_number_prefix": "SBI-GENERAL",
+      "name": "SBI General — Arogya Plus Policy",
+      "tpa_name": "Heritage Health Insurance TPA Pvt. Ltd.",
+      "sum_insured": 300000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 1460,
+      "filing_window_days": 30,
+      "room_rent_capping": 4000.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic rhinoplasty"
       ]
     }
-  }
+  ]
 }

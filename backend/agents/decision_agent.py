@@ -19,12 +19,30 @@ from services.audit_log import log_event
 RULES_PATH = Path(__file__).parent.parent / "data" / "policy_rules.json"
 
 
-def load_policy(policy_number: str) -> dict | None:
+def load_rules() -> dict:
     if not RULES_PATH.exists():
-        return None
+        return {"policies": []}
     with open(RULES_PATH, encoding="utf-8") as f:
-        rules = json.load(f)
-    return rules.get("policies", {}).get(policy_number)
+        return json.load(f)
+
+
+def load_policy(policy_number: str) -> dict:
+    rules = load_rules()
+    policies = rules.get("policies", [])
+    if isinstance(policies, list):
+        # 1. Match by prefix
+        clean_pol = (policy_number or "").upper().replace(" ", "")
+        for p in policies:
+            prefix = p.get("policy_number_prefix", "").upper()
+            if prefix and prefix in clean_pol:
+                return p
+            if p.get("id") == policy_number:
+                return p
+        # Default to first policy (Star Health)
+        return policies[0] if policies else {}
+    elif isinstance(policies, dict):
+        return policies.get(policy_number, next(iter(policies.values()), {}))
+    return {}
 
 
 def calculate_dual_policy_optimization(total_amount: float, primary_policy: dict, secondary_policy_id: str = "HDFC-ERGO-CORP-2024") -> dict:
@@ -165,11 +183,12 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
 
     # Check 1: Waiting Period
     admission_dt = parse_date(fields.get("admission_date"))
-    policy_start_dt = parse_date(policy["policy_start_date"])
+    policy_start_dt = parse_date(policy.get("policy_start_date", "01-01-2024"))
 
     if admission_dt and policy_start_dt:
         days_active = (admission_dt - policy_start_dt).days
-        req_days = policy["waiting_period_days"].get("general", 30)
+        wp = policy.get("waiting_period_days", 30)
+        req_days = wp.get("general", 30) if isinstance(wp, dict) else wp
         waiting_ok = days_active >= req_days
         checks["waiting_period"] = {
             "passed": waiting_ok,
@@ -190,7 +209,8 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
     # Check 2: Exclusions
     diagnosis = fields.get("diagnosis", "")
     procedure = fields.get("procedure", "")
-    exclusion_eval = interpret_exclusion_ambiguity(diagnosis, procedure, policy.get("exclusions", []))
+    exclusions_list = policy.get("excluded_procedures", []) or policy.get("exclusions", [])
+    exclusion_eval = interpret_exclusion_ambiguity(diagnosis, procedure, exclusions_list)
     is_excluded = exclusion_eval["excluded"]
     checks["exclusions"] = {
         "passed": not is_excluded,
@@ -212,7 +232,7 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
 
     if discharge_dt:
         days_since_discharge = (today_dt - discharge_dt).days
-        window_days = policy.get("claim_filing_window_days", 30)
+        window_days = policy.get("claim_filing_window_days") or policy.get("filing_window_days") or 30
         within_window = days_since_discharge <= window_days
         days_remaining = window_days - days_since_discharge
         checks["filing_window"] = {
