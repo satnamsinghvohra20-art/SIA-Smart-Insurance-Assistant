@@ -9,16 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080B10;
-    --bg-surface: #0E131D;
-    --panel: #131926;
-    --panel-2: #1A2234;
-    --panel-3: #222C42;
-    --line: #243047;
-    --line-subtle: #1C2638;
+    --bg: #070A0F;
+    --bg-surface: #0D121B;
+    --panel: #121824;
+    --panel-2: #182132;
+    --panel-3: #202B40;
+    --line: #222E42;
+    --line-subtle: #192334;
     --text: #F0F4F8;
-    --text-dim: #8B98AD;
-    --text-muted: #58677E;
+    --text-dim: #8E9BAE;
+    --text-muted: #546377;
     --accent: #4CC3B0;          /* Emerald/Teal money recovered */
     --accent-glow: rgba(76, 195, 176, 0.25);
     --accent-soft: rgba(76, 195, 176, 0.12);
@@ -30,6 +30,8 @@
     --blue-soft: rgba(56, 189, 248, 0.12);
     --purple: #A78BFA;          /* Async Pub/Sub */
     --purple-soft: rgba(167, 139, 250, 0.12);
+    --wa-green: #25D366;        /* WhatsApp */
+    --wa-bg: #0B141A;
     --radius: 12px;
   }
 
@@ -48,9 +50,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 28px;
+    padding: 12px 28px;
     border-bottom: 1px solid var(--line);
-    background: linear-gradient(180deg, #101624 0%, #0A0E17 100%);
+    background: linear-gradient(180deg, #101624 0%, #080C14 100%);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -64,12 +66,22 @@
     font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #061512; font-size: 16px;
     box-shadow: 0 0 16px var(--accent-glow);
   }
-  .brand h1 { font-family: 'Space Grotesk', sans-serif; font-size: 19px; margin: 0; letter-spacing: -0.2px; font-weight: 700; }
+  .brand h1 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; margin: 0; letter-spacing: -0.2px; font-weight: 700; }
   .brand .badge {
     background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent);
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 2px 7px; border-radius: 12px; font-weight: 600;
   }
-  .header-actions { display: flex; align-items: center; gap: 12px; }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* DPDP Toggle */
+  .privacy-toggle {
+    display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-family: 'IBM Plex Mono', monospace;
+    background: var(--panel-2); border: 1px solid var(--line); padding: 5px 12px; border-radius: 20px;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .privacy-toggle.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .privacy-toggle input { display: none; }
+
   .claim-badge {
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim);
     background: var(--panel-2); border: 1px solid var(--line); padding: 6px 14px; border-radius: 20px;
@@ -80,37 +92,37 @@
 
   /* ---- Value Proposition / Hero Bar ---- */
   .hero-strip {
-    background: linear-gradient(90deg, rgba(76,195,176,0.06) 0%, rgba(56,189,248,0.04) 50%, rgba(167,139,250,0.06) 100%);
+    background: linear-gradient(90deg, rgba(76,195,176,0.08) 0%, rgba(56,189,248,0.05) 50%, rgba(167,139,250,0.08) 100%);
     border-bottom: 1px solid var(--line);
-    padding: 14px 28px;
+    padding: 12px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 14px;
   }
-  .hero-text { font-size: 13.5px; color: var(--text-dim); max-width: 680px; line-height: 1.45; }
+  .hero-text { font-size: 13.5px; color: var(--text-dim); max-width: 650px; line-height: 1.45; }
   .hero-text strong { color: var(--text); font-weight: 600; }
-  .metrics-pill-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .metrics-pill-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .metric-pill {
     background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 6px 12px; display: flex; align-items: center; gap: 8px; font-size: 12px;
+    padding: 5px 10px; display: flex; align-items: center; gap: 6px; font-size: 11.5px;
   }
   .metric-pill .val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--accent); }
-  .metric-pill .label { color: var(--text-dim); font-size: 11px; }
+  .metric-pill .label { color: var(--text-dim); font-size: 10.5px; }
 
   /* ---- Scenario Switcher Bar ---- */
   .scenario-bar {
-    padding: 14px 28px 4px;
+    padding: 12px 28px 4px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     overflow-x: auto;
   }
   .scenario-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; white-space: nowrap; }
   .scenario-btn {
     background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 8px 14px; font-size: 12.5px; color: var(--text-dim); cursor: pointer;
+    padding: 7px 12px; font-size: 12px; color: var(--text-dim); cursor: pointer;
     transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap;
   }
   .scenario-btn:hover { border-color: var(--line); color: var(--text); background: var(--panel-2); }
@@ -119,7 +131,7 @@
     box-shadow: 0 0 12px var(--accent-glow);
   }
   .scenario-btn .tag {
-    font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; padding: 2px 6px; border-radius: 10px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 6px; border-radius: 10px; font-weight: 600;
   }
   .tag-emerald { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
   .tag-crimson { background: var(--red-soft); color: var(--red); border: 1px solid var(--red); }
@@ -127,56 +139,56 @@
   .tag-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple); }
 
   /* ---- Pipeline Rail ---- */
-  .rail-wrap { padding: 18px 28px 8px; }
+  .rail-wrap { padding: 14px 28px 6px; }
   .rail {
-    display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1280px; margin: 0 auto; gap: 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1350px; margin: 0 auto; gap: 10px;
   }
   .node {
     background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    padding: 12px 14px; position: relative; transition: all 0.3s ease; cursor: pointer;
+    padding: 10px 12px; position: relative; transition: all 0.3s ease; cursor: pointer;
   }
-  .node.active { border-color: var(--amber); background: var(--amber-soft); box-shadow: 0 0 16px rgba(245,166,35,0.15); }
+  .node.active { border-color: var(--amber); background: var(--amber-soft); box-shadow: 0 0 14px rgba(245,166,35,0.15); }
   .node.done { border-color: var(--accent); background: var(--accent-soft); }
   .node.fail { border-color: var(--red); background: var(--red-soft); }
-  .node-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .node-number { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); font-weight: 600; }
+  .node-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .node-number { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: var(--text-muted); font-weight: 600; }
   .node-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
   .node.active .node-status-dot { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 1.2s infinite; }
   .node.done .node-status-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
   .node.fail .node-status-dot { background: var(--red); box-shadow: 0 0 8px var(--red); }
-  .node .label { font-family: 'Space Grotesk', sans-serif; font-size: 13.5px; font-weight: 700; }
-  .node .sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; font-family: 'IBM Plex Mono', monospace; }
+  .node .label { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; }
+  .node .sub { font-size: 10.5px; color: var(--text-dim); margin-top: 1px; font-family: 'IBM Plex Mono', monospace; }
 
   /* ---- Main Split Layout ---- */
   main {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
-    gap: 18px;
-    max-width: 1400px;
-    margin: 14px auto;
+    gap: 16px;
+    max-width: 1440px;
+    margin: 10px auto;
     padding: 0 28px 40px;
   }
-  @media (max-width: 1060px) { main { grid-template-columns: 1fr; } }
+  @media (max-width: 1080px) { main { grid-template-columns: 1fr; } }
 
   .card {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 20px 22px;
-    margin-bottom: 18px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
     position: relative;
     overflow: hidden;
   }
   .card-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
   }
   .card h2 {
-    font-family: 'Space Grotesk', sans-serif; font-size: 15px; margin: 0; letter-spacing: -0.1px;
-    display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif; font-size: 14.5px; margin: 0; letter-spacing: -0.1px;
+    display: flex; align-items: center; gap: 8px; color: var(--text); font-weight: 700;
   }
   .card h2 .eyebrow {
-    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--accent);
-    background: var(--accent-soft); padding: 3px 8px; border-radius: 6px; font-weight: 600; letter-spacing: 0.5px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent);
+    background: var(--accent-soft); padding: 3px 7px; border-radius: 6px; font-weight: 600; letter-spacing: 0.5px;
   }
   .card h2 .eyebrow.blue { color: var(--blue); background: var(--blue-soft); }
   .card h2 .eyebrow.amber { color: var(--amber); background: var(--amber-soft); }
@@ -184,10 +196,10 @@
 
   /* Buttons */
   button {
-    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 12.5px;
     background: var(--accent); color: #051411; border: none; border-radius: 8px;
-    padding: 10px 18px; cursor: pointer; transition: all 0.15s ease;
-    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; cursor: pointer; transition: all 0.15s ease;
+    display: inline-flex; align-items: center; gap: 6px;
   }
   button:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 12px var(--accent-glow); }
   button:active { transform: translateY(0); }
@@ -198,33 +210,65 @@
   button.danger { background: var(--red); color: #fff; }
   button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
+  /* Document Tabs */
+  .doc-tabs { display: flex; gap: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  .doc-tab {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border-radius: 6px;
+    background: transparent; border: 1px solid transparent; color: var(--text-dim); cursor: pointer;
+  }
+  .doc-tab.active { background: var(--panel-2); border-color: var(--line); color: var(--accent); font-weight: 600; }
+
   textarea {
-    width: 100%; min-height: 140px; background: #0A0E15; color: var(--text); border: 1px solid var(--line);
-    border-radius: 8px; padding: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; resize: vertical;
+    width: 100%; min-height: 120px; background: #080C14; color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; resize: vertical;
     line-height: 1.5;
   }
   textarea:focus { outline: none; border-color: var(--accent); }
 
+  /* Cross-Document Matrix Card */
+  .cross-doc-card {
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+    margin-top: 12px; margin-bottom: 12px;
+  }
+  .cross-doc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .cross-doc-title { font-size: 12px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .cross-doc-item {
+    display: flex; align-items: flex-start; justify-content: space-between; font-size: 11.5px; padding: 6px 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .cross-doc-item:first-child { border-top: none; }
+
+  /* Dual Policy Optimizer Box */
+  .dual-opt-box {
+    background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(18,24,36,0.9) 100%);
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .dual-opt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .dual-opt-title { font-size: 12px; font-weight: 700; color: var(--blue); }
+
   /* ---- Field Grid (Intake Agent) ---- */
   .field-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 8px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-top: 6px;
   }
   .field {
-    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
     position: relative; transition: border-color 0.2s ease;
   }
   .field.review { border-color: var(--amber); background: var(--amber-soft); }
   .field-header { display: flex; align-items: center; justify-content: space-between; }
-  .field label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .field label { font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
   .field .edit-btn {
-    font-size: 10px; color: var(--amber); background: transparent; border: none; padding: 0; cursor: pointer;
+    font-size: 9.5px; color: var(--amber); background: transparent; border: none; padding: 0; cursor: pointer;
     text-decoration: underline; font-family: 'IBM Plex Mono', monospace;
   }
-  .field .val { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; margin-top: 4px; font-weight: 500; color: var(--text); word-break: break-word; }
-  .field .conf-bar-wrap { margin-top: 6px; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .field .val { font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 3px; font-weight: 500; color: var(--text); word-break: break-word; }
+  .field .conf-bar-wrap { margin-top: 5px; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
   .field .conf-bar { height: 100%; background: var(--accent); border-radius: 2px; }
   .field.review .conf-bar { background: var(--amber); }
-  .field .conf-label { font-size: 9.5px; margin-top: 4px; color: var(--text-dim); display: flex; justify-content: space-between; }
+  .field .conf-label { font-size: 9px; margin-top: 3px; color: var(--text-dim); display: flex; justify-content: space-between; }
   .field.review .conf-label { color: var(--amber); font-weight: 600; }
 
   /* ---- Decision Hero & Rules (Decision Agent) ---- */
@@ -232,93 +276,88 @@
     background: linear-gradient(135deg, rgba(76,195,176,0.1) 0%, rgba(14,19,29,0.8) 100%);
     border: 1px solid var(--accent);
     border-radius: 10px;
-    padding: 16px 20px;
-    margin-bottom: 16px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
   .decision-hero.rejected {
     background: linear-gradient(135deg, rgba(255,92,92,0.1) 0%, rgba(14,19,29,0.8) 100%);
     border-color: var(--red);
   }
-  .decision-amount-block .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
-  .decision-amount-block .amount { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+  .decision-amount-block .label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
+  .decision-amount-block .amount { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent); }
   .decision-hero.rejected .amount { color: var(--red); }
-  .math-breakdown { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .math-breakdown { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
 
   .status-badge-lg {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 6px 14px; border-radius: 20px; font-weight: 700;
-    letter-spacing: 0.5px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; padding: 5px 12px; border-radius: 20px; font-weight: 700;
   }
   .status-badge-lg.approved { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
   .status-badge-lg.rejected { background: var(--red-soft); color: var(--red); border: 1px solid var(--red); }
 
-  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   @media (max-width: 600px) { .rules-grid { grid-template-columns: 1fr; } }
   .rule-card {
-    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px;
   }
-  .rule-card-header { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; font-weight: 600; }
-  .rule-card .detail { font-size: 11px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+  .rule-card-header { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 600; }
+  .rule-card .detail { font-size: 10.5px; color: var(--text-dim); margin-top: 3px; line-height: 1.35; }
 
   .trace-container {
-    background: #090D14; border: 1px solid var(--line-subtle); border-radius: 8px; padding: 12px 14px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--text-dim);
+    background: #080C14; border: 1px solid var(--line-subtle); border-radius: 8px; padding: 10px 12px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim);
   }
-  .trace-container h4 { margin: 0 0 8px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+  .trace-container h4 { margin: 0 0 6px; font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; }
   .trace-list { list-style: none; padding: 0; margin: 0; }
-  .trace-list li { padding: 5px 0; border-top: 1px dashed var(--line-subtle); }
+  .trace-list li { padding: 4px 0; border-top: 1px dashed var(--line-subtle); }
   .trace-list li:first-child { border-top: none; }
 
   /* ---- Execution & Checklist ---- */
-  .checklist { list-style: none; padding: 0; margin: 0 0 16px; }
+  .checklist { list-style: none; padding: 0; margin: 0 0 14px; }
   .checklist li {
-    display: flex; justify-content: space-between; align-items: center; padding: 9px 6px;
-    border-top: 1px solid var(--line); font-size: 12.5px;
+    display: flex; justify-content: space-between; align-items: center; padding: 8px 4px;
+    border-top: 1px solid var(--line); font-size: 12px;
   }
   .checklist li:first-child { border-top: none; }
-  .chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .chip { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; padding: 2px 7px; border-radius: 12px; font-weight: 600; }
   .chip.needed { background: var(--red-soft); color: var(--red); }
   .chip.needs_review { background: var(--amber-soft); color: var(--amber); }
   .chip.ready { background: var(--accent-soft); color: var(--accent); }
   .chip.deadline { background: var(--purple-soft); color: var(--purple); }
 
   .pdf-preview-box {
-    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px;
-    margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+    margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;
   }
-  .pdf-info { display: flex; align-items: center; gap: 12px; }
-  .pdf-icon { font-size: 24px; color: var(--accent); }
-  .pdf-title { font-size: 13px; font-weight: 600; }
-  .pdf-sub { font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; }
+  .pdf-info { display: flex; align-items: center; gap: 10px; }
+  .pdf-icon { font-size: 22px; color: var(--accent); }
+  .pdf-title { font-size: 12.5px; font-weight: 600; }
+  .pdf-sub { font-size: 10.5px; color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; }
 
-  /* ---- Async Tracking Timeline ---- */
-  .tracking-box {
-    background: #090D14; border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-top: 14px;
+  /* ---- WhatsApp Simulator Slide-Out ---- */
+  .phone-drawer {
+    position: fixed; right: 28px; bottom: 20px; width: 330px; background: var(--wa-bg);
+    border: 2px solid #222E35; border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    z-index: 200; overflow: hidden; display: none; flex-direction: column; transition: transform 0.3s ease;
   }
-  .tracking-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .timeline { list-style: none; padding: 0; margin: 0; position: relative; }
-  .timeline-step { display: flex; gap: 14px; margin-bottom: 14px; position: relative; }
-  .timeline-step:last-child { margin-bottom: 0; }
-  .timeline-step .dot-wrap { display: flex; flex-direction: column; align-items: center; }
-  .timeline-step .t-dot {
-    width: 12px; height: 12px; border-radius: 50%; background: var(--line); border: 2px solid var(--panel);
-    transition: all 0.3s ease;
+  .phone-drawer.open { display: flex; }
+  .phone-top-bar {
+    background: #202C33; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #111B21;
   }
-  .timeline-step.done .t-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
-  .timeline-step.current .t-dot { background: var(--purple); box-shadow: 0 0 10px var(--purple); animation: pulse 1.4s infinite; }
-  .timeline-step .t-line { width: 2px; flex: 1; background: var(--line); margin-top: 4px; }
-  .timeline-step.done .t-line { background: var(--accent); }
-  .timeline-step:last-child .t-line { display: none; }
-  .timeline-step .content { padding-top: 1px; }
-  .timeline-step .t-title { font-size: 12.5px; font-weight: 600; }
-  .timeline-step .t-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-  .timeline-step .t-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+  .wa-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--wa-green); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 12px; }
+  .wa-chat-area { padding: 14px; height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #0B141A; }
+  .wa-bubble {
+    background: #005C4B; color: #E9EDEF; padding: 8px 10px; border-radius: 8px 8px 2px 8px; font-size: 11px;
+    line-height: 1.4; align-self: flex-end; max-width: 90%; box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .wa-time { font-size: 9px; color: #8696A0; text-align: right; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
 
-  /* ---- Right Column: Live Agent Activity Terminal ---- */
+  /* ---- Right Column: Live Streaming Agent Activity Terminal ---- */
   .log-container {
     background: #06090F;
     border: 1px solid var(--line);
@@ -326,50 +365,48 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 780px;
+    height: 820px;
     position: sticky;
-    top: 80px;
+    top: 76px;
   }
   .log-header {
-    background: #0D121C;
+    background: #0C111A;
     border-bottom: 1px solid var(--line);
-    padding: 12px 18px;
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   .log-title {
-    font-family: 'Space Grotesk', sans-serif; font-size: 13.5px; font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
     display: flex; align-items: center; gap: 8px;
   }
-  .log-actions { display: flex; align-items: center; gap: 8px; }
+  .log-actions { display: flex; align-items: center; gap: 6px; }
   .log-panel {
     flex: 1;
-    padding: 16px 18px;
+    padding: 14px 16px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10.5px;
     overflow-y: auto;
     line-height: 1.6;
   }
-  .log-entry { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #111827; }
+  .log-entry { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #101622; }
   .log-entry:last-child { border-bottom: none; }
-  .log-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-  .log-ts { color: var(--text-muted); font-size: 10px; }
-  .log-agent { font-weight: 600; border-radius: 4px; padding: 1px 6px; font-size: 10px; }
+  .log-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .log-ts { color: var(--text-muted); font-size: 9.5px; }
+  .log-agent { font-weight: 600; border-radius: 4px; padding: 1px 5px; font-size: 9.5px; }
   .agent-intake { background: var(--blue-soft); color: var(--blue); }
   .agent-decision { background: var(--amber-soft); color: var(--amber); }
   .agent-execution { background: var(--accent-soft); color: var(--accent); }
-  .log-tool {
-    background: #182030; color: #93C5FD; padding: 1px 6px; border-radius: 4px; font-size: 10px;
-  }
-  .log-latency { color: #10B981; font-size: 10px; }
+  .log-tool { background: #161F2E; color: #93C5FD; padding: 1px 5px; border-radius: 4px; font-size: 9.5px; }
+  .log-latency { color: #10B981; font-size: 9.5px; }
   .log-msg { color: var(--text); word-break: break-word; }
   .log-payload {
-    background: #0B0F17; border: 1px solid #1E293B; border-radius: 6px; padding: 6px 10px;
-    margin-top: 5px; color: #94A3B8; font-size: 10.5px; overflow-x: auto; white-space: pre-wrap;
+    background: #0A0E16; border: 1px solid #1E293B; border-radius: 6px; padding: 5px 8px;
+    margin-top: 4px; color: #94A3B8; font-size: 10px; overflow-x: auto; white-space: pre-wrap;
   }
 
-  /* Modal */
+  /* Modals */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
     display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
@@ -377,11 +414,11 @@
   .modal-overlay.open { display: flex; }
   .modal {
     background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 26px;
+    max-width: 750px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 24px;
     position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
   }
-  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .modal-header h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; font-size: 18px; font-weight: 700; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-header h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; font-size: 17px; font-weight: 700; }
   .modal-close { background: transparent; border: none; font-size: 20px; color: var(--text-dim); cursor: pointer; padding: 4px; }
 
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -401,8 +438,17 @@
     </div>
   </div>
   <div class="header-actions">
-    <button class="secondary" onclick="openArchModal()" style="font-size:12px; padding:7px 12px;">
-      <span>📐 Architecture &amp; Script</span>
+    <!-- DPDP Privacy Shield Toggle -->
+    <label class="privacy-toggle" id="privacyToggleBtn" onclick="togglePrivacyShield()">
+      <span>🛡️ DPDP Privacy Shield</span>
+      <span id="privacyStatusBadge" style="color:var(--text-muted);">OFF</span>
+    </label>
+
+    <button class="secondary" onclick="openBeforeAfterModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>⚡ 45m vs 4m</span>
+    </button>
+    <button class="secondary" onclick="openArchModal()" style="font-size:11.5px; padding:6px 11px;">
+      <span>📐 Blueprint &amp; Script</span>
     </button>
     <div class="claim-badge" id="claimBadge">
       <div class="dot"></div>
@@ -414,24 +460,24 @@
 <!-- Hero Strip / Value Prop -->
 <div class="hero-strip">
   <div class="hero-text">
-    <strong>ClaimPilot:</strong> The autonomous agent that finds the insurance money you're already entitled to — and does the paperwork for you.
+    <strong>ClaimPilot:</strong> The autonomous multi-agent system that finds the health insurance money you're already entitled to — and does the paperwork for you.
   </div>
   <div class="metrics-pill-group">
     <div class="metric-pill">
       <span class="val">45m → 3.8m</span>
-      <span class="label">Time Saved</span>
+      <span class="label">Filing Time</span>
     </div>
     <div class="metric-pill">
       <span class="val">₹0.42</span>
       <span class="label">Gemini Cost/Claim</span>
     </div>
     <div class="metric-pill">
-      <span class="val">100%</span>
-      <span class="label">Deterministic Math</span>
+      <span class="val">3-Doc</span>
+      <span class="label">Cross-Verification</span>
     </div>
     <div class="metric-pill">
-      <span class="val">0</span>
-      <span class="label">Missed Deadlines</span>
+      <span class="val">100%</span>
+      <span class="label">Deterministic Math</span>
     </div>
   </div>
 </div>
@@ -439,7 +485,6 @@
 <!-- Scenario Presets Switcher -->
 <div class="scenario-bar" id="scenarioBar">
   <span class="scenario-title">Demo Presets:</span>
-  <!-- Injected dynamically -->
 </div>
 
 <!-- Pipeline Rail -->
@@ -451,7 +496,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Intake Agent</div>
-      <div class="sub">Multimodal Extraction</div>
+      <div class="sub">3-Doc Bundle &amp; Cross-Check</div>
     </div>
     <div class="node" id="node-decision" onclick="scrollToCard('decisionCard')">
       <div class="node-header">
@@ -459,7 +504,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Decision Agent</div>
-      <div class="sub">Deterministic Rules</div>
+      <div class="sub">Rules &amp; Dual-Policy Opt</div>
     </div>
     <div class="node" id="node-execution" onclick="scrollToCard('executionCard')">
       <div class="node-header">
@@ -467,7 +512,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Execution Agent</div>
-      <div class="sub">IRDAI PDF &amp; Gate</div>
+      <div class="sub">IRDAI PDF &amp; Human Gate</div>
     </div>
     <div class="node" id="node-tracking" onclick="scrollToCard('trackingCard')">
       <div class="node-header">
@@ -475,7 +520,7 @@
         <div class="node-status-dot"></div>
       </div>
       <div class="label">Pub/Sub Tracker</div>
-      <div class="sub">Cloud Run Polling</div>
+      <div class="sub">WhatsApp Alerts &amp; Polling</div>
     </div>
   </div>
 </div>
@@ -484,39 +529,65 @@
   <!-- Left Column: Agent Controls & Artifacts -->
   <div class="col-left">
 
-    <!-- STEP 1: Upload / Input -->
+    <!-- STEP 1: Multi-Document Bundle Input -->
     <div class="card" id="uploadCard">
       <div class="card-header">
-        <h2><span class="eyebrow blue">STEP 1</span> Inpatient Hospital Bill &amp; Policy Input</h2>
+        <h2><span class="eyebrow blue">STEP 1</span> 3-Document Evidence Ingestion Bundle</h2>
         <span style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;" id="activeScenarioLabel">Happy Path Preset</span>
       </div>
-      <textarea id="billText" placeholder="Paste hospital bill text or select a preset above..."></textarea>
+
+      <!-- Document tabs -->
+      <div class="doc-tabs">
+        <button class="doc-tab active" id="tabBill" onclick="switchDocTab('bill')">1. Final Hospital Bill</button>
+        <button class="doc-tab" id="tabDischarge" onclick="switchDocTab('discharge')">2. Discharge Summary</button>
+        <button class="doc-tab" id="tabRx" onclick="switchDocTab('rx')">3. Doctor Prescription</button>
+      </div>
+
+      <div id="docContentBill">
+        <textarea id="billText" placeholder="Hospital itemized bill text..."></textarea>
+      </div>
+      <div id="docContentDischarge" style="display:none;">
+        <textarea id="dischargeText" placeholder="Clinical discharge summary text..."></textarea>
+      </div>
+      <div id="docContentRx" style="display:none;">
+        <textarea id="rxText" placeholder="Doctor prescriptions & medications..."></textarea>
+      </div>
+
       <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
         <div style="display:flex; gap:10px;">
           <button onclick="runIntake()" id="btnIntake">
-            <span>⚡ Run Intake Agent</span>
+            <span>⚡ Ingest &amp; Cross-Verify</span>
           </button>
           <button class="secondary" onclick="runFullPipeline()" id="btnFullPipeline">
             <span>🚀 Run Full Pipeline (Auto)</span>
           </button>
         </div>
-        <button class="secondary" onclick="resetDemo()" style="font-size:12px; padding:8px 12px;">Reset</button>
+        <button class="secondary" onclick="resetDemo()" style="font-size:11.5px; padding:7px 12px;">Reset</button>
       </div>
     </div>
 
-    <!-- STEP 2: Intake Agent Results -->
+    <!-- STEP 2: Intake Agent & Cross-Doc Verification -->
     <div class="card" id="intakeCard" style="display:none;">
       <div class="card-header">
-        <h2><span class="eyebrow blue">INTAKE AGENT</span> Structured Fields &amp; Confidence Review</h2>
-        <span id="intakeStats" style="font-size:11.5px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
+        <h2><span class="eyebrow blue">INTAKE AGENT</span> Cross-Document Clinical Verification</h2>
+        <span id="intakeStats" style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
       </div>
-      <div style="font-size:12px; color:var(--text-dim); margin-bottom:12px;">
-        Gemini 3.5 Multimodal OCR extracted structured claim fields. Fields with &lt;80% confidence are highlighted in <strong style="color:var(--amber);">amber</strong> for human-in-the-loop confirmation.
+
+      <!-- Cross-Doc Verification Box -->
+      <div class="cross-doc-card" id="crossDocBox">
+        <div class="cross-doc-header">
+          <span class="cross-doc-title">
+            <span>🔬 Multi-Document Consistency Audit:</span>
+            <span id="crossDocScoreBadge" class="chip ready">98% CONSISTENT</span>
+          </span>
+        </div>
+        <div id="crossDocList"></div>
       </div>
+
       <div class="field-grid" id="fieldGrid"></div>
-      <div style="margin-top:16px; display:flex; gap:10px;">
+      <div style="margin-top:14px; display:flex; gap:10px;">
         <button onclick="runDecision()" id="btnDecision">
-          <span>⚡ Run Decision Agent (Rules Engine)</span>
+          <span>⚡ Run Decision Agent (Rules &amp; Multi-Policy)</span>
         </button>
       </div>
     </div>
@@ -525,7 +596,7 @@
     <div class="card" id="decisionCard" style="display:none;">
       <div class="card-header">
         <h2><span class="eyebrow amber">DECISION AGENT</span> Eligibility &amp; Financial Math</h2>
-        <span id="decisionLatency" style="font-size:11.5px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
+        <span id="decisionLatency" style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
       </div>
 
       <div class="decision-hero" id="decisionHero">
@@ -537,6 +608,15 @@
         <span class="status-badge-lg approved" id="statusBadge">ELIGIBLE</span>
       </div>
 
+      <!-- Dual Policy Split Claim Optimizer -->
+      <div class="dual-opt-box" id="dualOptBox" style="display:none;">
+        <div class="dual-opt-header">
+          <span class="dual-opt-title">💡 Dual-Policy Split Claim Optimizer:</span>
+          <span class="chip deadline">100% RECOVERY ROUTING</span>
+        </div>
+        <div style="font-size:11.5px; color:var(--text); line-height:1.4;" id="dualOptDesc"></div>
+      </div>
+
       <div class="rules-grid" id="rulesGrid"></div>
 
       <div class="trace-container">
@@ -544,7 +624,7 @@
         <ul class="trace-list" id="traceList"></ul>
       </div>
 
-      <div style="margin-top:16px; display:flex; gap:10px;">
+      <div style="margin-top:14px; display:flex; gap:10px;">
         <button onclick="runExecution()" id="btnExecution">
           <span>⚡ Run Execution Agent (Assemble Package)</span>
         </button>
@@ -555,7 +635,7 @@
     <div class="card" id="executionCard" style="display:none;">
       <div class="card-header">
         <h2><span class="eyebrow">EXECUTION AGENT</span> IRDAI Claim Form &amp; Evidence Bundle</h2>
-        <span id="executionLatency" style="font-size:11.5px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
+        <span id="executionLatency" style="font-size:11px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace;"></span>
       </div>
 
       <div class="pdf-preview-box" id="pdfPreviewBox">
@@ -567,23 +647,23 @@
           </div>
         </div>
         <a id="pdfDownloadLink" href="#" target="_blank">
-          <button class="outline-accent" style="font-size:12px; padding:8px 14px;">
+          <button class="outline-accent" style="font-size:11.5px; padding:7px 12px;">
             <span>↓ Download Form PDF</span>
           </button>
         </a>
       </div>
 
-      <h3 style="font-size:13px; font-family:'Space Grotesk',sans-serif; margin:0 0 10px; color:var(--text);">Mandatory Evidence Checklist:</h3>
+      <h3 style="font-size:12.5px; font-family:'Space Grotesk',sans-serif; margin:0 0 8px; color:var(--text);">Mandatory Evidence Checklist:</h3>
       <ul class="checklist" id="checklistList"></ul>
 
-      <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:14px; margin-top:14px;">
-        <div style="font-size:12.5px; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+      <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:12px;">
+        <div style="font-size:12px; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
           <span>🛡️ Human-in-the-Loop Approval Gate</span>
         </div>
-        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:12px; line-height:1.4;">
-          The autonomous pipeline halts here. By clicking Approve, you authorize ClaimPilot to dispatch the claim package to the TPA portal via Google Cloud Pub/Sub.
+        <div style="font-size:11px; color:var(--text-dim); margin-bottom:10px; line-height:1.4;">
+          The autonomous pipeline halts here. By clicking Approve, you authorize ClaimPilot to dispatch the claim package to the TPA portal via Google Cloud Pub/Sub and trigger proactive WhatsApp status tracking.
         </div>
-        <button onclick="approveClaim()" id="approveBtn" style="font-size:13.5px; padding:11px 22px;">
+        <button onclick="approveClaim()" id="approveBtn" style="font-size:13px; padding:10px 20px;">
           <span>✓ Approve &amp; Dispatch to TPA</span>
         </button>
       </div>
@@ -595,12 +675,12 @@
         <h2><span class="eyebrow purple">ASYNC TRACKER</span> Cloud Run TPA Polling Milestones</h2>
         <span id="trackingLiveBadge" class="chip deadline"><span class="pulse-dot"></span> POLLING ACTIVE</span>
       </div>
-      <div class="tracking-box">
-        <div class="tracking-header">
-          <span style="font-size:12px; font-family:'IBM Plex Mono',monospace; color:var(--text-dim);" id="trackingClaimRef">REF: —</span>
-          <span style="font-size:11px; color:var(--accent); font-family:'IBM Plex Mono',monospace;" id="trackingTimeElapsed">Updated just now</span>
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:14px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <span style="font-size:11.5px; font-family:'IBM Plex Mono',monospace; color:var(--text-dim);" id="trackingClaimRef">REF: —</span>
+          <span style="font-size:10.5px; color:var(--accent); font-family:'IBM Plex Mono',monospace;" id="trackingTimeElapsed">Updated just now</span>
         </div>
-        <ul class="timeline" id="trackingTimeline"></ul>
+        <ul class="timeline" id="trackingTimeline" style="list-style:none; padding:0; margin:0;"></ul>
       </div>
     </div>
 
@@ -615,15 +695,32 @@
           <span>Live Agent Tool Traces</span>
         </div>
         <div class="log-actions">
-          <button class="secondary" onclick="clearLogs()" style="font-size:10.5px; padding:4px 8px;">Clear</button>
+          <button class="secondary" onclick="clearLogs()" style="font-size:10px; padding:3px 7px;">Clear</button>
         </div>
       </div>
       <div class="log-panel" id="logPanel">
-        <div style="color:var(--text-muted); font-style:italic;">// Waiting for agent execution... Select a scenario and click Run Intake Agent.</div>
+        <div style="color:var(--text-muted); font-style:italic;">// Waiting for agent execution... Select a scenario and click Ingest &amp; Cross-Verify.</div>
       </div>
     </div>
   </div>
 </main>
+
+<!-- Slide-out WhatsApp Preview Widget -->
+<div class="phone-drawer" id="phoneDrawer">
+  <div class="phone-top-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="wa-avatar">CP</div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#fff;">ClaimPilot Assistant</div>
+        <div style="font-size:9.5px; color:#25D366; font-family:'IBM Plex Mono',monospace;">● Online · Proactive Alerts</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="togglePhoneDrawer()" style="font-size:16px; color:#8696A0;">&times;</button>
+  </div>
+  <div class="wa-chat-area" id="waChatArea">
+    <!-- Messages injected dynamically -->
+  </div>
+</div>
 
 <!-- Field Edit Modal -->
 <div class="modal-overlay" id="editModal">
@@ -632,14 +729,50 @@
       <h3>Edit Extracted Field (Human-in-the-Loop)</h3>
       <button class="modal-close" onclick="closeEditModal()">&times;</button>
     </div>
-    <div style="font-size:12.5px; color:var(--text-dim); margin-bottom:14px;">
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:12px;">
       Correct the OCR value. Saving will update confidence to 100% and re-align downstream decision calculations.
     </div>
-    <label style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-family:'IBM Plex Mono',monospace;" id="editFieldLabel">Field Name</label>
-    <input type="text" id="editFieldValue" style="width:100%; margin-top:6px; padding:10px 12px; background:#0B0E15; border:1px solid var(--line); border-radius:6px; color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:13px;">
-    <div style="margin-top:18px; display:flex; justify-content:flex-end; gap:10px;">
+    <label style="font-size:10.5px; text-transform:uppercase; color:var(--text-muted); font-family:'IBM Plex Mono',monospace;" id="editFieldLabel">Field Name</label>
+    <input type="text" id="editFieldValue" style="width:100%; margin-top:5px; padding:9px 11px; background:#080C14; border:1px solid var(--line); border-radius:6px; color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:12.5px;">
+    <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:8px;">
       <button class="secondary" onclick="closeEditModal()">Cancel</button>
       <button onclick="saveFieldEdit()">Save &amp; Recalculate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Before vs After Modal -->
+<div class="modal-overlay" id="beforeAfterModal">
+  <div class="modal" style="max-width:780px;">
+    <div class="modal-header">
+      <h3>⚡ Before vs. After ClaimPilot</h3>
+      <button class="modal-close" onclick="closeBeforeAfterModal()">&times;</button>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
+      <div style="background:#140C0C; border:1px solid rgba(255,92,92,0.3); border-radius:10px; padding:16px;">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; color:var(--red); margin-bottom:10px;">
+          ❌ Traditional Reimbursement
+        </div>
+        <ul style="list-style:none; padding:0; margin:0; font-size:12px; line-height:1.6; color:#D1D5DB;">
+          <li>⏱️ <strong>45-60 minutes</strong> manual form filing</li>
+          <li>📄 <strong>6 physical paper forms</strong> to print &amp; courier</li>
+          <li>❓ <strong>38% rejection rate</strong> due to clerical errors</li>
+          <li>⏳ <strong>30-45 days</strong> blind waiting with zero status alerts</li>
+          <li>💸 <strong>Over ₹15,000 crore</strong> unclaimed in India yearly</li>
+        </ul>
+      </div>
+      <div style="background:#071411; border:1px solid rgba(76,195,176,0.4); border-radius:10px; padding:16px;">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; color:var(--accent); margin-bottom:10px;">
+          ✓ With ClaimPilot Autonomous Suite
+        </div>
+        <ul style="list-style:none; padding:0; margin:0; font-size:12px; line-height:1.6; color:#D1D5DB;">
+          <li>⏱️ <strong>3.8 minutes</strong> autonomous processing</li>
+          <li>📄 <strong>IRDAI standard PDF</strong> auto-filled from 3-doc bundle</li>
+          <li>🔬 <strong>100% deterministic rules</strong> (zero hallucinations)</li>
+          <li>📱 <strong>Proactive WhatsApp updates</strong> via Pub/Sub</li>
+          <li>💰 <strong>₹0.42 total compute cost</strong> per claim</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -651,26 +784,26 @@
       <h3>ClaimPilot — Architecture &amp; Demo Blueprint</h3>
       <button class="modal-close" onclick="closeArchModal()">&times;</button>
     </div>
-    <div style="font-size:13px; line-height:1.6; color:var(--text-dim);">
-      <h4 style="color:var(--accent); margin:12px 0 6px;">1. Three-Agent Architecture (Google Cloud Native)</h4>
-      <div style="background:#090D14; border:1px solid var(--line); border-radius:8px; padding:12px; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-bottom:16px;">
-        [Upload Bill PDF] ──▶ <strong>Intake Agent</strong> (Gemini 3.5 Multimodal OCR + Confidence)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Writes structured fields to Firestore)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Decision Agent</strong> (Deterministic Rules Engine + Gemini Ambiguity)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Computes co-pay, waiting periods, sub-limits, exclusions)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Execution Agent</strong> (IRDAI Claim Form PDF + Evidence Checklist)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Human Approval Gate]<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Pub/Sub Event</strong> ──▶ <strong>Cloud Run Worker</strong> (Async TPA Polling)
+    <div style="font-size:12.5px; line-height:1.6; color:var(--text-dim);">
+      <h4 style="color:var(--accent); margin:10px 0 6px;">1. Three-Agent Architecture (Google Cloud Native)</h4>
+      <div style="background:#080C14; border:1px solid var(--line); border-radius:8px; padding:12px; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-bottom:14px;">
+        [3-Doc Bundle (Bill + Summary + Rx)] ──▶ <strong>Intake Agent</strong> (Gemini 3.5 Multimodal + Cross-Verification)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Writes structured fields to Firestore &amp; DPDP redaction)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Decision Agent</strong> (Deterministic Rules Engine + Dual-Policy Split)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ (Computes co-pay, waiting periods, sub-limits, exclusions)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Execution Agent</strong> (IRDAI Claim Form PDF + Evidence Checklist)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Human Approval Gate]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Pub/Sub Event</strong> ──▶ <strong>Cloud Run Worker</strong> (Async TPA Polling &amp; WhatsApp Alerts)
       </div>
 
-      <h4 style="color:var(--accent); margin:12px 0 6px;">2. 3-Minute Demo Video Script Guide</h4>
-      <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;">
+      <h4 style="color:var(--accent); margin:10px 0 6px;">2. 3-Minute Demo Video Script Guide</h4>
+      <table style="width:100%; border-collapse:collapse; font-size:11.5px; margin-top:6px;">
         <tr style="border-bottom:1px solid var(--line); text-align:left;">
           <th style="padding:6px; color:var(--text);">Time</th>
           <th style="padding:6px; color:var(--text);">Beat</th>
@@ -679,27 +812,27 @@
         <tr style="border-bottom:1px solid var(--line-subtle);">
           <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:00–0:20</td>
           <td style="padding:6px; font-weight:600; color:var(--accent);">Problem</td>
-          <td style="padding:6px;">"In India, over 35% of eligible Mediclaim reimbursements go unclaimed due to paperwork friction."</td>
+          <td style="padding:6px;">Show "45m vs 4m" comparison card. State Indian Mediclaim unclaimed loss metric.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--line-subtle);">
           <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:20–0:45</td>
-          <td style="padding:6px; font-weight:600; color:var(--blue);">Intake OCR</td>
-          <td style="padding:6px;">Load Happy Path / Low Confidence Scan. Show orange confidence badge and inline edit.</td>
+          <td style="padding:6px; font-weight:600; color:var(--blue);">3-Doc Ingestion</td>
+          <td style="padding:6px;">Show 3-doc tabs (Bill, Discharge, Rx). Click Ingest &amp; Cross-Verify. Highlight DPDP privacy shield.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--line-subtle);">
           <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">0:45–1:45</td>
-          <td style="padding:6px; font-weight:600; color:var(--amber);">Decision Agent</td>
-          <td style="padding:6px;">Show deterministic co-pay calculation (10% = ₹7,750), explain zero hallucination rule.</td>
+          <td style="padding:6px; font-weight:600; color:var(--amber);">Decision &amp; Dual-Opt</td>
+          <td style="padding:6px;">Show deterministic rules engine math + Dual-Policy Split optimizer recovering co-pay.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--line-subtle);">
           <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">1:45–2:15</td>
           <td style="padding:6px; font-weight:600; color:var(--accent);">Execution &amp; Gate</td>
-          <td style="padding:6px;">Show generated IRDAI PDF, click Approve &amp; Submit, watch async Pub/Sub timeline update.</td>
+          <td style="padding:6px;">Download IRDAI PDF, click Approve &amp; Dispatch, watch WhatsApp drawer open with alerts.</td>
         </tr>
         <tr>
           <td style="padding:6px; font-family:'IBM Plex Mono',monospace;">2:15–3:00</td>
           <td style="padding:6px; font-weight:600; color:var(--purple);">Edge Cases &amp; Close</td>
-          <td style="padding:6px;">Switch to Excluded Rhinoplasty preset to show transparent rejection, then wrap up.</td>
+          <td style="padding:6px;">Switch to Excluded Rhinoplasty preset to show zero-hallucination rejection. Close strongly.</td>
         </tr>
       </table>
     </div>
@@ -717,8 +850,8 @@ let currentExecutionData = null;
 let editingFieldKey = null;
 let logPollTimer = null;
 let trackPollTimer = null;
+let privacyShieldActive = false;
 
-// Initialize on page load
 window.addEventListener("DOMContentLoaded", async () => {
   await loadScenarios();
 });
@@ -759,11 +892,49 @@ function selectScenario(scenarioId) {
   const activeBtn = document.getElementById(`sc-btn-${scenarioId}`);
   if (activeBtn) activeBtn.classList.add("active");
 
-  document.getElementById("billText").value = sc.bill_text;
+  document.getElementById("billText").value = sc.bill_text || "";
+  document.getElementById("dischargeText").value = sc.discharge_summary || "";
+  document.getElementById("rxText").value = sc.prescription_text || "";
   document.getElementById("activeScenarioLabel").textContent = sc.title;
 
-  // Reset steps
+  switchDocTab("bill");
   resetDemoStateOnly();
+}
+
+function switchDocTab(tabName) {
+  document.querySelectorAll(".doc-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("docContentBill").style.display = "none";
+  document.getElementById("docContentDischarge").style.display = "none";
+  document.getElementById("docContentRx").style.display = "none";
+
+  if (tabName === "bill") {
+    document.getElementById("tabBill").classList.add("active");
+    document.getElementById("docContentBill").style.display = "block";
+  } else if (tabName === "discharge") {
+    document.getElementById("tabDischarge").classList.add("active");
+    document.getElementById("docContentDischarge").style.display = "block";
+  } else if (tabName === "rx") {
+    document.getElementById("tabRx").classList.add("active");
+    document.getElementById("docContentRx").style.display = "block";
+  }
+}
+
+function togglePrivacyShield() {
+  privacyShieldActive = !privacyShieldActive;
+  const btn = document.getElementById("privacyToggleBtn");
+  const badge = document.getElementById("privacyStatusBadge");
+  if (privacyShieldActive) {
+    btn.classList.add("active");
+    badge.textContent = "ACTIVE (DPDP 2023)";
+    badge.style.color = "var(--accent)";
+  } else {
+    btn.classList.remove("active");
+    badge.textContent = "OFF";
+    badge.style.color = "var(--text-muted)";
+  }
+  if (currentClaimId) {
+    runIntake();
+  }
 }
 
 function fmtMoney(num) {
@@ -785,12 +956,20 @@ function scrollToCard(id) {
 async function runIntake() {
   setRailNode("node-intake", "active");
   const raw_text = document.getElementById("billText").value.trim();
+  const discharge_summary = document.getElementById("dischargeText").value.trim();
+  const prescription_text = document.getElementById("rxText").value.trim();
 
   try {
     const res = await fetch(`${API}/api/intake`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ raw_text, scenario_id: activeScenarioId })
+      body: JSON.stringify({
+        raw_text,
+        discharge_summary,
+        prescription_text,
+        scenario_id: activeScenarioId,
+        privacy_shield: privacyShieldActive
+      })
     });
     const data = await res.json();
     currentClaimId = data.claim_id;
@@ -800,6 +979,7 @@ async function runIntake() {
     document.getElementById("claimIdText").textContent = currentClaimId;
     setRailNode("node-intake", "done");
 
+    renderCrossDocMatrix(data.intake.cross_document_verification);
     renderIntakeFields(data.intake);
     document.getElementById("intakeCard").style.display = "block";
     startLogPolling();
@@ -810,6 +990,35 @@ async function runIntake() {
   }
 }
 
+function renderCrossDocMatrix(crossDoc) {
+  if (!crossDoc) return;
+  const list = document.getElementById("crossDocList");
+  list.innerHTML = "";
+  const scoreBadge = document.getElementById("crossDocScoreBadge");
+
+  if (crossDoc.status === "CONSISTENT") {
+    scoreBadge.className = "chip ready";
+    scoreBadge.textContent = `${crossDoc.consistency_score}% CONSISTENT`;
+  } else {
+    scoreBadge.className = "chip needed";
+    scoreBadge.textContent = "DISCREPANCY DETECTED";
+  }
+
+  (crossDoc.checks || []).forEach(c => {
+    const isOk = c.status === "verified";
+    const div = document.createElement("div");
+    div.className = "cross-doc-item";
+    div.innerHTML = `
+      <div>
+        <div style="font-weight:600; color:${isOk ? 'var(--text)' : 'var(--amber)'};">${isOk ? '✓' : '⚠️'} ${c.item}</div>
+        <div style="color:var(--text-dim); margin-top:2px;">${c.detail}</div>
+      </div>
+      <span class="chip ${isOk ? 'ready' : 'needs_review'}">${c.status.toUpperCase()}</span>
+    `;
+    list.appendChild(div);
+  });
+}
+
 function renderIntakeFields(intake) {
   const grid = document.getElementById("fieldGrid");
   grid.innerHTML = "";
@@ -817,7 +1026,7 @@ function renderIntakeFields(intake) {
   const lowConf = intake.low_confidence_fields || [];
 
   const fieldKeys = [
-    "patient_name", "policy_number", "total_amount", "diagnosis",
+    "patient_name", "aadhaar_number", "pan_number", "policy_number", "total_amount", "diagnosis",
     "procedure", "hospital_name", "admission_date", "discharge_date",
     "treating_doctor", "hospital_gstin", "bill_date"
   ];
@@ -847,7 +1056,7 @@ function renderIntakeFields(intake) {
     grid.appendChild(div);
   });
 
-  document.getElementById("intakeStats").textContent = `${Object.keys(fields).length} fields extracted · ${intake.latency_ms || 140}ms`;
+  document.getElementById("intakeStats").textContent = `${Object.keys(fields).length} fields · 3-doc bundle · ${intake.latency_ms || 140}ms`;
 }
 
 function openEditModal(fieldKey, currentValue) {
@@ -880,7 +1089,6 @@ async function saveFieldEdit() {
     renderIntakeFields(data.intake);
     closeEditModal();
 
-    // Hide downstream steps if updated
     document.getElementById("decisionCard").style.display = "none";
     document.getElementById("executionCard").style.display = "none";
     document.getElementById("trackingCard").style.display = "none";
@@ -914,12 +1122,26 @@ async function runDecision() {
       badgeEl.className = "status-badge-lg approved";
       badgeEl.textContent = "APPROVED (ELIGIBLE)";
       mathEl.textContent = `Gross Bill: ${fmtMoney(d.total_amount)} - ${d.co_pay_percent}% Co-pay (${fmtMoney(d.co_pay_amount)}) = Net ${fmtMoney(d.eligible_amount)}`;
+
+      // Render Dual Policy Optimizer if available
+      const dual = d.dual_policy_optimization;
+      if (dual && dual.dual_policy_available && d.co_pay_amount > 0) {
+        document.getElementById("dualOptBox").style.display = "block";
+        document.getElementById("dualOptDesc").innerHTML = `
+          Holding both <strong>${dual.primary_policy.name}</strong> and <strong>${dual.secondary_policy.name}</strong>?
+          ClaimPilot detected that your corporate policy has <strong>0% co-pay</strong>.
+          By filing a secondary claim for the remaining <strong>${fmtMoney(dual.optimization_gain_inr)}</strong>, you achieve <strong>100% total reimbursement (${fmtMoney(dual.total_combined_reimbursement)})</strong> with ₹0 out-of-pocket loss.
+        `;
+      } else {
+        document.getElementById("dualOptBox").style.display = "none";
+      }
     } else {
       hero.className = "decision-hero rejected";
       amountEl.textContent = "₹0.00";
       badgeEl.className = "status-badge-lg rejected";
       badgeEl.textContent = "REJECTED (INELIGIBLE)";
       mathEl.textContent = d.reason;
+      document.getElementById("dualOptBox").style.display = "none";
     }
 
     renderRuleChecks(d);
@@ -986,7 +1208,7 @@ async function runExecution() {
     if (e.form_path) {
       pdfBox.style.display = "flex";
       link.href = `${API}/api/claim-form/${currentClaimId}`;
-      document.getElementById("pdfTitle").textContent = `IRDAI Claim Form (${currentClaimId}.pdf)`;
+      document.getElementById("pdfTitle").textContent = `IRDAI Standard Claim Form (${currentClaimId}.pdf)`;
     } else {
       pdfBox.style.display = "none";
     }
@@ -1028,6 +1250,10 @@ async function approveClaim() {
     document.getElementById("trackingCard").style.display = "block";
     document.getElementById("trackingClaimRef").textContent = `REF: ${currentClaimId}`;
     scrollToCard("trackingCard");
+
+    // Open phone drawer
+    document.getElementById("phoneDrawer").classList.add("open");
+
     startTrackingPolling();
   } catch (err) {
     console.error("Approval failed:", err);
@@ -1044,6 +1270,7 @@ function startTrackingPolling() {
       if (!res.ok) return;
       const data = await res.json();
       renderTrackingTimeline(data);
+      renderWhatsAppMessages(data.notifications || []);
 
       if (data.step >= data.total_steps - 1) {
         clearInterval(trackPollTimer);
@@ -1055,6 +1282,21 @@ function startTrackingPolling() {
       console.error("Tracking poll error:", err);
     }
   }, 1800);
+}
+
+function renderWhatsAppMessages(notifications) {
+  const chatArea = document.getElementById("waChatArea");
+  chatArea.innerHTML = "";
+  notifications.forEach(n => {
+    const bubble = document.createElement("div");
+    bubble.className = "wa-bubble";
+    bubble.innerHTML = `
+      <div>${n.text}</div>
+      <div class="wa-time">${n.timestamp} · ✓✓</div>
+    `;
+    chatArea.appendChild(bubble);
+  });
+  chatArea.scrollTop = chatArea.scrollHeight;
 }
 
 function renderTrackingTimeline(state) {
@@ -1075,21 +1317,25 @@ function renderTrackingTimeline(state) {
     const isFuture = idx > state.step;
 
     const li = document.createElement("li");
-    li.className = `timeline-step ${isDone ? 'done' : ''} ${isCurrent ? 'current' : ''}`;
+    li.style.cssText = "display:flex; gap:12px; margin-bottom:12px;";
     li.innerHTML = `
-      <div class="dot-wrap">
-        <div class="t-dot"></div>
-        <div class="t-line"></div>
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="width:10px; height:10px; border-radius:50%; background:${isDone ? 'var(--accent)' : (isCurrent ? 'var(--purple)' : 'var(--line)')}; ${isCurrent ? 'box-shadow:0 0 8px var(--purple);' : ''}"></div>
+        ${idx < allStages.length - 1 ? `<div style="width:2px; flex:1; background:${isDone ? 'var(--accent)' : 'var(--line)'}; margin-top:3px;"></div>` : ''}
       </div>
-      <div class="content">
-        <div class="t-title" style="color:${isFuture ? 'var(--text-muted)' : 'var(--text)'}">${st.title}</div>
-        <div class="t-desc">${st.desc}</div>
-        ${isCurrent ? '<div class="t-time"><span class="pulse-dot"></span> In Progress (Cloud Run Poller)</div>' : ''}
-        ${isDone ? '<div class="t-time" style="color:var(--accent);">✓ Cleared</div>' : ''}
+      <div style="padding-top:0;">
+        <div style="font-size:12px; font-weight:600; color:${isFuture ? 'var(--text-muted)' : 'var(--text)'}">${st.title}</div>
+        <div style="font-size:10.5px; color:var(--text-dim); margin-top:2px;">${st.desc}</div>
+        ${isCurrent ? '<div style="font-size:9.5px; color:var(--purple); margin-top:2px; font-family:\'IBM Plex Mono\',monospace;"><span class="pulse-dot"></span> In Progress (Cloud Run Poller)</div>' : ''}
+        ${isDone ? '<div style="font-size:9.5px; color:var(--accent); margin-top:2px; font-family:\'IBM Plex Mono\',monospace;">✓ Milestone Cleared</div>' : ''}
       </div>
     `;
     timeline.appendChild(li);
   });
+}
+
+function togglePhoneDrawer() {
+  document.getElementById("phoneDrawer").classList.toggle("open");
 }
 
 function startLogPolling() {
@@ -1174,12 +1420,20 @@ function resetDemoStateOnly() {
   document.getElementById("decisionCard").style.display = "none";
   document.getElementById("executionCard").style.display = "none";
   document.getElementById("trackingCard").style.display = "none";
+  document.getElementById("phoneDrawer").classList.remove("open");
   clearLogs();
 }
 
 function resetDemo() {
   resetDemoStateOnly();
   selectScenario(activeScenarioId);
+}
+
+function openBeforeAfterModal() {
+  document.getElementById("beforeAfterModal").classList.add("open");
+}
+function closeBeforeAfterModal() {
+  document.getElementById("beforeAfterModal").classList.remove("open");
 }
 
 function openArchModal() {

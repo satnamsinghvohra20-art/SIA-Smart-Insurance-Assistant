@@ -49,8 +49,11 @@ RULES_PATH = DATA_DIR / "policy_rules.json"
 
 class IntakeRequest(BaseModel):
     raw_text: str | None = None
+    discharge_summary: str | None = None
+    prescription_text: str | None = None
     field_overrides: dict | None = None
     scenario_id: str | None = None
+    privacy_shield: bool = False
 
 
 class DecisionRequest(BaseModel):
@@ -95,28 +98,35 @@ def list_policies():
 
 @app.post("/api/intake")
 def intake(req: IntakeRequest):
-    """Intake Agent: extracts structured fields with confidence scores."""
+    """Intake Agent: extracts structured fields with confidence scores from 3-doc bundle."""
     claim_id = f"CLM-{uuid.uuid4().hex[:8].upper()}"
 
-    # Resolve bill text
     raw_text = req.raw_text
-    if not raw_text:
-        if SCENARIOS_PATH.exists():
-            with open(SCENARIOS_PATH, encoding="utf-8") as f:
-                data = json.load(f)
-                raw_text = data["scenarios"][0]["bill_text"]
-        else:
-            raw_text = "FINAL HOSPITAL BILL\nPatient Name: Satnam Singh\nTotal: 77500.00"
+    discharge_summary = req.discharge_summary
+    prescription_text = req.prescription_text
+
+    if not raw_text and SCENARIOS_PATH.exists():
+        with open(SCENARIOS_PATH, encoding="utf-8") as f:
+            data = json.load(f)
+            sc0 = data["scenarios"][0]
+            raw_text = sc0.get("bill_text")
+            discharge_summary = sc0.get("discharge_summary")
+            prescription_text = sc0.get("prescription_text")
 
     intake_result = intake_agent.run_intake(
         claim_id=claim_id,
-        raw_text=raw_text,
+        raw_text=raw_text or "",
+        discharge_summary=discharge_summary,
+        prescription_text=prescription_text,
         field_overrides=req.field_overrides,
+        privacy_shield=req.privacy_shield,
     )
 
     CLAIMS[claim_id] = {
         "claim_id": claim_id,
         "raw_text": raw_text,
+        "discharge_summary": discharge_summary,
+        "prescription_text": prescription_text,
         "intake": intake_result,
     }
 

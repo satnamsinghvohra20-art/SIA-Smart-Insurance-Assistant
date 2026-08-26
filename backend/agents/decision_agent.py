@@ -2,22 +2,13 @@
 DECISION AGENT
 --------------
 Responsibility: Given structured claim fields + the policy rules, compute eligibility
-and payable amount deterministically.
+and payable amount deterministically, and optimize multi-policy dual claim settlements.
 
 WHY DETERMINISTIC?
   Eligibility math (co-pay, waiting periods, sub-limits, filing deadlines) MUST be
   reproducible, auditable, and hallucination-free for regulatory compliance.
   Gemini is only invoked for semantic reasoning over ambiguous free-text exclusion
   wording, maintaining an auditable separation of concerns.
-
-PRODUCTION SWAP POINT:
-  `interpret_exclusion_ambiguity()` connects to Gemini with structured policy context:
-
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=[f"Policy exclusions: {exclusions}. Diagnosis: {diagnosis}. Is this covered?"],
-        config={"response_mime_type": "application/json"}
-    )
 """
 import json
 import time
@@ -36,17 +27,49 @@ def load_policy(policy_number: str) -> dict | None:
     return rules.get("policies", {}).get(policy_number)
 
 
+def calculate_dual_policy_optimization(total_amount: float, primary_policy: dict, secondary_policy_id: str = "HDFC-ERGO-CORP-2024") -> dict:
+    """Calculates optimal split claim routing between Corporate and Personal policies."""
+    sec_policy = load_policy(secondary_policy_id)
+    if not sec_policy:
+        return {"dual_policy_available": False}
+
+    primary_copay = round(total_amount * (primary_policy.get("co_pay_percent", 10) / 100.0), 2)
+    primary_payout = total_amount - primary_copay
+
+    # Route remaining co-pay/uncovered amount to corporate 0% co-pay policy
+    secondary_claimable = min(primary_copay, sec_policy.get("sum_insured", 300000))
+    total_recovered = primary_payout + secondary_claimable
+    out_of_pocket = total_amount - total_recovered
+
+    return {
+        "dual_policy_available": True,
+        "primary_policy": {
+            "name": primary_policy.get("insurer"),
+            "claim_amount": primary_payout,
+            "copay_deducted": primary_copay,
+        },
+        "secondary_policy": {
+            "name": sec_policy.get("insurer"),
+            "policy_id": secondary_policy_id,
+            "claim_amount": secondary_claimable,
+            "copay_percent": sec_policy.get("co_pay_percent", 0),
+        },
+        "total_combined_reimbursement": total_recovered,
+        "out_of_pocket_expense": out_of_pocket,
+        "optimization_gain_inr": secondary_claimable,
+        "recommendation": f"File primary claim with {primary_policy.get('insurer')}, then submit settlement letter to {sec_policy.get('insurer')} for remaining ₹{secondary_claimable:,.2f} co-pay reimbursement.",
+    }
+
+
 def interpret_exclusion_ambiguity(diagnosis: str, procedure: str | None, exclusions: list) -> dict:
     """Evaluates diagnosis and procedure against exclusion clauses."""
     diag_proc_text = f"{diagnosis or ''} {procedure or ''}".lower()
 
     for exclusion in exclusions:
         ex_lower = exclusion.lower()
-        # Check key medical keywords
         keywords = [w for w in ex_lower.replace("(", " ").replace(")", " ").split() if len(w) > 3]
         matches = [kw for kw in keywords if kw in diag_proc_text]
 
-        # If significant keyword overlap exists
         if (
             ("cosmetic" in diag_proc_text or "rhinoplasty" in diag_proc_text or "aesthetic" in diag_proc_text)
             and ("cosmetic" in ex_lower or "rhinoplasty" in ex_lower or "aesthetic" in ex_lower)
@@ -185,7 +208,6 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
 
     # Check 3: Claim Filing Deadline Window
     discharge_dt = parse_date(fields.get("discharge_date"))
-    # Reference date is Aug 26, 2026 for simulation consistency
     today_dt = datetime(2026, 8, 26)
 
     if discharge_dt:
@@ -236,12 +258,17 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
         f"Financial Calculation: Total Bill Rs {total_amount:,.2f} - {co_pay_pct}% Co-pay (Rs {co_pay_amount:,.2f}) = Net Eligible Rs {net_payable:,.2f} (Within Sum Insured Rs {sum_insured:,.2f})."
     )
 
-    # Missing Documents Analysis
     required_docs = policy.get("required_documents", [])
     checks["required_documents"] = required_docs
 
-    # Final Overall Decision
     is_eligible = waiting_ok and (not is_excluded) and within_window and (total_amount > 0)
+
+    # Multi-Policy Split Claim Optimizer
+    dual_optimization = calculate_dual_policy_optimization(total_amount, policy)
+    if dual_optimization.get("dual_policy_available") and is_eligible and co_pay_amount > 0:
+        reasoning_trace.append(
+            f"Dual Policy Optimization: Secondary Corporate Claim can recover remaining Rs {dual_optimization['optimization_gain_inr']:,.2f} co-pay deduction!"
+        )
 
     if not is_eligible:
         if is_excluded:
@@ -287,6 +314,7 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
             d for d in required_docs if d not in ["hospital_final_bill", "payment_receipts"]
         ],
         "checks": checks,
+        "dual_policy_optimization": dual_optimization,
         "policy_summary": {
             "policy_id": policy.get("policy_id", policy_number),
             "insurer": policy.get("insurer"),
