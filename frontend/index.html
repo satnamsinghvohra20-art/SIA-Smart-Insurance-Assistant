@@ -199,7 +199,7 @@
     overflow: hidden;
   }
   .glass-card:hover {
-    border-color: rgba(56, 189, 248, 0.4);
+    border-color: rgba(52, 211, 153, 0.5);
     background: var(--bg-card-hover);
     box-shadow: var(--shadow-glow);
     transform: translateY(-2px);
@@ -207,7 +207,7 @@
 
   /* Header Bar */
   header {
-    background: rgba(3, 7, 18, 0.82);
+    background: rgba(2, 24, 16, 0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--border-subtle);
@@ -224,15 +224,15 @@
   .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
   .brand-logo-gem {
     width: 44px; height: 44px; border-radius: 14px;
-    background: linear-gradient(135deg, #00E5FF 0%, #2563EB 50%, #7C3AED 100%);
+    background: linear-gradient(135deg, #34D399 0%, #059669 50%, #047857 100%);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-weight: 900; font-size: 20px; font-family: 'Outfit', sans-serif;
-    box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.5);
     position: relative;
   }
   .brand-logo-gem::after {
     content: ''; position: absolute; inset: -2px; border-radius: 16px;
-    background: linear-gradient(135deg, #00E5FF, #A855F7); opacity: 0.4; z-index: -1;
+    background: linear-gradient(135deg, #34D399, #059669); opacity: 0.4; z-index: -1;
     filter: blur(8px);
   }
   .brand-text h1 {
@@ -251,7 +251,7 @@
   .nav-link:hover, .nav-link.active { color: #FFFFFF; }
   .nav-link.active::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--cyan-neon), var(--purple)); border-radius: 2px;
+    background: linear-gradient(90deg, #34D399, #10B981); border-radius: 2px;
   }
 
   /* Buttons */
@@ -269,27 +269,27 @@
     transform: skewX(-20deg); animation: shimmerSweep 3.5s infinite;
   }
   .btn-primary-glow {
-    background: linear-gradient(135deg, #0284C7 0%, #2563EB 50%, #7C3AED 100%);
-    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
-  }
-  .btn-primary-glow:hover {
-    box-shadow: 0 0 35px rgba(56, 189, 248, 0.6); transform: translateY(-2px);
-  }
-  .btn-emerald-glow {
-    background: linear-gradient(135deg, #059669 0%, #0D9488 50%, #0284C7 100%);
-    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);
+    background: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%);
+    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
   }
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 35px rgba(52, 211, 153, 0.6); transform: translateY(-2px);
+  }
+  .btn-emerald-glow {
+    background: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%);
+    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+  }
   .btn-emerald-glow:hover {
-    box-shadow: 0 0 35px rgba(16, 185, 129, 0.6); transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(52, 211, 153, 0.7); transform: translateY(-2px);
   }
   .btn-glass {
-    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); color: #fff;
+    background: rgba(52, 211, 153, 0.08); border: 1px solid var(--border-glass); color: #fff;
     backdrop-filter: blur(14px);
   }
   .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(52, 211, 153, 0.16); border-color: rgba(52, 211, 153, 0.45);
     transform: translateY(-1px);
   }
 
@@ -304,20 +304,20 @@
     max-width: 1240px; margin: 70px auto 40px; padding: 0 36px; text-align: center; position: relative;
   }
   .hero-tag-badge {
-    background: rgba(56, 189, 248, 0.08); border: 1px solid var(--border-glow);
+    background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(52, 211, 153, 0.45);
     padding: 7px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 700;
-    color: var(--cyan-neon); display: inline-flex; align-items: center; gap: 8px; margin-bottom: 28px;
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.18);
+    color: #34D399; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 28px;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
   }
   .landing-hero h1 {
     font-size: 64px; font-weight: 900; line-height: 1.1; letter-spacing: -2px;
     font-family: 'Outfit', sans-serif; margin-bottom: 24px;
-    background: linear-gradient(180deg, #FFFFFF 30%, #94A3B8 100%);
+    background: linear-gradient(180deg, #FFFFFF 35%, #A7F3D0 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   @media (max-width: 768px) { .landing-hero h1 { font-size: 38px; letter-spacing: -1px; } }
   .landing-hero h1 span.gradient-text {
-    background: linear-gradient(135deg, #00E5FF 0%, #818CF8 50%, #C084FC 100%);
+    background: linear-gradient(135deg, #34D399 0%, #6EE7B7 50%, #A7F3D0 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .landing-hero p.hero-subtitle {
@@ -329,12 +329,12 @@
   /* Live Interactive Hero Adjudication Simulator Widget */
   .hero-preview-glass {
     max-width: 1100px; margin: 0 auto 90px;
-    background: rgba(15, 23, 42, 0.55);
+    background: var(--bg-card);
     backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-3xl);
     padding: 30px 38px;
-    box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.18);
+    box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.85), 0 0 50px rgba(16, 185, 129, 0.2);
     text-align: left;
   }
   .preview-top-bar {
@@ -350,7 +350,7 @@
 
   /* Interactive Multi-Agent Network Topology */
   .agent-network-box {
-    background: rgba(11, 17, 33, 0.75); border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
+    background: rgba(4, 34, 23, 0.8); border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
     padding: 20px 24px; display: flex; flex-direction: column; gap: 12px;
   }
   .agent-node-row {
@@ -365,6 +365,8 @@
   .section-header { text-align: center; margin-bottom: 60px; }
   .section-header h2 {
     font-size: 42px; font-weight: 900; font-family: 'Outfit', sans-serif; letter-spacing: -1px; margin-bottom: 16px;
+    background: linear-gradient(180deg, #FFFFFF 35%, #A7F3D0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .section-header p { font-size: 17px; color: var(--text-secondary); max-width: 660px; margin: 0 auto; }
 
@@ -381,12 +383,12 @@
     padding: 34px 30px; transition: var(--transition); position: relative; overflow: hidden;
   }
   .bento-card:hover {
-    background: var(--bg-card-hover); border-color: var(--cyan);
-    transform: translateY(-4px); box-shadow: 0 25px 50px rgba(0, 229, 255, 0.18);
+    background: var(--bg-card-hover); border-color: #34D399;
+    transform: translateY(-4px); box-shadow: 0 25px 50px rgba(16, 185, 129, 0.25);
   }
   .bento-icon {
     width: 52px; height: 52px; border-radius: 14px;
-    background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3);
+    background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(52, 211, 153, 0.35);
     display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;
   }
   .bento-card h3 { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 10px; font-family: 'Outfit', sans-serif; }
@@ -394,8 +396,8 @@
 
   /* Interactive Hospital Tariff vs GIPSA Benchmark Showcase */
   .tariff-showcase-box {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.7) 100%);
-    border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-3xl);
+    background: linear-gradient(135deg, rgba(6, 48, 33, 0.75) 0%, rgba(2, 24, 16, 0.95) 100%);
+    border: 1.5px solid rgba(52, 211, 153, 0.35); border-radius: var(--radius-3xl);
     padding: 40px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
   }
   @media (max-width: 860px) { .tariff-showcase-box { grid-template-columns: 1fr; } }
@@ -691,7 +693,7 @@
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Autonomous 6-Agent Status</div>
           <div class="agent-node-row"><span class="agent-pill-name">📥 1. Intake Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ 4 Docs Parsed</span></div>
           <div class="agent-node-row"><span class="agent-pill-name">🛡️ 2. Safety Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ NMC Cleared</span></div>
-          <div class="agent-node-row"><span class="agent-pill-name">⚖️ 3. Eligibility Agent</span><span style="color:#00E5FF; font-family:'JetBrains Mono';">✓ 92.5% Score</span></div>
+          <div class="agent-node-row"><span class="agent-pill-name">⚖️ 3. Eligibility Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ 92.5% Score</span></div>
           <div class="agent-node-row"><span class="agent-pill-name">📄 4. Claim Prep Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ IRDAI Form Built</span></div>
         </div>
       </div>
