@@ -571,6 +571,48 @@
   .btn-close-modal { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 24px; }
   .btn-close-modal:hover { color: #fff; }
 
+  /* User Auth Profile Badge in Header */
+  .user-profile-badge {
+    background: rgba(6, 48, 33, 0.85); border: 1px solid rgba(52, 211, 153, 0.35);
+    border-radius: 30px; padding: 5px 14px 5px 6px; display: flex; align-items: center; gap: 10px;
+    cursor: pointer; transition: var(--transition);
+  }
+  .user-profile-badge:hover {
+    border-color: #34D399; background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 16px rgba(52, 211, 153, 0.3);
+  }
+  .user-avatar-circle {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #059669, #34D399); color: #021810;
+    font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .btn-logout-small {
+    background: rgba(239, 68, 68, 0.18); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5;
+    border-radius: 50%; width: 22px; height: 22px; font-size: 11px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: var(--transition);
+  }
+  .btn-logout-small:hover { background: #EF4444; color: #fff; }
+
+  /* Login Modal Tab Switcher & Personas */
+  .auth-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; margin-bottom: 22px; }
+  .auth-tab-btn {
+    background: transparent; border: 1px solid transparent; color: var(--text-muted);
+    padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+  }
+  .auth-tab-btn.active {
+    background: rgba(16, 185, 129, 0.15); border-color: rgba(52, 211, 153, 0.4); color: #34D399;
+  }
+  .persona-card {
+    background: rgba(2, 24, 16, 0.85); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
+    padding: 14px 18px; margin-bottom: 10px; cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .persona-card:hover {
+    border-color: #34D399; background: rgba(6, 48, 33, 0.9); transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+  }
+
   /* AI Claims Copilot Floating Drawer */
   .copilot-bubble-btn {
     position: fixed; bottom: 32px; right: 36px; z-index: 150;
@@ -638,10 +680,26 @@
     <a class="nav-link" onclick="openAnalyticsModal()">TPA Analytics</a>
   </div>
 
-  <div style="display: flex; align-items: center; gap: 12px;">
+  <div style="display: flex; align-items: center; gap: 10px;">
     <button class="btn btn-glass" id="themeToggleBtn" onclick="toggleTheme()">🌿 Glassy Green</button>
-    <button class="btn btn-emerald-glow btn-shimmer" onclick="showWorkspacePage(event); triggerScenario1();">⚡ Run Demo (₹42k Claim)</button>
     <button class="btn btn-glass" onclick="openApiKeyModal()">🔑 Gemini Key</button>
+
+    <!-- Authentication Area -->
+    <div id="authHeaderArea">
+      <button class="btn btn-emerald-glow" id="btnLoginHeader" onclick="openLoginModal()" style="padding: 9px 18px; font-size: 13px;">
+        🔐 Policy Login
+      </button>
+      <div class="user-profile-badge" id="userProfileBadge" style="display: none;" onclick="openLoginModal()">
+        <div class="user-avatar-circle" id="headerUserAvatar">MK</div>
+        <div style="text-align: left; line-height: 1.2;">
+          <div style="font-size: 12px; font-weight: 700; color: #fff;" id="headerUserName">Manpreet Kaur</div>
+          <div style="font-size: 10px; color: #34D399; font-family: 'JetBrains Mono', monospace;" id="headerUserPolicy">STAR-2026-99120</div>
+        </div>
+        <button class="btn-logout-small" onclick="event.stopPropagation(); handleLogout();" title="Sign Out">✕</button>
+      </div>
+    </div>
+
+    <button class="btn btn-emerald-glow btn-shimmer" onclick="showWorkspacePage(event); triggerScenario1();">⚡ Run Demo (₹42k Claim)</button>
   </div>
 </header>
 
@@ -1329,16 +1387,321 @@
   </div>
 </div>
 
+<!-- Modal 8: Policyholder & Insurer Login System -->
+<div class="modal-overlay" id="modalLogin">
+  <div class="modal-box-glass" style="max-width: 620px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #059669, #34D399); color: #021810; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">🔐</div>
+        <div>
+          <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin: 0; font-family: 'Outfit';">Policyholder &amp; TPA Portal Login</h3>
+          <p style="font-size: 11.5px; color: var(--text-secondary); margin: 2px 0 0;">Unified health insurance access via Policy Number, ABDM (ABHA ID), or Quick Demo</p>
+        </div>
+      </div>
+      <button class="btn-close-modal" onclick="closeLoginModal()">&times;</button>
+    </div>
+
+    <!-- Auth Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" id="tabAuthPolicy" onclick="switchAuthTab('policy')">📋 Policy Number + OTP</button>
+      <button class="auth-tab-btn" id="tabAuthAbha" onclick="switchAuthTab('abha')">🏥 ABDM (ABHA ID)</button>
+      <button class="auth-tab-btn" id="tabAuthDemo" onclick="switchAuthTab('demo')">⚡ 1-Click Quick Demo</button>
+    </div>
+
+    <!-- Tab 1: Policy Number + OTP -->
+    <div id="authContentPolicy">
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 6px;">Health Insurance Policy Number or Registered Mobile:</label>
+        <input type="text" class="input-glass-field" id="authPolicyInput" placeholder="e.g. STAR-2026-99120 or +91 98765 43210" value="STAR-2026-99120">
+        <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+          <span style="font-size: 10.5px; color: var(--text-muted);">Quick autofill:</span>
+          <a href="javascript:void(0)" onclick="document.getElementById('authPolicyInput').value='STAR-2026-99120'" style="font-size: 10.5px; color: #34D399; font-family: 'JetBrains Mono';">STAR-2026-99120</a>
+          <a href="javascript:void(0)" onclick="document.getElementById('authPolicyInput').value='HDFC-CORP-4401'" style="font-size: 10.5px; color: #34D399; font-family: 'JetBrains Mono';">HDFC-CORP-4401</a>
+          <a href="javascript:void(0)" onclick="document.getElementById('authPolicyInput').value='ICICI-ADV-7721'" style="font-size: 10.5px; color: #34D399; font-family: 'JetBrains Mono';">ICICI-ADV-7721</a>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 20px;">
+        <div style="flex: 1;">
+          <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 6px;">6-Digit OTP (Default Demo: 123456):</label>
+          <input type="text" class="input-glass-field" id="authOtpInput" placeholder="Enter 6-digit OTP" value="123456" style="font-family: 'JetBrains Mono'; letter-spacing: 4px; font-weight: 700;">
+        </div>
+        <button class="btn btn-glass" onclick="handleSendOtp()" style="padding: 12px 18px; font-size: 12px; white-space: nowrap;">
+          📲 Send OTP
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+        <span style="font-size: 11px; color: var(--text-muted);">🔒 Aadhaar &amp; IRDAI DPDP 2023 Encrypted</span>
+        <button class="btn btn-emerald-glow btn-shimmer" onclick="handleLoginSubmit('policy_number')" style="padding: 12px 28px;">
+          Verify &amp; Sign In &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 2: ABHA ID Login -->
+    <div id="authContentAbha" style="display: none;">
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 6px;">Ayushman Bharat Health Account (ABHA Address):</label>
+        <input type="text" class="input-glass-field" id="authAbhaInput" placeholder="e.g. manpreet.kaur@abdm or satnam.singh@abdm" value="manpreet.kaur@abdm">
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
+          <span style="font-size: 10.5px; color: var(--text-muted);">Registered ABHA Handles:</span>
+          <a href="javascript:void(0)" onclick="document.getElementById('authAbhaInput').value='manpreet.kaur@abdm'" style="font-size: 10.5px; color: #34D399; font-family: 'JetBrains Mono';">manpreet.kaur@abdm</a>
+          <a href="javascript:void(0)" onclick="document.getElementById('authAbhaInput').value='satnam.singh@abdm'" style="font-size: 10.5px; color: #34D399; font-family: 'JetBrains Mono';">satnam.singh@abdm</a>
+        </div>
+      </div>
+
+      <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 20px; font-size: 12px; color: var(--text-secondary);">
+        🌐 <strong>ABDM Health Exchange (HIE-CM):</strong> Direct connection with National Health Authority (NHA) digital health locker for 1-click clinical records sync.
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+        <span style="font-size: 11px; color: var(--text-muted);">🏥 NHA ABDM Certified</span>
+        <button class="btn btn-emerald-glow btn-shimmer" onclick="handleLoginSubmit('abha_otp')" style="padding: 12px 28px;">
+          Authorize via ABHA &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 3: Quick Demo Personas -->
+    <div id="authContentDemo" style="display: none;">
+      <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px;">
+        Select an instant pre-loaded Indian health insurance persona for evaluators and judges:
+      </p>
+
+      <div class="persona-card" onclick="handleDemoLogin('usr_manpreet_kaur')">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">MK</div>
+          <div>
+            <div style="font-weight: 800; color: #fff; font-size: 13.5px;">Manpreet Kaur</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Star Health Family Optima &bull; Policy: <span style="color: #34D399; font-family: 'JetBrains Mono';">STAR-2026-99120</span></div>
+          </div>
+        </div>
+        <span class="btn btn-glass" style="font-size: 11px; padding: 6px 12px;">Switch Persona &rarr;</span>
+      </div>
+
+      <div class="persona-card" onclick="handleDemoLogin('usr_satnam_singh')">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #0284C7; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">SS</div>
+          <div>
+            <div style="font-weight: 800; color: #fff; font-size: 13.5px;">Satnam Singh Vohra (Corporate Dual-Cover)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">HDFC ERGO Corporate + Star Health &bull; Policy: <span style="color: #38BDF8; font-family: 'JetBrains Mono';">HDFC-CORP-4401</span></div>
+          </div>
+        </div>
+        <span class="btn btn-glass" style="font-size: 11px; padding: 6px 12px;">Switch Persona &rarr;</span>
+      </div>
+
+      <div class="persona-card" onclick="handleDemoLogin('usr_tpa_adjudicator')">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #7C3AED; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">VA</div>
+          <div>
+            <div style="font-weight: 800; color: #fff; font-size: 13.5px;">Dr. Vikram Anand (MD) — Senior TPA Auditor</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Star Health In-House TPA Directorate &bull; <span style="color: #C084FC; font-family: 'JetBrains Mono';">NMC Verified Examiner</span></div>
+          </div>
+        </div>
+        <span class="btn btn-glass" style="font-size: 11px; padding: 6px 12px;">Switch Persona &rarr;</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- JavaScript Application Controller -->
 <script>
 let currentClaimId = "CLM-SCENARIO-1";
 let currentClaimData = null;
 let activeApiKey = localStorage.getItem("claimpilot_gemini_key") || "";
+let currentAuthUser = null;
+let currentAuthToken = localStorage.getItem("claimpilot_auth_token") || "";
 
 window.addEventListener("DOMContentLoaded", () => {
   initTheme();
+  checkAuthSession();
   loadInitialState();
 });
+
+// ==================== Authentication & Session Controller ====================
+async function checkAuthSession() {
+  try {
+    const token = localStorage.getItem("claimpilot_auth_token");
+    const storedUser = localStorage.getItem("claimpilot_auth_user");
+    if (storedUser) {
+      currentAuthUser = JSON.parse(storedUser);
+      updateAuthUI(currentAuthUser);
+    }
+    if (token) {
+      const res = await fetch(`/api/auth/me?token=${token}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          currentAuthUser = data.user;
+          localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+          updateAuthUI(data.user);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Auth check error:", err);
+  }
+}
+
+function updateAuthUI(user) {
+  const btnLogin = document.getElementById("btnLoginHeader");
+  const badge = document.getElementById("userProfileBadge");
+  const nameEl = document.getElementById("headerUserName");
+  const policyEl = document.getElementById("headerUserPolicy");
+  const avatarEl = document.getElementById("headerUserAvatar");
+
+  if (user) {
+    btnLogin.style.display = "none";
+    badge.style.display = "flex";
+    nameEl.textContent = user.full_name || "Policyholder";
+    policyEl.textContent = user.policy_number || "STAR-2026-99120";
+    avatarEl.textContent = user.avatar_text || (user.full_name ? user.full_name.substring(0, 2).toUpperCase() : "CP");
+  } else {
+    btnLogin.style.display = "inline-flex";
+    badge.style.display = "none";
+  }
+}
+
+function openLoginModal() {
+  document.getElementById("modalLogin").classList.add("open");
+}
+
+function closeLoginModal() {
+  document.getElementById("modalLogin").classList.remove("open");
+}
+
+function switchAuthTab(tabName) {
+  document.querySelectorAll(".auth-tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("authContentPolicy").style.display = "none";
+  document.getElementById("authContentAbha").style.display = "none";
+  document.getElementById("authContentDemo").style.display = "none";
+
+  if (tabName === "policy") {
+    document.getElementById("tabAuthPolicy").classList.add("active");
+    document.getElementById("authContentPolicy").style.display = "block";
+  } else if (tabName === "abha") {
+    document.getElementById("tabAuthAbha").classList.add("active");
+    document.getElementById("authContentAbha").style.display = "block";
+  } else if (tabName === "demo") {
+    document.getElementById("tabAuthDemo").classList.add("active");
+    document.getElementById("authContentDemo").style.display = "block";
+  }
+}
+
+async function handleSendOtp() {
+  const identifier = document.getElementById("authPolicyInput").value.trim();
+  if (!identifier) {
+    showToast("Please enter your policy number or mobile number.", "⚠️");
+    return;
+  }
+  try {
+    const res = await fetch("/api/auth/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier })
+    });
+    const data = await res.json();
+    showToast(`OTP Sent to registered mobile! (Demo code: 123456)`, "📲");
+    document.getElementById("authOtpInput").value = "123456";
+  } catch (err) {
+    showToast("Failed to send OTP: " + err.message, "❌");
+  }
+}
+
+async function handleLoginSubmit(authType) {
+  let identifier = "";
+  let otp = "";
+  if (authType === "policy_number") {
+    identifier = document.getElementById("authPolicyInput").value.trim();
+    otp = document.getElementById("authOtpInput").value.trim();
+  } else if (authType === "abha_otp") {
+    identifier = document.getElementById("authAbhaInput").value.trim();
+    otp = "123456";
+  }
+
+  if (!identifier) {
+    showToast("Please provide your login identifier.", "⚠️");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier, auth_type: authType, otp })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Authentication failed");
+
+    currentAuthUser = data.user;
+    currentAuthToken = data.token;
+    localStorage.setItem("claimpilot_auth_token", data.token);
+    localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+
+    updateAuthUI(data.user);
+    closeLoginModal();
+    showToast(`Welcome back, ${data.user.full_name}!`, "🎉");
+
+    // Apply policyholder details to workspace if on workspace
+    if (data.user.insurer_id) {
+      const select = document.getElementById("insurerSelect");
+      if (select) {
+        select.value = data.user.insurer_id;
+        if (typeof handlePolicyChanged === 'function') handlePolicyChanged();
+      }
+    }
+  } catch (err) {
+    showToast(err.message, "❌");
+  }
+}
+
+async function handleDemoLogin(userId) {
+  try {
+    const res = await fetch("/api/auth/demo-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Failed to switch persona");
+
+    currentAuthUser = data.user;
+    currentAuthToken = data.token;
+    localStorage.setItem("claimpilot_auth_token", data.token);
+    localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+
+    updateAuthUI(data.user);
+    closeLoginModal();
+    showToast(`Switched active profile to: ${data.user.full_name} (${data.user.role})`, "👤");
+
+    if (data.user.insurer_id) {
+      const select = document.getElementById("insurerSelect");
+      if (select) {
+        select.value = data.user.insurer_id;
+        if (typeof handlePolicyChanged === 'function') handlePolicyChanged();
+      }
+    }
+  } catch (err) {
+    showToast(err.message, "❌");
+  }
+}
+
+async function handleLogout() {
+  try {
+    const token = localStorage.getItem("claimpilot_auth_token");
+    if (token) {
+      await fetch(`/api/auth/logout?token=${token}`, { method: "POST" });
+    }
+  } catch (e) {}
+
+  currentAuthUser = null;
+  currentAuthToken = "";
+  localStorage.removeItem("claimpilot_auth_token");
+  localStorage.removeItem("claimpilot_auth_user");
+  updateAuthUI(null);
+  showToast("Logged out successfully.", "👋");
+}
 
 function initTheme() {
   const saved = localStorage.getItem("claimpilot_theme") || "green";

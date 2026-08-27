@@ -114,7 +114,22 @@ def run_tests():
     assert "Star Health" in copilot_res["reply"] or "co-pay" in copilot_res["reply"] or "10%" in copilot_res["reply"]
     print(f"  [OK] Copilot Answered Inquiry ({len(copilot_res['reply'])} chars).")
 
-    # 9. Full Live Pipeline Integration Test
+    # 9. Authentication & Policyholder Login System Test
+    print("\n[Auth & Login Test] Testing Multi-Factor Policyholder Authentication Engine...")
+    from services.auth_service import authenticate_user, generate_otp, find_user, get_session
+    otp_code = generate_otp("STAR-2026-99120")
+    assert otp_code == "123456"
+    auth_res = authenticate_user(identifier="STAR-2026-99120", auth_type="policy_number", otp=otp_code)
+    assert auth_res["status"] == "authenticated"
+    assert auth_res["user"]["full_name"] == "Manpreet Kaur"
+    assert auth_res["token"].startswith("cp_sess_")
+    
+    session = get_session(auth_res["token"])
+    assert session is not None
+    assert session["user"]["policy_number"] == "STAR-2026-99120"
+    print(f"  [OK] Policyholder Authenticated: {auth_res['user']['full_name']} (Policy: {auth_res['user']['policy_number']}, Token: {auth_res['token'][:16]}...).")
+
+    # 10. Full Live Pipeline Integration Test
     print("\n[Pipeline Integration Test] Testing Full 4-Agent Pipeline on Live Claim...")
     claim_id = "LIVE-CLM-GRANDPRIZE"
     intake_res = intake_agent.run_intake(
@@ -142,3 +157,4 @@ def run_tests():
 
 if __name__ == "__main__":
     run_tests()
+

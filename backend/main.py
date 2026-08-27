@@ -68,6 +68,16 @@ from services.copilot_service import answer_claim_query
 from services.gemini_extractor import set_gemini_api_key
 from services.bounding_box_annotator import generate_document_annotations
 from services.gipsa_tariff_engine import GIPSA_PPN_SCHEDULES
+from services import auth_service
+from services.auth_service import (
+    authenticate_user,
+    generate_otp,
+    get_session,
+    find_user,
+    create_session,
+    REGISTERED_POLICYHOLDERS,
+    ACTIVE_SESSIONS
+)
 
 app = FastAPI(
     title="ClaimPilot Multi-Agent API",
@@ -106,6 +116,21 @@ if not db.get_user("usr_demo123"):
 
 
 # ==================== Request Schemas ====================
+class AuthLoginRequest(BaseModel):
+    identifier: str
+    auth_type: Optional[str] = "policy_number"
+    otp: Optional[str] = None
+    password: Optional[str] = None
+
+
+class SendOtpRequest(BaseModel):
+    identifier: str
+
+
+class DemoLoginRequest(BaseModel):
+    user_id: str
+
+
 class CreateClaimRequest(BaseModel):
     title: str = "Corporate Health Reimbursement Claim"
     user_id: str = "usr_demo123"
@@ -616,6 +641,78 @@ def cloud_architecture():
             "observability": "Google Cloud Logging & Cloud Trace (Append-Only Event Auditing)"
         }
     }
+
+
+# ==================== Authentication & Policyholder Login Endpoints ====================
+@app.get("/api/auth/demo-users")
+def get_demo_users():
+    """Returns available registered demo personas for instant 1-click test evaluation."""
+    return {"users": REGISTERED_POLICYHOLDERS}
+
+
+@app.post("/api/auth/send-otp")
+def send_otp_endpoint(req: SendOtpRequest):
+    """Simulates sending a 6-digit Aadhaar/Mobile OTP for policyholder authentication."""
+    otp = generate_otp(req.identifier)
+    return {
+        "status": "otp_sent",
+        "identifier": req.identifier,
+        "demo_hint": "Default demo OTP is 123456",
+        "expires_in_seconds": 300
+    }
+
+
+@app.post("/api/auth/login")
+def login_endpoint(req: AuthLoginRequest):
+    """Authenticates policyholder via policy number, ABHA ID, email or phone with OTP."""
+    try:
+        res = authenticate_user(
+            identifier=req.identifier,
+            auth_type=req.auth_type or "policy_number",
+            otp=req.otp,
+            password=req.password
+        )
+        return res
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Authentication error: {str(e)}")
+
+
+@app.post("/api/auth/demo-login")
+def demo_login_endpoint(req: DemoLoginRequest):
+    """Instant 1-click login as specific demo persona."""
+    user = find_user(req.user_id)
+    if not user:
+        # Fallback to first persona
+        user = REGISTERED_POLICYHOLDERS[0]
+    session = create_session(user)
+    return {
+        "status": "authenticated",
+        "token": session["token"],
+        "user": user,
+        "message": f"Logged in as {user['full_name']} ({user['role']})"
+    }
+
+
+@app.get("/api/auth/me")
+def get_current_user_endpoint(token: Optional[str] = None):
+    """Returns current active user session."""
+    if not token:
+        # Return default guest/demo user
+        return {"authenticated": False, "user": REGISTERED_POLICYHOLDERS[0]}
+    session = get_session(token)
+    if not session:
+        return {"authenticated": False, "user": None}
+    return {"authenticated": True, "user": session["user"]}
+
+
+@app.post("/api/auth/logout")
+def logout_endpoint(token: Optional[str] = None):
+    """Logs out and destroys active session."""
+    if token and token in ACTIVE_SESSIONS:
+        del ACTIVE_SESSIONS[token]
+    return {"status": "logged_out", "message": "Session invalidated successfully"}
 
 
 @app.get("/")
