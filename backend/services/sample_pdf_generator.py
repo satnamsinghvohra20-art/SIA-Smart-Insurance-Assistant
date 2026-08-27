@@ -9,6 +9,7 @@ from reportlab.pdfgen import canvas
 
 SAMPLE_DIR = Path(__file__).parent.parent / "data" / "sample_files"
 SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
+SAMPLES_DIR = SAMPLE_DIR
 
 
 def generate_sample_bill_pdf() -> str:
