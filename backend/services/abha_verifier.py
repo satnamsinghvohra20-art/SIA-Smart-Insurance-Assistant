@@ -21,3 +21,7 @@ def verify_abha_identity(patient_name: str | None, aadhaar_masked: str | None = 
         "kyc_verification": "AADHAAR_OTP_VERIFIED",
         "summary": f"ABHA ID '{abha_address}' verified with National Health Authority (NHA). Digital Health Locker linked.",
     }
+
+
+# Alias for backward compatibility
+verify_abha_id = verify_abha_identity
