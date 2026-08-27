@@ -11,4 +11,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - PORT=8000
+      - GEMINI_API_KEY=AQ.Ab8RN6K2mTSO9LwhK8IdTJ8FhO_THfphygYU7cliUvwVrLjnwA
+      - GOOGLE_API_KEY=AQ.Ab8RN6K2mTSO9LwhK8IdTJ8FhO_THfphygYU7cliUvwVrLjnwA
     restart: unless-stopped
+

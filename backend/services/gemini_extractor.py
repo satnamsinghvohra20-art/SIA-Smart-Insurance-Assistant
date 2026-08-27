@@ -17,7 +17,25 @@ try:
 except ImportError:
     HAS_GENAI = False
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
+# Try loading from .env
+_env_path = Path(__file__).resolve().parent.parent / ".env"
+if _env_path.exists():
+    try:
+        with open(_env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    if k.strip() in ["GEMINI_API_KEY", "GOOGLE_API_KEY"] and not os.getenv(k.strip()):
+                        os.environ[k.strip()] = v.strip()
+    except Exception:
+        pass
+
+GEMINI_API_KEY = (
+    os.getenv("GEMINI_API_KEY")
+    or os.getenv("GOOGLE_API_KEY")
+    or "AQ.Ab8RN6K2mTSO9LwhK8IdTJ8FhO_THfphygYU7cliUvwVrLjnwA"
+)
 
 
 def set_gemini_api_key(api_key: str):
@@ -25,6 +43,10 @@ def set_gemini_api_key(api_key: str):
     GEMINI_API_KEY = api_key.strip()
     if HAS_GENAI and GEMINI_API_KEY:
         genai.configure(api_key=GEMINI_API_KEY)
+
+
+def is_gemini_configured() -> bool:
+    return bool(HAS_GENAI and GEMINI_API_KEY)
 
 
 if HAS_GENAI and GEMINI_API_KEY:
