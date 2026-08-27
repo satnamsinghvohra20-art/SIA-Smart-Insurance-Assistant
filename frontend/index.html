@@ -48,6 +48,114 @@
   }
 
   /* ==========================================================================
+     GLASSY GREEN THEME OVERRIDES
+     ========================================================================== */
+  body.green-theme {
+    --bg-black: #021810;
+    --bg-base: #042418;
+    --bg-surface: rgba(5, 41, 28, 0.75);
+    --bg-card: rgba(6, 48, 33, 0.6);
+    --bg-card-hover: rgba(10, 68, 47, 0.8);
+    --bg-glass-modal: rgba(4, 34, 23, 0.95);
+    
+    --border-subtle: rgba(52, 211, 153, 0.15);
+    --border-glass: rgba(52, 211, 153, 0.28);
+    --border-glow: rgba(16, 185, 129, 0.6);
+    --border-emerald-glow: rgba(52, 211, 153, 0.6);
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: #A7F3D0;
+    --text-muted: #6EE7B7;
+    
+    --cyan: #34D399;
+    --cyan-neon: #10B981;
+    --cyan-glow: rgba(16, 185, 129, 0.35);
+    --emerald: #10B981;
+    --emerald-glow: rgba(16, 185, 129, 0.35);
+    --purple: #059669;
+    --purple-glow: rgba(5, 150, 105, 0.35);
+    --amber: #FBBF24;
+    --amber-glow: rgba(251, 191, 36, 0.25);
+    
+    --shadow-subtle: 0 20px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(52, 211, 153, 0.2);
+    --shadow-glow: 0 0 45px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(52, 211, 153, 0.3);
+    
+    background: #021810 !important;
+    color: #FFFFFF !important;
+    background-image: 
+      radial-gradient(at 10% 0%, rgba(16, 185, 129, 0.28) 0px, transparent 45%),
+      radial-gradient(at 90% 10%, rgba(5, 150, 105, 0.22) 0px, transparent 45%),
+      radial-gradient(at 50% 50%, rgba(52, 211, 153, 0.14) 0px, transparent 50%),
+      radial-gradient(at 10% 90%, rgba(4, 120, 87, 0.2) 0px, transparent 45%),
+      linear-gradient(rgba(52, 211, 153, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52, 211, 153, 0.02) 1px, transparent 1px) !important;
+  }
+
+  body.green-theme header {
+    background: rgba(2, 24, 16, 0.88);
+    border-bottom-color: rgba(52, 211, 153, 0.2);
+  }
+  body.green-theme .brand-logo-gem {
+    background: linear-gradient(135deg, #34D399 0%, #059669 50%, #047857 100%);
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.6);
+  }
+  body.green-theme .brand-text h1 { color: #FFFFFF; }
+  body.green-theme .nav-link { color: #A7F3D0; }
+  body.green-theme .nav-link:hover, body.green-theme .nav-link.active { color: #FFFFFF; }
+  body.green-theme .landing-hero h1 {
+    background: linear-gradient(180deg, #FFFFFF 30%, #A7F3D0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body.green-theme .landing-hero h1 span.gradient-text {
+    background: linear-gradient(135deg, #34D399 0%, #6EE7B7 50%, #A7F3D0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body.green-theme .hero-preview-glass,
+  body.green-theme .bento-card,
+  body.green-theme .glass-card,
+  body.green-theme .workspace-kpi-banner,
+  body.green-theme .workspace-scenario-strip,
+  body.green-theme .agent-rail-container,
+  body.green-theme .approval-hero-card {
+    background: rgba(6, 48, 33, 0.6);
+    border-color: rgba(52, 211, 153, 0.25);
+    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(52, 211, 153, 0.15);
+  }
+  body.green-theme .agent-network-box,
+  body.green-theme .doc-slot-box,
+  body.green-theme .fact-item-card,
+  body.green-theme .evidence-card-row,
+  body.green-theme .kpi-tile-glass,
+  body.green-theme .rail-step-card {
+    background: rgba(4, 34, 23, 0.8);
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+  body.green-theme .input-glass-field,
+  body.green-theme .modal-box-glass,
+  body.green-theme .copilot-drawer-panel {
+    background: #032015 !important;
+    color: #FFFFFF !important;
+    border-color: rgba(52, 211, 153, 0.4) !important;
+  }
+  body.green-theme .copilot-chat-bubble.bot {
+    background: #063826 !important;
+    color: #FFFFFF !important;
+  }
+  body.green-theme .btn-glass {
+    background: rgba(52, 211, 153, 0.08);
+    border-color: rgba(52, 211, 153, 0.25);
+    color: #FFFFFF;
+  }
+  body.green-theme .btn-glass:hover {
+    background: rgba(52, 211, 153, 0.18);
+  }
+  body.green-theme footer {
+    background: #021810 !important;
+    border-top-color: rgba(52, 211, 153, 0.15) !important;
+    color: #A7F3D0 !important;
+  }
+
+  /* ==========================================================================
      WHITE / LIGHT THEME OVERRIDES
      ========================================================================== */
   body.light-theme {
@@ -631,7 +739,7 @@
   </div>
 
   <div style="display: flex; align-items: center; gap: 12px;">
-    <button class="btn btn-glass" id="themeToggleBtn" onclick="toggleTheme()">☀️ White Theme</button>
+    <button class="btn btn-glass" id="themeToggleBtn" onclick="cycleTheme()">🌿 Glassy Green</button>
     <button class="btn btn-emerald-glow btn-shimmer" onclick="showWorkspacePage(event); triggerScenario1();">⚡ Run Demo (₹42k Claim)</button>
     <button class="btn btn-glass" onclick="openApiKeyModal()">🔑 Gemini Key</button>
   </div>
@@ -1333,26 +1441,39 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function initTheme() {
-  const saved = localStorage.getItem("claimpilot_theme");
-  if (saved === "light") {
+  const saved = localStorage.getItem("claimpilot_theme") || "green";
+  setTheme(saved);
+}
+
+function setTheme(theme) {
+  document.body.classList.remove("green-theme", "light-theme");
+  const btn = document.getElementById("themeToggleBtn");
+  
+  if (theme === "green") {
+    document.body.classList.add("green-theme");
+    if (btn) btn.innerHTML = "🌿 Glassy Green";
+    localStorage.setItem("claimpilot_theme", "green");
+  } else if (theme === "light") {
     document.body.classList.add("light-theme");
-    const btn = document.getElementById("themeToggleBtn");
-    if (btn) btn.innerHTML = "🌙 Dark Theme";
+    if (btn) btn.innerHTML = "☀️ White Theme";
+    localStorage.setItem("claimpilot_theme", "light");
+  } else {
+    if (btn) btn.innerHTML = "🌙 OLED Dark";
+    localStorage.setItem("claimpilot_theme", "dark");
   }
 }
 
-function toggleTheme() {
-  const isLight = document.body.classList.toggle("light-theme");
-  const btn = document.getElementById("themeToggleBtn");
-  if (isLight) {
-    if (btn) btn.innerHTML = "🌙 Dark Theme";
-    localStorage.setItem("claimpilot_theme", "light");
-    showToast("Switched to Clean White Theme", "☀️");
-  } else {
-    if (btn) btn.innerHTML = "☀️ White Theme";
-    localStorage.setItem("claimpilot_theme", "dark");
-    showToast("Switched to OLED Dark Theme", "🌙");
-  }
+function cycleTheme() {
+  const current = localStorage.getItem("claimpilot_theme") || "green";
+  let next = "dark";
+  if (current === "green") next = "dark";
+  else if (current === "dark") next = "light";
+  else if (current === "light") next = "green";
+  
+  setTheme(next);
+  if (next === "green") showToast("Switched to Glassy Emerald Green Theme", "🌿");
+  else if (next === "light") showToast("Switched to Clean White Theme", "☀️");
+  else showToast("Switched to OLED Dark Theme", "🌙");
 }
 
 function showToast(msg, icon = "⚡") {
