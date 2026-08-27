@@ -301,30 +301,34 @@ async def upload_claim_documents(
     return pipeline_result
 
 
-@app.patch("/api/claim-cases/{claim_id}/facts/{fact_id}")
-@app.post("/api/claim-cases/{claim_id}/update-fact")
-def update_fact_endpoint(claim_id: str, req: FactUpdateRequest, fact_id: Optional[str] = None):
-    """Allows human-in-the-loop to correct an extracted fact and triggers deterministic re-evaluation."""
+@app.get("/api/annotations/{claim_id}")
+def get_claim_annotations(claim_id: str):
+    """Returns visual bounding box coordinate tokens for extracted facts."""
+    facts = db.get_extracted_facts(claim_id)
+    fields_dict = {f["key"]: {"value": f["value"], "confidence": f.get("confidence", 0.98)} for f in facts}
+    return generate_document_annotations(fields_dict)
+
+
+def _apply_fact_update(claim_id: str, key: str, value: Any, fact_id: Optional[str] = None):
     facts = db.get_extracted_facts(claim_id)
     target_id = fact_id
     if not target_id:
-        # Match by key
         for f in facts:
-            if f.get("key") == req.key:
+            if f.get("key") == key:
                 target_id = f.get("fact_id")
                 break
 
     if not target_id:
-        raise HTTPException(404, f"Fact with key '{req.key}' or id '{fact_id}' not found")
+        raise HTTPException(404, f"Fact with key '{key}' or id '{fact_id}' not found")
 
-    updated_fact = db.update_extracted_fact(claim_id, target_id, req.value)
+    updated_fact = db.update_extracted_fact(claim_id, target_id, value)
     
     db.log_audit_event(AuditEvent(
         claim_case_id=claim_id,
         agent_name="HumanReviewer",
         event_type="EXTRACTION",
         title="Human Correction Applied to Fact",
-        detail=f"Field '{req.key}' updated to '{req.value}' (Confidence set to 100% human-verified).",
+        detail=f"Field '{key}' updated to '{value}' (Confidence set to 100% human-verified).",
         severity="INFO"
     ))
 
@@ -338,6 +342,18 @@ def update_fact_endpoint(claim_id: str, req: FactUpdateRequest, fact_id: Optiona
         "fact": updated_fact,
         "eligibility": db.get_eligibility_assessment(claim_id)
     }
+
+
+@app.post("/api/claim-cases/{claim_id}/update-fact")
+def update_fact_endpoint(claim_id: str, req: FactUpdateRequest):
+    """Allows human-in-the-loop to correct an extracted fact by key and triggers deterministic re-evaluation."""
+    return _apply_fact_update(claim_id, req.key, req.value)
+
+
+@app.patch("/api/claim-cases/{claim_id}/facts/{fact_id}")
+def patch_fact_endpoint(claim_id: str, fact_id: str, req: FactUpdateRequest):
+    """Allows human-in-the-loop to correct an extracted fact by ID and triggers deterministic re-evaluation."""
+    return _apply_fact_update(claim_id, req.key, req.value, fact_id=fact_id)
 
 
 @app.post("/api/claim-cases/{claim_id}/approve")
