@@ -18,6 +18,7 @@ from services.audit_log import log_event
 from services.appeal_generator import generate_ombudsman_appeal_letter
 from agents.fraud_agent import analyze_fraud_risk
 from services.tariff_analyzer import analyze_bill_line_items
+from services.gipsa_tariff_engine import benchmark_hospital_tariff
 
 RULES_PATH = Path(__file__).parent.parent / "data" / "policy_rules.json"
 
@@ -375,6 +376,13 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
     # Run Line-Item Tariff Breakdown
     tariff_breakdown = analyze_bill_line_items(total_amount=total_amount)
 
+    # Run GIPSA / PPN Standardized Package Rate Benchmark
+    gipsa_benchmark = benchmark_hospital_tariff(
+        procedure=proc_str,
+        billed_amount=total_amount,
+        city_tier=fraud_audit.get("hospital_accreditation", {}).get("tier", "Tier-1"),
+    )
+
     return {
         "eligible": is_eligible,
         "status": "APPROVED" if is_eligible else "REJECTED",
@@ -392,6 +400,7 @@ def run_decision(claim_id: str, intake_result: dict) -> dict:
         "dual_policy_optimization": dual_optimization,
         "fraud_audit": fraud_audit,
         "tariff_breakdown": tariff_breakdown,
+        "gipsa_benchmark": gipsa_benchmark,
         "ombudsman_appeal_letter": appeal_letter,
         "policy_summary": {
             "policy_id": policy.get("policy_id", policy_number),

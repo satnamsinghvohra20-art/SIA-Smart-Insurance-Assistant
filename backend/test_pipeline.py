@@ -1,8 +1,8 @@
 """
 Automated end-to-end pipeline test script for ClaimPilot (Grand Prize Suite).
 Tests dynamic ingestion, ABHA ID verification, NMC doctor verification,
-Forensic Fraud & NABH audit, line-item tariff analyzer, Claims Copilot Q&A,
-and IRDAI claim form PDF generation.
+Forensic Fraud & NABH audit, line-item tariff analyzer, GIPSA/PPN fair rate benchmarking,
+visual OCR bounding boxes, Claims Copilot Q&A, and IRDAI claim form PDF generation.
 """
 import sys
 from pathlib import Path
@@ -25,6 +25,8 @@ from services import (
     appeal_generator,
     tariff_analyzer,
     copilot_service,
+    gipsa_tariff_engine,
+    bounding_box_annotator,
 )
 
 
@@ -90,13 +92,29 @@ def run_tests():
     assert len(tariff_res["buckets"]) == 6
     print(f"  [OK] Categorized 6 line items: Gross=Rs. {tariff_res['gross_bill_amount']:,.2f}, Non-Medical Deductions=Rs. {tariff_res['non_medical_deductions']:,.2f}")
 
-    # 6. Conversational Claims Copilot Test
+    # 6. GIPSA PPN Fair Market Benchmark Test
+    print("\n[GIPSA PPN Test] Testing Standardized Fair Market Hospital Rate Benchmarking...")
+    gipsa_res = gipsa_tariff_engine.benchmark_hospital_tariff(
+        procedure="Laparoscopic Cholecystectomy",
+        billed_amount=112000.00,
+        city_tier="Tier-1",
+    )
+    assert gipsa_res["gipsa_ppn_benchmark_rate"] > 0
+    print(f"  [OK] GIPSA PPN Benchmark: {gipsa_res['procedure']} -> Cap: Rs. {gipsa_res['gipsa_ppn_benchmark_rate']:,.2f}, Verdict: {gipsa_res['tariff_verdict']}")
+
+    # 7. Visual Bounding Box Annotations Test
+    print("\n[Visual OCR Test] Testing Multimodal Document Bounding Box Token Annotator...")
+    annot_res = bounding_box_annotator.generate_document_annotations(fields=parsed_dyn)
+    assert annot_res["total_tokens_highlighted"] > 0
+    print(f"  [OK] Generated {annot_res['total_tokens_highlighted']} visual bounding boxes with {annot_res['avg_confidence_pct']}% avg confidence.")
+
+    # 8. Conversational Claims Copilot Test
     print("\n[AI Claims Copilot Test] Testing Natural Language Q&A Engine...")
     copilot_res = copilot_service.answer_claim_query("Why was co-pay deducted?", claim_context={"fields": parsed_dyn})
     assert "Star Health" in copilot_res["reply"] or "co-pay" in copilot_res["reply"] or "10%" in copilot_res["reply"]
     print(f"  [OK] Copilot Answered Inquiry ({len(copilot_res['reply'])} chars).")
 
-    # 7. Full Live Pipeline Execution Test
+    # 9. Full Live Pipeline Integration Test
     print("\n[Pipeline Integration Test] Testing Full 4-Agent Pipeline on Live Claim...")
     claim_id = "LIVE-CLM-GRANDPRIZE"
     intake_res = intake_agent.run_intake(
@@ -109,6 +127,7 @@ def run_tests():
     assert decision_res["eligible"] is True
     assert "fraud_audit" in decision_res
     assert "tariff_breakdown" in decision_res
+    assert "gipsa_benchmark" in decision_res
 
     exec_res = execution_agent.run_execution(claim_id, intake_res, decision_res)
     assert exec_res["status"] == "ready_for_approval"

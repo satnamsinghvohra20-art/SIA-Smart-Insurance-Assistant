@@ -36,6 +36,8 @@ from services.doctor_verifier import verify_doctor, load_doctor_registry
 from agents.fraud_agent import load_hospitals
 from services.copilot_service import answer_claim_query
 from services.gemini_extractor import set_gemini_api_key
+from services.bounding_box_annotator import generate_document_annotations
+from services.gipsa_tariff_engine import GIPSA_PPN_SCHEDULES
 
 app = FastAPI(
     title="ClaimPilot Multi-Agent API",
@@ -408,6 +410,21 @@ def analytics():
             {"insurer": "Tata AIG", "volume": 150, "avg_approval_mins": 3.4, "pass_rate": 96.0},
         ],
     }
+
+
+@app.get("/api/annotations/{claim_id}")
+def get_annotations_endpoint(claim_id: str):
+    """Returns visual document bounding boxes and token confidence coordinates."""
+    claim_ctx = CLAIMS.get(claim_id, {})
+    intake_data = claim_ctx.get("intake", {})
+    fields = intake_data.get("fields", {})
+    return generate_document_annotations(fields=fields)
+
+
+@app.get("/api/tariffs/gipsa")
+def get_gipsa_tariffs_endpoint():
+    """Returns standardized GIPSA / PPN hospital rate benchmarks."""
+    return GIPSA_PPN_SCHEDULES
 
 
 @app.get("/api/metrics")
