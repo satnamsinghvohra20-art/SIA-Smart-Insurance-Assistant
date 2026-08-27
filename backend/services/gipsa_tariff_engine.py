@@ -81,3 +81,10 @@ def benchmark_hospital_tariff(procedure: str, billed_amount: float, city_tier: s
         if within_gipsa
         else f"Billed amount exceeds GIPSA PPN benchmark by ₹{diff:,.2f} ({round((diff / benchmark_cap) * 100.0, 1)}%). Subject to package tariff ceiling.",
     }
+
+
+def benchmark_gipsa_tariff(procedure_name: str, billed_amount: float, city_tier: str = "Tier-1") -> dict:
+    """Convenience alias for safety agent."""
+    res = benchmark_hospital_tariff(procedure_name, billed_amount, city_tier)
+    res["status"] = "GROSSLY_INFLATED" if not res["is_within_fair_tariff"] and res["variance_pct"] > 50 else "FAIR_TARIFF"
+    return res

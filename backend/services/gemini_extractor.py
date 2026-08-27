@@ -93,3 +93,18 @@ def extract_with_gemini_live(combined_text: str, api_key: str | None = None) -> 
     except Exception as e:
         print(f"Gemini live extraction error: {e}")
         return None
+
+
+def is_gemini_configured() -> bool:
+    return bool(GEMINI_API_KEY or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"))
+
+
+def extract_with_gemini(combined_text: str, api_key: str | None = None) -> dict | None:
+    res = extract_with_gemini_live(combined_text, api_key)
+    if res:
+        if "total_amount" in res and "total_bill_amount" not in res:
+            res["total_bill_amount"] = res["total_amount"]
+        if "doctor_reg_number" in res and "doctor_reg_no" not in res:
+            res["doctor_reg_no"] = res["doctor_reg_number"]
+        return {"fields": res}
+    return None

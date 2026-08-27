@@ -119,3 +119,17 @@ def analyze_fraud_risk(
     )
 
     return result
+
+
+def verify_nabh_and_fraud(hospital_name: str, bill_amount: float = 0.0) -> dict:
+    """Convenience helper for safety agent integration."""
+    return analyze_fraud_risk(
+        claim_id="CLM-FORENSIC",
+        hospital_name=hospital_name,
+        hospital_gstin="",
+        diagnosis="Medical Treatment",
+        procedure="Inpatient Care",
+        total_amount=bill_amount,
+        bill_raw_text="",
+        treating_doctor_verified=True
+    )

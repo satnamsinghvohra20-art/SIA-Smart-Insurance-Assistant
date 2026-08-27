@@ -36,3 +36,7 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
+
+# Runtime generated artifacts
+backend/generated/*.pdf
+backend/data/store/

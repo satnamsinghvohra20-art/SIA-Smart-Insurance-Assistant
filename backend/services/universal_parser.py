@@ -181,3 +181,21 @@ def parse_any_medical_document(text: str) -> dict:
         set_field("hospital_gstin", "27ABCDE1234F1Z5", 0.80)
 
     return fields
+
+
+class UniversalMedicalParser:
+    def parse_text(self, text: str) -> dict:
+        raw_fields = parse_any_medical_document(text)
+        # flatten to key-value
+        result = {}
+        for k, v in raw_fields.items():
+            if isinstance(v, dict) and "value" in v:
+                result[k] = v["value"]
+            else:
+                result[k] = v
+        # standardize common aliases
+        if "total_amount" in result and "total_bill_amount" not in result:
+            result["total_bill_amount"] = result["total_amount"]
+        if "doctor_reg_number" in result and "doctor_reg_no" not in result:
+            result["doctor_reg_no"] = result["doctor_reg_number"]
+        return result
