@@ -39,32 +39,62 @@ def run_eligibility_agent(claim_case_id: str, policy_rules: Dict[str, Any] = Non
         severity="INFO"
     ))
 
-    # Policy Defaults for Indian Employer Group Health Insurance (GHI)
-    sum_insured = 50000.0  # ₹50,000 corporate limit for entry tier / standard demo
-    copay_pct = 0.0        # Most employer GHI policies have 0% copay
-    room_rent_cap_pct = 0.02 # 2% per day = ₹1,000/day
+    # Load Policy Rules dynamically
+    import json
+    from pathlib import Path
+    rules_file = Path(__file__).parent.parent / "data" / "policy_rules.json"
+    matched_rule = None
+    if rules_file.exists():
+        try:
+            with open(rules_file, "r", encoding="utf-8") as f:
+                p_data = json.load(f)
+                policies = p_data.get("policies", [])
+                pol_upper = policy_no.upper()
+                for p in policies:
+                    if p.get("id") in pol_upper.lower() or p.get("policy_number_prefix", "") in pol_upper:
+                        matched_rule = p
+                        break
+                if not matched_rule and policies:
+                    # Match by prefix or default to first policy
+                    matched_rule = policies[0]
+        except Exception:
+            pass
+
+    sum_insured = matched_rule.get("sum_insured", 500000.0) if matched_rule else 500000.0
+    copay_pct = (matched_rule.get("co_pay_percent", 0) / 100.0) if matched_rule else 0.0
+    policy_name = matched_rule.get("name", "Indian Health Insurance Policy") if matched_rule else "Health Insurance Policy"
     
-    # Non-medical exclusions according to IRDAI Non-Payables Guidelines
-    # e.g., Admission kit, PPE/gloves, biomedical waste charge, administrative sanitization
-    non_medical_deductions = round(claimed_amount * 0.08, 2)  # ~8% standard non-medical items (e.g. ₹3,360 on ₹42k)
-    if non_medical_deductions < 1500:
-        non_medical_deductions = 1800.0
+    # Non-medical exclusions according to IRDAI Non-Payables Guidelines (Annexure 1)
+    # e.g., Admission kit, gloves, administrative charges, food & beverage
+    non_medical_deductions = round(claimed_amount * 0.065, 2)  # ~6.5% standard non-medical consumables
+    if non_medical_deductions < 800 and claimed_amount > 5000:
+        non_medical_deductions = 1200.0
     
     # Calculate eligible amounts
-    eligible_base = claimed_amount - non_medical_deductions
-    max_reimbursable = min(eligible_base, sum_insured)
-    # Min reimbursable accounts for potential additional TPA investigation/discretionary deduction
-    min_reimbursable = max(0.0, max_reimbursable - round(claimed_amount * 0.05, 2))
+    eligible_base = max(0.0, claimed_amount - non_medical_deductions)
+    copay_deduction = round(eligible_base * copay_pct, 2)
+    max_reimbursable = min(eligible_base - copay_deduction, sum_insured)
+    min_reimbursable = max(0.0, max_reimbursable - round(claimed_amount * 0.04, 2))
     
-    eligibility_status = EligibilityStatus.LIKELY_ELIGIBLE
-    confidence = 0.96
-    
-    basis_explanation = (
-        f"Claim is within policy sum insured limit (₹{sum_insured:,.0f}). "
-        f"Procedure '{diagnosis}' is covered under Active Inpatient Care. "
-        f"Estimated non-medical consumable deductions (IRDAI Schedule 1 items like gloves, registration, kit) are ₹{non_medical_deductions:,.0f}. "
-        f"0% co-pay applicable under employer corporate coverage."
-    )
+    # Check procedure exclusions
+    excluded_procedures = matched_rule.get("excluded_procedures", []) if matched_rule else []
+    is_excluded = any(ex.lower() in diagnosis.lower() for ex in excluded_procedures)
+
+    if is_excluded:
+        eligibility_status = EligibilityStatus.INELIGIBLE
+        max_reimbursable = 0.0
+        min_reimbursable = 0.0
+        basis_explanation = (
+            f"Procedure '{diagnosis}' is explicitly classified as an EXCLUDED PROCEDURE under {policy_name} clauses."
+        )
+    else:
+        eligibility_status = EligibilityStatus.LIKELY_ELIGIBLE
+        basis_explanation = (
+            f"Claim is within policy sum insured limit (₹{sum_insured:,.0f} under {policy_name}). "
+            f"Procedure '{diagnosis}' is covered under Active Inpatient Care. "
+            f"Estimated non-medical consumable deductions: -₹{non_medical_deductions:,.2f}. "
+            f"Applicable co-pay ({int(copay_pct*100)}%): -₹{copay_deduction:,.2f}."
+        )
 
     # Compile Supporting Evidence with page-level citations
     supporting_evidence: List[SupportingEvidenceItem] = []

@@ -152,10 +152,12 @@ def run_intake_agent(claim_case_id: str, raw_documents: List[Dict[str, Any]]) ->
         ("total_bill_amount", "Gross Claimed Amount (INR)", "billing", primary_bill_doc.document_id if primary_bill_doc else "doc_1", primary_bill_doc.filename if primary_bill_doc else "Hospital_Bill.pdf", 1),
     ]
 
+    is_demo_scenario = "SCENARIO" in claim_case_id.upper() or "DEMO" in claim_case_id.upper()
+
     for key, label, category, doc_id, doc_fn, page in field_mappings:
         val = parsed_data.get(key)
-        # fallback default names if missing
-        if val is None or val == "":
+        # Only use demo fallback if explicitly running a sample demo scenario
+        if (val is None or val == "") and is_demo_scenario:
             if key == "patient_name": val = "Manpreet Kaur"
             elif key == "policy_number": val = "STAR-GHI-2024-9941"
             elif key == "employer_name": val = "Acme Technologies India Pvt Ltd"
@@ -168,12 +170,15 @@ def run_intake_agent(claim_case_id: str, raw_documents: List[Dict[str, Any]]) ->
             elif key == "bill_number": val = "INV-BLR-2026-8812"
             elif key == "total_bill_amount": val = 42000.0
 
-        confidence = 0.98 if val else 0.75
+        confidence = 0.98 if val else 0.50
+        display_val = val if val is not None and str(val).strip() else "Unspecified"
+        if key == "total_bill_amount" and (val is None or val == ""):
+            display_val = 0.0
         fact = ExtractedFact(
             claim_case_id=claim_case_id,
             key=key,
             display_label=label,
-            value=val,
+            value=display_val,
             confidence=confidence,
             category=category,
             citation=SourceCitation(

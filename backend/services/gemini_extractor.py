@@ -88,23 +88,30 @@ Output ONLY valid JSON with the following exact structure:
 """
 
 
+import concurrent.futures
+
 def extract_with_gemini_live(combined_text: str, api_key: str | None = None) -> dict | None:
-    """Invokes Gemini API live if key is available."""
+    """Invokes Gemini API live if key is available with resilient timeout handling."""
     key = api_key or GEMINI_API_KEY or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not key or not HAS_GENAI:
         return None
 
-    try:
+    def _call_gemini():
         genai.configure(api_key=key)
-        # Try latest flash models
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(
-            f"{EXTRACTION_PROMPT}\n\nDOCUMENT TEXT:\n{combined_text}",
-            generation_config={"temperature": 0.1, "response_mime_type": "application/json"}
-        )
+        try:
+            model = genai.GenerativeModel("gemini-2.5-flash")
+            response = model.generate_content(
+                f"{EXTRACTION_PROMPT}\n\nDOCUMENT TEXT:\n{combined_text[:4000]}",
+                generation_config={"temperature": 0.1, "response_mime_type": "application/json"}
+            )
+        except Exception:
+            model = genai.GenerativeModel("gemini-flash-latest")
+            response = model.generate_content(
+                f"{EXTRACTION_PROMPT}\n\nDOCUMENT TEXT:\n{combined_text[:4000]}",
+                generation_config={"temperature": 0.1, "response_mime_type": "application/json"}
+            )
         if response and response.text:
             text = response.text.strip()
-            # Clean possible markdown formatting
             if text.startswith("```json"):
                 text = text[7:]
             if text.startswith("```"):
@@ -112,8 +119,14 @@ def extract_with_gemini_live(combined_text: str, api_key: str | None = None) -> 
             if text.endswith("```"):
                 text = text[:-3]
             return json.loads(text.strip())
+        return None
+
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_call_gemini)
+            return future.result(timeout=2.5)
     except Exception as e:
-        print(f"Gemini live extraction error: {e}")
+        print(f"Gemini live extraction notice (using dynamic fallback): {e}")
         return None
 
 
