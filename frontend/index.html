@@ -6,26 +6,28 @@
 <title>ClaimPilot — Autonomous Multi-Agent Health Reimbursement & Adjudication Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-base: #030712;
-    --bg-surface: rgba(11, 17, 33, 0.65);
-    --bg-glass-card: rgba(15, 23, 42, 0.45);
-    --bg-glass-card-hover: rgba(22, 34, 60, 0.65);
-    --bg-glass-modal: rgba(8, 13, 26, 0.88);
-    --bg-pill: rgba(255, 255, 255, 0.04);
+    --bg-black: #030712;
+    --bg-base: #070B14;
+    --bg-surface: rgba(13, 20, 36, 0.7);
+    --bg-card: rgba(15, 23, 42, 0.55);
+    --bg-card-hover: rgba(22, 34, 60, 0.75);
+    --bg-glass-modal: rgba(8, 13, 26, 0.92);
     
-    --border-glass: rgba(255, 255, 255, 0.09);
-    --border-glass-glow: rgba(56, 189, 248, 0.35);
-    --border-glass-highlight: rgba(255, 255, 255, 0.16);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glass: rgba(255, 255, 255, 0.12);
+    --border-glow: rgba(56, 189, 248, 0.45);
+    --border-emerald-glow: rgba(16, 185, 129, 0.45);
     
     --text-primary: #FFFFFF;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
     
     --cyan: #38BDF8;
-    --cyan-glow: rgba(56, 189, 248, 0.28);
+    --cyan-neon: #00E5FF;
+    --cyan-glow: rgba(0, 229, 255, 0.25);
     --emerald: #10B981;
     --emerald-glow: rgba(16, 185, 129, 0.25);
     --purple: #A855F7;
@@ -34,452 +36,663 @@
     --amber-glow: rgba(245, 158, 11, 0.22);
     --rose: #F43F5E;
     
-    --radius-2xl: 24px;
-    --radius-xl: 18px;
-    --radius-lg: 14px;
-    --radius-md: 10px;
-    --radius-sm: 6px;
+    --radius-3xl: 28px;
+    --radius-2xl: 20px;
+    --radius-xl: 16px;
+    --radius-lg: 12px;
+    --radius-md: 8px;
     
-    --shadow-glass: 0 20px 50px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    --shadow-glass-hover: 0 25px 60px -5px rgba(0, 229, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-subtle: 0 20px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    --shadow-glow: 0 0 40px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ==========================================================================
+     GLASSY GREEN THEME OVERRIDES
+     ========================================================================== */
+  body.green-theme {
+    --bg-black: #021810;
+    --bg-base: #042418;
+    --bg-surface: rgba(5, 41, 28, 0.75);
+    --bg-card: rgba(6, 48, 33, 0.6);
+    --bg-card-hover: rgba(10, 68, 47, 0.8);
+    --bg-glass-modal: rgba(4, 34, 23, 0.95);
+    
+    --border-subtle: rgba(52, 211, 153, 0.15);
+    --border-glass: rgba(52, 211, 153, 0.28);
+    --border-glow: rgba(16, 185, 129, 0.6);
+    --border-emerald-glow: rgba(52, 211, 153, 0.6);
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: #A7F3D0;
+    --text-muted: #6EE7B7;
+    
+    --cyan: #34D399;
+    --cyan-neon: #10B981;
+    --cyan-glow: rgba(16, 185, 129, 0.35);
+    --emerald: #10B981;
+    --emerald-glow: rgba(16, 185, 129, 0.35);
+    --purple: #059669;
+    --purple-glow: rgba(5, 150, 105, 0.35);
+    --amber: #FBBF24;
+    --amber-glow: rgba(251, 191, 36, 0.25);
+    
+    --shadow-subtle: 0 20px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(52, 211, 153, 0.2);
+    --shadow-glow: 0 0 45px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(52, 211, 153, 0.3);
+    
+    background: #021810 !important;
+    color: #FFFFFF !important;
+    background-image: 
+      radial-gradient(at 10% 0%, rgba(16, 185, 129, 0.28) 0px, transparent 45%),
+      radial-gradient(at 90% 10%, rgba(5, 150, 105, 0.22) 0px, transparent 45%),
+      radial-gradient(at 50% 50%, rgba(52, 211, 153, 0.14) 0px, transparent 50%),
+      radial-gradient(at 10% 90%, rgba(4, 120, 87, 0.2) 0px, transparent 45%),
+      linear-gradient(rgba(52, 211, 153, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52, 211, 153, 0.02) 1px, transparent 1px) !important;
+  }
+
+  body.green-theme header {
+    background: rgba(2, 24, 16, 0.88);
+    border-bottom-color: rgba(52, 211, 153, 0.2);
+  }
+  body.green-theme .brand-logo-gem {
+    background: linear-gradient(135deg, #34D399 0%, #059669 50%, #047857 100%);
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.6);
+  }
+  body.green-theme .brand-text h1 { color: #FFFFFF; }
+  body.green-theme .nav-link { color: #A7F3D0; }
+  body.green-theme .nav-link:hover, body.green-theme .nav-link.active { color: #FFFFFF; }
+  body.green-theme .landing-hero h1 {
+    background: linear-gradient(180deg, #FFFFFF 30%, #A7F3D0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body.green-theme .landing-hero h1 span.gradient-text {
+    background: linear-gradient(135deg, #34D399 0%, #6EE7B7 50%, #A7F3D0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body.green-theme .hero-preview-glass,
+  body.green-theme .bento-card,
+  body.green-theme .glass-card,
+  body.green-theme .workspace-kpi-banner,
+  body.green-theme .workspace-scenario-strip,
+  body.green-theme .agent-rail-container,
+  body.green-theme .approval-hero-card {
+    background: rgba(6, 48, 33, 0.6);
+    border-color: rgba(52, 211, 153, 0.25);
+    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(52, 211, 153, 0.15);
+  }
+  body.green-theme .agent-network-box,
+  body.green-theme .doc-slot-box,
+  body.green-theme .fact-item-card,
+  body.green-theme .evidence-card-row,
+  body.green-theme .kpi-tile-glass,
+  body.green-theme .rail-step-card {
+    background: rgba(4, 34, 23, 0.8);
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+  body.green-theme .input-glass-field,
+  body.green-theme .modal-box-glass,
+  body.green-theme .copilot-drawer-panel {
+    background: #032015 !important;
+    color: #FFFFFF !important;
+    border-color: rgba(52, 211, 153, 0.4) !important;
+  }
+  body.green-theme .copilot-chat-bubble.bot {
+    background: #063826 !important;
+    color: #FFFFFF !important;
+  }
+  body.green-theme .btn-glass {
+    background: rgba(52, 211, 153, 0.08);
+    border-color: rgba(52, 211, 153, 0.25);
+    color: #FFFFFF;
+  }
+  body.green-theme .btn-glass:hover {
+    background: rgba(52, 211, 153, 0.18);
+  }
+  body.green-theme footer {
+    background: #021810 !important;
+    border-top-color: rgba(52, 211, 153, 0.15) !important;
+    color: #A7F3D0 !important;
+  }
+
+  /* ==========================================================================
+     WHITE / LIGHT THEME OVERRIDES
+     ========================================================================== */
+  body.light-theme {
+    --bg-black: #F8FAFC;
+    --bg-base: #F1F5F9;
+    --bg-surface: rgba(255, 255, 255, 0.9);
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-card-hover: #FFFFFF;
+    --bg-glass-modal: rgba(255, 255, 255, 0.98);
+    
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-glass: rgba(0, 0, 0, 0.1);
+    --border-glow: rgba(2, 132, 199, 0.3);
+    --border-emerald-glow: rgba(5, 150, 105, 0.3);
+    
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    
+    --cyan: #0284C7;
+    --cyan-neon: #0284C7;
+    --cyan-glow: rgba(2, 132, 199, 0.12);
+    --emerald: #059669;
+    --emerald-glow: rgba(5, 150, 105, 0.12);
+    --purple: #7C3AED;
+    --purple-glow: rgba(124, 58, 237, 0.12);
+    --amber: #D97706;
+    --amber-glow: rgba(217, 119, 6, 0.12);
+    
+    --shadow-subtle: 0 10px 30px -5px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 12px 35px -5px rgba(2, 132, 199, 0.15);
+    
+    background: #F8FAFC !important;
+    color: #0F172A !important;
+    background-image: 
+      radial-gradient(at 10% 0%, rgba(2, 132, 199, 0.08) 0px, transparent 40%),
+      radial-gradient(at 90% 10%, rgba(124, 58, 237, 0.06) 0px, transparent 40%),
+      radial-gradient(at 50% 50%, rgba(5, 150, 105, 0.05) 0px, transparent 50%),
+      linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px) !important;
+  }
+
+  body.light-theme header {
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+  body.light-theme .brand-text h1 { color: #0F172A; }
+  body.light-theme .nav-link { color: #475569; }
+  body.light-theme .nav-link:hover, body.light-theme .nav-link.active { color: #0F172A; }
+  body.light-theme .landing-hero h1 {
+    background: linear-gradient(180deg, #0F172A 30%, #475569 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body.light-theme .hero-preview-glass,
+  body.light-theme .bento-card,
+  body.light-theme .glass-card,
+  body.light-theme .workspace-kpi-banner,
+  body.light-theme .workspace-scenario-strip,
+  body.light-theme .agent-rail-container,
+  body.light-theme .approval-hero-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+  }
+  body.light-theme .agent-network-box,
+  body.light-theme .doc-slot-box,
+  body.light-theme .fact-item-card,
+  body.light-theme .evidence-card-row,
+  body.light-theme .kpi-tile-glass,
+  body.light-theme .rail-step-card {
+    background: #FFFFFF;
+    border-color: rgba(0, 0, 0, 0.09);
+  }
+  body.light-theme .rail-agent-name,
+  body.light-theme .bento-card h3,
+  body.light-theme .kpi-tile-val,
+  body.light-theme .case-title-block h2,
+  body.light-theme .fact-val-text,
+  body.light-theme .doc-slot-title,
+  body.light-theme .agent-pill-name {
+    color: #0F172A !important;
+  }
+  body.light-theme .input-glass-field,
+  body.light-theme .modal-box-glass,
+  body.light-theme .copilot-drawer-panel {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+  }
+  body.light-theme .copilot-chat-bubble.bot {
+    background: #F1F5F9 !important;
+    color: #0F172A !important;
+  }
+  body.light-theme .btn-glass {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #0F172A;
+  }
+  body.light-theme .btn-glass:hover {
+    background: rgba(0, 0, 0, 0.09);
+  }
+  body.light-theme footer {
+    background: #FFFFFF !important;
+    border-top-color: rgba(0, 0, 0, 0.08) !important;
+    color: #64748B !important;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    background: var(--bg-base);
+    background: var(--bg-black);
     color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
     background-image: 
-      radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.14) 0px, transparent 40%),
-      radial-gradient(at 100% 10%, rgba(168, 85, 247, 0.12) 0px, transparent 40%),
-      radial-gradient(at 50% 60%, rgba(16, 185, 129, 0.08) 0px, transparent 45%),
-      radial-gradient(at 10% 90%, rgba(37, 99, 235, 0.1) 0px, transparent 40%),
+      radial-gradient(at 10% 0%, rgba(56, 189, 248, 0.18) 0px, transparent 40%),
+      radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.15) 0px, transparent 40%),
+      radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+      radial-gradient(at 10% 90%, rgba(37, 99, 235, 0.12) 0px, transparent 40%),
       linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
     background-attachment: fixed;
   }
 
-  /* Custom Scrollbar */
+  /* Custom Scrollbars */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.8); }
-  ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 8px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-  /* Glassmorphism Classes */
-  .glass-card {
-    background: var(--bg-glass-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-xl);
-    padding: 30px 32px;
-    box-shadow: var(--shadow-glass);
-    transition: var(--transition-smooth);
-    position: relative;
-  }
-  .glass-card:hover {
-    border-color: var(--border-glass-highlight);
-    background: var(--bg-glass-card-hover);
-    box-shadow: var(--shadow-glass-hover);
+  /* Shimmer Sweep Animation */
+  @keyframes shimmerSweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
   }
 
-  .glass-panel {
-    background: var(--bg-surface);
+  /* Glassmorphism Surface Base */
+  .glass-card {
+    background: var(--bg-card);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-2xl);
-    padding: 36px 40px;
-    box-shadow: var(--shadow-glass);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .glass-card:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    background: var(--bg-card-hover);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
   }
 
-  /* Nav Header */
+  /* Header Bar */
   header {
-    background: rgba(3, 7, 18, 0.75);
+    background: rgba(3, 7, 18, 0.82);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--border-glass);
+    border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 100;
-    padding: 16px 48px;
+    padding: 16px 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  @media (max-width: 768px) { header { padding: 14px 20px; } }
+
+  .brand-group { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
   .brand-logo-gem {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, #38BDF8 0%, #2563EB 50%, #7C3AED 100%);
+    width: 44px; height: 44px; border-radius: 14px;
+    background: linear-gradient(135deg, #00E5FF 0%, #2563EB 50%, #7C3AED 100%);
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 800; font-size: 19px;
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+    color: #fff; font-weight: 900; font-size: 20px; font-family: 'Outfit', sans-serif;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
     position: relative;
   }
   .brand-logo-gem::after {
-    content: ''; position: absolute; inset: -2px; border-radius: 14px;
-    background: linear-gradient(135deg, #38BDF8, #A855F7); opacity: 0.45; z-index: -1;
-    filter: blur(6px);
+    content: ''; position: absolute; inset: -2px; border-radius: 16px;
+    background: linear-gradient(135deg, #00E5FF, #A855F7); opacity: 0.4; z-index: -1;
+    filter: blur(8px);
   }
   .brand-text h1 {
-    font-size: 18px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.4px;
+    font-size: 19px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.4px;
     font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 8px;
   }
-  .brand-text p { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+  .brand-text p { font-size: 11.5px; color: var(--text-secondary); font-weight: 500; }
   
-  .nav-menu-links { display: flex; align-items: center; gap: 28px; }
+  .nav-menu-links { display: flex; align-items: center; gap: 32px; }
+  @media (max-width: 900px) { .nav-menu-links { display: none; } }
+
   .nav-link {
-    color: var(--text-secondary); font-size: 13.5px; font-weight: 600; text-decoration: none;
-    transition: var(--transition-smooth); cursor: pointer;
+    color: var(--text-secondary); font-size: 14px; font-weight: 600; text-decoration: none;
+    transition: var(--transition); cursor: pointer; position: relative; padding: 6px 0;
   }
   .nav-link:hover, .nav-link.active { color: #FFFFFF; }
+  .nav-link.active::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--cyan-neon), var(--purple)); border-radius: 2px;
+  }
 
   /* Buttons */
   .btn {
     font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700;
     padding: 10px 22px; border-radius: var(--radius-md); cursor: pointer;
     display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent;
-    transition: var(--transition-smooth); text-decoration: none; user-select: none;
+    transition: var(--transition); text-decoration: none; user-select: none;
+    position: relative; overflow: hidden;
   }
-  .btn:active { transform: scale(0.98); }
+  .btn:active { transform: scale(0.97); }
+  .btn-shimmer::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: skewX(-20deg); animation: shimmerSweep 3.5s infinite;
+  }
   .btn-primary-glow {
     background: linear-gradient(135deg, #0284C7 0%, #2563EB 50%, #7C3AED 100%);
-    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
   }
   .btn-primary-glow:hover {
-    box-shadow: 0 0 35px rgba(56, 189, 248, 0.6);
-    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.6); transform: translateY(-2px);
   }
   .btn-emerald-glow {
     background: linear-gradient(135deg, #059669 0%, #0D9488 50%, #0284C7 100%);
-    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
   }
   .btn-emerald-glow:hover {
-    box-shadow: 0 0 35px rgba(16, 185, 129, 0.6);
-    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(16, 185, 129, 0.6); transform: translateY(-2px);
   }
   .btn-glass {
     background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); color: #fff;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
   }
   .btn-glass:hover {
     background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
   }
 
-  /* ---- Page View Sections (Landing Page vs Claims Workspace) ---- */
+  /* View Container Switching */
   .view-container { display: none; }
   .view-container.active { display: block; }
 
   /* ==========================================================================
-     LANDING PAGE STYLING
+     $100K LANDING PAGE HERO & BENTO GRID
      ========================================================================== */
   .landing-hero {
-    max-width: 1200px;
-    margin: 60px auto 40px;
-    padding: 0 32px;
-    text-align: center;
-    position: relative;
+    max-width: 1240px; margin: 70px auto 40px; padding: 0 36px; text-align: center; position: relative;
   }
   .hero-tag-badge {
-    background: rgba(56, 189, 248, 0.08); border: 1px solid var(--border-glass-glow);
-    padding: 6px 18px; border-radius: 30px; font-size: 12px; font-weight: 700;
-    color: var(--cyan); display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px;
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    background: rgba(56, 189, 248, 0.08); border: 1px solid var(--border-glow);
+    padding: 7px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 700;
+    color: var(--cyan-neon); display: inline-flex; align-items: center; gap: 8px; margin-bottom: 28px;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.18);
   }
   .landing-hero h1 {
-    font-size: 56px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px;
+    font-size: 64px; font-weight: 900; line-height: 1.1; letter-spacing: -2px;
     font-family: 'Outfit', sans-serif; margin-bottom: 24px;
     background: linear-gradient(180deg, #FFFFFF 30%, #94A3B8 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
+  @media (max-width: 768px) { .landing-hero h1 { font-size: 38px; letter-spacing: -1px; } }
   .landing-hero h1 span.gradient-text {
-    background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #C084FC 100%);
+    background: linear-gradient(135deg, #00E5FF 0%, #818CF8 50%, #C084FC 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .landing-hero p.hero-subtitle {
-    font-size: 18px; color: var(--text-secondary); max-width: 780px; margin: 0 auto 36px;
-    line-height: 1.6; font-weight: 400;
+    font-size: 19px; color: var(--text-secondary); max-width: 820px; margin: 0 auto 40px;
+    line-height: 1.65; font-weight: 400;
   }
-  .hero-cta-group { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 48px; }
+  .hero-cta-group { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 56px; }
 
-  /* Hero Live Interactive Adjudication Preview Widget */
+  /* Live Interactive Hero Adjudication Simulator Widget */
   .hero-preview-glass {
-    max-width: 1080px; margin: 0 auto 80px;
-    background: rgba(15, 23, 42, 0.5);
-    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border-glass-highlight);
-    border-radius: var(--radius-2xl);
-    padding: 24px 32px;
-    box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.15);
+    max-width: 1100px; margin: 0 auto 90px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-3xl);
+    padding: 30px 38px;
+    box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.18);
     text-align: left;
   }
   .preview-top-bar {
-    display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-glass);
-    padding-bottom: 16px; margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 18px; margin-bottom: 24px;
   }
-  .mac-dots { display: flex; gap: 7px; }
-  .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mac-dots { display: flex; gap: 8px; }
+  .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
   .dot-red { background: #EF4444; } .dot-yellow { background: #F59E0B; } .dot-green { background: #10B981; }
-  
-  .preview-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+
+  .preview-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 32px; }
   @media (max-width: 860px) { .preview-grid { grid-template-columns: 1fr; } }
 
-  /* Landing 6-Agent Feature Grid */
-  .section-container { max-width: 1200px; margin: 80px auto; padding: 0 32px; }
-  .section-header { text-align: center; margin-bottom: 56px; }
-  .section-header h2 {
-    font-size: 38px; font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: -0.8px; margin-bottom: 14px;
+  /* Interactive Multi-Agent Network Topology */
+  .agent-network-box {
+    background: rgba(11, 17, 33, 0.75); border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
+    padding: 20px 24px; display: flex; flex-direction: column; gap: 12px;
   }
-  .section-header p { font-size: 16px; color: var(--text-secondary); max-width: 620px; margin: 0 auto; }
+  .agent-node-row {
+    display: flex; align-items: center; justify-content: space-between; font-size: 13px; padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .agent-node-row:last-child { border-bottom: none; }
+  .agent-pill-name { font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
 
-  .agent-cards-grid {
+  /* Section Containers */
+  .section-container { max-width: 1240px; margin: 90px auto; padding: 0 36px; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-header h2 {
+    font-size: 42px; font-weight: 900; font-family: 'Outfit', sans-serif; letter-spacing: -1px; margin-bottom: 16px;
+  }
+  .section-header p { font-size: 17px; color: var(--text-secondary); max-width: 660px; margin: 0 auto; }
+
+  /* Bento Grid 6 Agents */
+  .bento-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   }
-  @media (max-width: 960px) { .agent-cards-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) { .agent-cards-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 960px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .bento-grid { grid-template-columns: 1fr; } }
 
-  .agent-feature-card {
-    background: var(--bg-glass-card); backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
-    padding: 30px 28px; transition: var(--transition-smooth);
+  .bento-card {
+    background: var(--bg-card); backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass); border-radius: var(--radius-2xl);
+    padding: 34px 30px; transition: var(--transition); position: relative; overflow: hidden;
   }
-  .agent-feature-card:hover {
-    background: var(--bg-glass-card-hover); border-color: var(--cyan);
-    transform: translateY(-4px); box-shadow: 0 20px 40px rgba(56, 189, 248, 0.15);
+  .bento-card:hover {
+    background: var(--bg-card-hover); border-color: var(--cyan);
+    transform: translateY(-4px); box-shadow: 0 25px 50px rgba(0, 229, 255, 0.18);
   }
-  .agent-icon-wrap {
-    width: 48px; height: 48px; border-radius: 12px;
-    background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25);
-    display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px;
+  .bento-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;
   }
-  .agent-feature-card h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-  .agent-feature-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+  .bento-card h3 { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 10px; font-family: 'Outfit', sans-serif; }
+  .bento-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
 
-  /* 3-Step Flow */
-  .flow-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  @media (max-width: 768px) { .flow-steps-grid { grid-template-columns: 1fr; } }
-  .flow-step-box {
-    background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
-    padding: 32px 28px; position: relative;
+  /* Interactive Hospital Tariff vs GIPSA Benchmark Showcase */
+  .tariff-showcase-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.7) 100%);
+    border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-3xl);
+    padding: 40px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
   }
-  .flow-step-num {
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; color: var(--cyan);
-    background: rgba(56, 189, 248, 0.1); padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 16px;
-  }
-  .flow-step-box h4 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #fff; }
-  .flow-step-box p { font-size: 13.5px; color: var(--text-secondary); }
-
-  /* Trust & Compliance Banner */
-  .compliance-banner-wrap {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-2xl);
-    padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;
-  }
-
-  /* Footer */
-  footer {
-    border-top: 1px solid var(--border-glass);
-    padding: 40px 48px; text-align: center; font-size: 12.5px; color: var(--text-muted);
-    background: rgba(3, 7, 18, 0.95);
-  }
+  @media (max-width: 860px) { .tariff-showcase-box { grid-template-columns: 1fr; } }
 
   /* ==========================================================================
-     CLAIMS WORKSPACE STYLING (SPACIOUS & UNCONGESTED)
+     $100K CLAIMS WORKSPACE (SPACIOUS & ULTRA-POLISHED)
      ========================================================================== */
-  .workspace-layout {
-    max-width: 1360px; margin: 24px auto 60px; padding: 0 36px;
-  }
+  .workspace-layout { max-width: 1400px; margin: 30px auto 80px; padding: 0 44px; }
+  @media (max-width: 768px) { .workspace-layout { padding: 0 18px; } }
 
-  /* Scenario Quick Switcher Bar */
+  /* Scenario Switcher Strip */
   .workspace-scenario-strip {
-    background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
-    padding: 14px 24px; margin-bottom: 24px;
+    background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass); border-radius: var(--radius-2xl);
+    padding: 16px 28px; margin-bottom: 28px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   }
   .scenario-pills-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .scenario-btn-pill {
     background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-glass);
-    padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 600; color: var(--text-secondary);
-    cursor: pointer; transition: var(--transition-smooth); display: flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 30px; font-size: 12.5px; font-weight: 600; color: var(--text-secondary);
+    cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 7px;
   }
-  .scenario-btn-pill:hover { border-color: var(--cyan); color: #fff; background: rgba(56, 189, 248, 0.08); }
+  .scenario-btn-pill:hover { border-color: var(--cyan-neon); color: #fff; background: rgba(0, 229, 255, 0.08); }
   .scenario-btn-pill.active {
-    background: rgba(56, 189, 248, 0.15); border-color: var(--cyan); color: #FFFFFF; font-weight: 700;
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+    background: rgba(0, 229, 255, 0.15); border-color: var(--cyan-neon); color: #FFFFFF; font-weight: 700;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
   }
 
   /* Hero KPI Strip */
   .workspace-kpi-banner {
-    background: var(--bg-surface); backdrop-filter: blur(24px);
-    border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
-    padding: 24px 32px; margin-bottom: 28px;
-    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    background: var(--bg-surface); backdrop-filter: blur(28px);
+    border: 1px solid var(--border-glass); border-radius: var(--radius-2xl);
+    padding: 28px 36px; margin-bottom: 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
   }
-  .case-title-block h2 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.3px; margin-bottom: 4px; }
-  .case-ref-tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-secondary);
-  }
-  .case-ref-tag strong { color: var(--cyan); }
+  .case-title-block h2 { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 4px; font-family: 'Outfit', sans-serif; }
+  .case-ref-tag { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary); }
+  .case-ref-tag strong { color: var(--cyan-neon); }
 
   .kpi-items-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
   .kpi-tile-glass {
-    background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
-    padding: 12px 22px; text-align: right; min-width: 140px; transition: var(--transition-smooth);
+    background: rgba(11, 17, 33, 0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
+    padding: 14px 24px; text-align: right; min-width: 145px; transition: var(--transition);
   }
-  .kpi-tile-glass:hover { border-color: var(--cyan); transform: translateY(-2px); }
+  .kpi-tile-glass:hover { border-color: var(--cyan-neon); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,229,255,0.2); }
   .kpi-tile-label { font-size: 10.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .kpi-tile-val { font-size: 20px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-top: 2px; color: #fff; }
+  .kpi-tile-val { font-size: 22px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-top: 2px; color: #fff; }
   .kpi-tile-val.emerald { color: #34D399; text-shadow: 0 0 16px rgba(16, 185, 129, 0.4); }
   .kpi-tile-val.cyan { color: #38BDF8; text-shadow: 0 0 16px rgba(56, 189, 248, 0.4); }
   .kpi-tile-val.amber { color: #FBBF24; }
 
   /* 6-Agent Live Progress Rail */
   .agent-rail-container {
-    background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass); border-radius: var(--radius-xl);
-    padding: 20px 28px; margin-bottom: 32px;
+    background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass); border-radius: var(--radius-2xl);
+    padding: 22px 32px; margin-bottom: 36px;
   }
-  .agent-rail-grid {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
-  }
+  .agent-rail-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
   @media (max-width: 1100px) { .agent-rail-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 640px) { .agent-rail-grid { grid-template-columns: 1fr; } }
 
   .rail-step-card {
     background: rgba(11, 17, 33, 0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
-    padding: 14px 16px; transition: var(--transition-smooth); position: relative; overflow: hidden;
+    padding: 16px 18px; transition: var(--transition); position: relative; overflow: hidden;
   }
   .rail-step-card.done {
-    border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.06);
   }
   .rail-step-card.done::after {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.5px;
-    background: linear-gradient(90deg, #10B981, #38BDF8);
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #10B981, #00E5FF);
   }
   .rail-step-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
   .rail-agent-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); font-weight: 700; }
   .rail-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.8); }
-  .rail-agent-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
-  .rail-agent-status { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rail-agent-name { font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .rail-agent-status { font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Spacious 2-Column Split */
   .workspace-columns-split {
-    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 32px;
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px;
   }
   @media (max-width: 1080px) { .workspace-columns-split { grid-template-columns: 1fr; } }
 
   /* Ingestion Dropzone Grid */
-  .doc-vault-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .doc-vault-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
   @media (max-width: 768px) { .doc-vault-grid { grid-template-columns: 1fr; } }
   .doc-slot-box {
-    background: rgba(11, 17, 33, 0.6); border: 1.5px dashed var(--border-glass); border-radius: var(--radius-md);
-    padding: 18px 14px; text-align: center; cursor: pointer; transition: var(--transition-smooth);
+    background: rgba(11, 17, 33, 0.65); border: 1.5px dashed var(--border-glass); border-radius: var(--radius-lg);
+    padding: 20px 16px; text-align: center; cursor: pointer; transition: var(--transition);
   }
-  .doc-slot-box:hover { border-color: var(--cyan); background: rgba(56, 189, 248, 0.06); transform: translateY(-2px); }
-  .doc-slot-box.loaded { border-style: solid; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05); }
-  .doc-slot-icon { font-size: 26px; margin-bottom: 6px; }
-  .doc-slot-title { font-size: 12.5px; font-weight: 700; color: #fff; }
-  .doc-slot-caption { font-size: 10.5px; color: var(--text-muted); }
+  .doc-slot-box:hover { border-color: var(--cyan-neon); background: rgba(0, 229, 255, 0.06); transform: translateY(-2px); }
+  .doc-slot-box.loaded { border-style: solid; border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.06); }
+  .doc-slot-icon { font-size: 28px; margin-bottom: 6px; }
+  .doc-slot-title { font-size: 13px; font-weight: 700; color: #fff; }
+  .doc-slot-caption { font-size: 11px; color: var(--text-muted); }
   .doc-slot-badge {
-    margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #34D399;
-    background: rgba(0, 0, 0, 0.4); padding: 4px 10px; border-radius: 6px; display: inline-block;
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #34D399;
+    background: rgba(0, 0, 0, 0.45); padding: 4px 10px; border-radius: 6px; display: inline-block;
+    border: 1px solid rgba(16, 185, 129, 0.3);
   }
 
   /* Extracted Facts Matrix */
-  .facts-spacious-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 18px; }
+  .facts-spacious-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-top: 20px; }
   .fact-item-card {
     background: rgba(11, 17, 33, 0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
-    padding: 14px 16px; transition: var(--transition-smooth);
+    padding: 16px 18px; transition: var(--transition);
   }
-  .fact-item-card:hover { border-color: var(--cyan); background: rgba(22, 34, 60, 0.75); transform: translateY(-2px); }
-  .fact-label-text { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+  .fact-item-card:hover { border-color: var(--cyan-neon); background: rgba(22, 34, 60, 0.85); transform: translateY(-2px); }
+  .fact-label-text { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
   .fact-val-row { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
-  .fact-val-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #fff; }
+  .fact-val-text { font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; color: #fff; }
   .btn-edit-inline {
-    background: transparent; border: none; color: var(--amber); cursor: pointer; font-size: 11.5px; font-weight: 700;
-    padding: 2px 6px; border-radius: 4px; transition: var(--transition-smooth);
+    background: transparent; border: none; color: var(--amber); cursor: pointer; font-size: 12px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px; transition: var(--transition);
   }
-  .btn-edit-inline:hover { background: rgba(245, 158, 11, 0.15); color: #FDE68A; }
+  .btn-edit-inline:hover { background: rgba(245, 158, 11, 0.18); color: #FDE68A; }
   .fact-cite-footer {
-    margin-top: 8px; font-size: 10px; color: var(--text-secondary); display: flex; justify-content: space-between;
+    margin-top: 8px; font-size: 10.5px; color: var(--text-secondary); display: flex; justify-content: space-between;
     border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 6px;
   }
 
-  /* Eligibility Box */
+  /* Eligibility Banner Box */
   .eligibility-banner-box {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.7) 100%);
-    border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-lg);
-    padding: 24px 28px; margin: 18px 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(15, 23, 42, 0.75) 100%);
+    border: 1.5px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-xl);
+    padding: 28px 32px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   }
-  .elig-payout-num { font-size: 32px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+  .elig-payout-num { font-size: 34px; font-weight: 900; color: #34D399; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 24px rgba(16, 185, 129, 0.35); }
 
   /* Evidence Checklist Items */
   .evidence-card-row {
-    background: rgba(11, 17, 33, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
-    padding: 16px 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    transition: var(--transition-smooth);
+    background: rgba(11, 17, 33, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
+    padding: 18px 20px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    transition: var(--transition);
   }
-  .evidence-card-row.missing { border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.06); }
-  .ev-badge-chip { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 5px 12px; border-radius: 6px; font-weight: 700; }
+  .evidence-card-row.missing { border-color: rgba(245, 158, 11, 0.45); background: rgba(245, 158, 11, 0.07); }
+  .ev-badge-chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 6px 14px; border-radius: 6px; font-weight: 700; }
   .ev-badge-chip.verified { background: var(--emerald-glow); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
   .ev-badge-chip.missing { background: var(--amber-glow); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
 
-  /* Human Approval Card */
+  /* Human Approval Hero Card */
   .approval-hero-card {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(7, 11, 20, 0.95) 100%);
-    border: 1.5px solid rgba(56, 189, 248, 0.4); border-radius: var(--radius-xl);
-    padding: 28px 30px; box-shadow: 0 0 35px rgba(56, 189, 248, 0.12); margin-bottom: 28px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(7, 11, 20, 0.98) 100%);
+    border: 1.5px solid rgba(0, 229, 255, 0.4); border-radius: var(--radius-2xl);
+    padding: 32px 34px; box-shadow: 0 0 40px rgba(0, 229, 255, 0.15); margin-bottom: 32px;
   }
   .input-glass-field {
     background: #030712; border: 1px solid var(--border-glass); border-radius: var(--radius-sm);
-    color: #fff; font-size: 13px; padding: 11px 16px; outline: none; width: 100%; font-family: inherit;
-    transition: var(--transition-smooth);
+    color: #fff; font-size: 13px; padding: 12px 18px; outline: none; width: 100%; font-family: inherit;
+    transition: var(--transition);
   }
-  .input-glass-field:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
+  .input-glass-field:focus { border-color: var(--cyan-neon); box-shadow: 0 0 16px rgba(0, 229, 255, 0.25); }
 
   /* Modals */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(14px);
     z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px;
   }
   .modal-overlay.open { display: flex; }
   .modal-box-glass {
-    background: #090E1A; border: 1px solid rgba(56, 189, 248, 0.35); border-radius: var(--radius-2xl);
-    max-width: 620px; width: 100%; padding: 32px 36px; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9);
+    background: #090E1A; border: 1px solid rgba(0, 229, 255, 0.35); border-radius: var(--radius-2xl);
+    max-width: 640px; width: 100%; padding: 34px 38px; box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95);
     max-height: 90vh; overflow-y: auto;
   }
-  .btn-close-modal { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 22px; }
+  .btn-close-modal { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 24px; }
   .btn-close-modal:hover { color: #fff; }
 
   /* AI Claims Copilot Floating Drawer */
   .copilot-bubble-btn {
-    position: fixed; bottom: 28px; right: 32px; z-index: 150;
-    background: linear-gradient(135deg, #0284C7 0%, #2563EB 50%, #7C3AED 100%);
-    color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 30px; padding: 14px 24px;
-    font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 10px;
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5); cursor: pointer; transition: var(--transition-smooth);
+    position: fixed; bottom: 32px; right: 36px; z-index: 150;
+    background: linear-gradient(135deg, #00E5FF 0%, #2563EB 50%, #7C3AED 100%);
+    color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 30px; padding: 14px 26px;
+    font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.55); cursor: pointer; transition: var(--transition);
   }
-  .copilot-bubble-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(124, 58, 237, 0.6); }
+  .copilot-bubble-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 45px rgba(124, 58, 237, 0.65); }
 
   .copilot-drawer-panel {
-    position: fixed; bottom: 94px; right: 32px; width: 400px; height: 540px;
-    background: #090E1A; border: 1px solid var(--border-glass-glow); border-radius: var(--radius-2xl);
-    z-index: 150; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85); display: none; flex-direction: column; overflow: hidden;
+    position: fixed; bottom: 100px; right: 36px; width: 420px; height: 560px;
+    background: #090E1A; border: 1px solid rgba(0, 229, 255, 0.4); border-radius: var(--radius-2xl);
+    z-index: 150; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9); display: none; flex-direction: column; overflow: hidden;
   }
   .copilot-drawer-panel.open { display: flex; }
   .copilot-drawer-header {
-    background: #0F172A; padding: 16px 20px; border-bottom: 1px solid var(--border-glass);
+    background: #0F172A; padding: 18px 22px; border-bottom: 1px solid var(--border-glass);
     display: flex; align-items: center; justify-content: space-between;
   }
   .copilot-drawer-body {
@@ -490,58 +703,73 @@
   }
   .copilot-chat-bubble.user { align-self: flex-end; background: #2563EB; color: #fff; }
   .copilot-chat-bubble.bot { align-self: flex-start; background: #0F172A; border: 1px solid var(--border-glass); color: var(--text-primary); }
+
+  /* Floating Toast Notification */
+  .toast-banner {
+    position: fixed; top: 24px; right: 36px; z-index: 300;
+    background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-emerald-glow); border-radius: var(--radius-lg);
+    padding: 14px 22px; color: #fff; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); backdrop-filter: blur(16px);
+  }
 </style>
 </head>
 <body>
+
+<!-- Toast Alert Container -->
+<div class="toast-banner" id="globalToast">
+  <span id="toastIcon">⚡</span>
+  <span id="toastMsg">Action executed successfully.</span>
+</div>
 
 <!-- Header Navigation Bar -->
 <header>
   <a href="#" class="brand-group" onclick="showLandingPage(event)">
     <div class="brand-logo-gem">CP</div>
     <div class="brand-text">
-      <h1>ClaimPilot <span style="font-size: 10px; font-weight: 700; color: var(--cyan); background: var(--cyan-glow); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(56,189,248,0.35);">ENTERPRISE</span></h1>
+      <h1>ClaimPilot <span style="font-size: 10px; font-weight: 800; color: var(--cyan-neon); background: var(--cyan-glow); padding: 3px 9px; border-radius: 12px; border: 1px solid rgba(0,229,255,0.35);">ENTERPRISE AI</span></h1>
       <p>Autonomous Multi-Agent Health Reimbursement & Adjudication Suite</p>
     </div>
   </a>
 
   <div class="nav-menu-links">
-    <a class="nav-link active" id="navLinkLanding" onclick="showLandingPage(event)">Product Overview</a>
+    <a class="nav-link active" id="navLinkLanding" onclick="showLandingPage(event)">Overview</a>
     <a class="nav-link" id="navLinkWorkspace" onclick="showWorkspacePage(event)">Claims Workspace</a>
     <a class="nav-link" onclick="openDoctorModal()">NMC Registry</a>
     <a class="nav-link" onclick="openAnalyticsModal()">TPA Analytics</a>
   </div>
 
   <div style="display: flex; align-items: center; gap: 12px;">
-    <button class="btn btn-emerald-glow" onclick="showWorkspacePage(event); triggerScenario1();">⚡ Launch Demo (₹42k Claim)</button>
+    <button class="btn btn-glass" id="themeToggleBtn" onclick="cycleTheme()">🌿 Glassy Green</button>
+    <button class="btn btn-emerald-glow btn-shimmer" onclick="showWorkspacePage(event); triggerScenario1();">⚡ Run Demo (₹42k Claim)</button>
     <button class="btn btn-glass" onclick="openApiKeyModal()">🔑 Gemini Key</button>
   </div>
 </header>
 
 <!-- ==========================================================================
-     VIEW 1: LANDING PAGE VIEW
+     VIEW 1: $100K LUXURY LANDING PAGE
      ========================================================================== -->
 <div class="view-container active" id="landingView">
 
   <!-- Hero Section -->
   <section class="landing-hero">
     <div class="hero-tag-badge">
-      <span>🛡️ DPDP Act 2023 Compliant</span> &bull; <span>Google Cloud Vertex AI</span> &bull; <span>IRDAI Standard</span>
+      <span>🛡️ DPDP Act 2023 Compliant</span> &bull; <span>Google Cloud Vertex AI</span> &bull; <span>IRDAI Standard Form</span>
     </div>
-    <h1>Stop Losing Medical Reimbursements.<br><span class="gradient-text">6 Autonomous AI Agents</span> Prepare & Audit Your Claim.</h1>
+    <h1>Stop Losing Medical Reimbursements.<br><span class="gradient-text">6 Autonomous AI Agents</span> Discover, Audit & Submit.</h1>
     <p class="hero-subtitle">
-      ClaimPilot automates document intake, discovers hidden policy deductibles, flags missing itemized hospital bills, and generates official IRDAI standard claim forms with zero guesswork.
+      ClaimPilot turns complicated hospital invoices, discharge summaries, and employer policy clauses into an audit-proof, human-approved reimbursement package in under 3 minutes.
     </p>
 
     <div class="hero-cta-group">
-      <button class="btn btn-emerald-glow" style="padding: 14px 28px; font-size: 14.5px;" onclick="showWorkspacePage(event); triggerScenario1();">
+      <button class="btn btn-emerald-glow btn-shimmer" style="padding: 15px 32px; font-size: 15px;" onclick="showWorkspacePage(event); triggerScenario1();">
         🚀 Test Live Scenario 1 (Appendectomy ₹42k)
       </button>
-      <button class="btn btn-glass" style="padding: 14px 24px; font-size: 14.5px;" onclick="showWorkspacePage(event)">
+      <button class="btn btn-glass" style="padding: 15px 28px; font-size: 15px;" onclick="showWorkspacePage(event)">
         Open Claims Workspace &rarr;
       </button>
     </div>
 
-    <!-- Live Interactive Adjudication Preview Widget -->
+    <!-- Live Interactive Adjudication Simulator Widget -->
     <div class="hero-preview-glass">
       <div class="preview-top-bar">
         <div class="mac-dots">
@@ -549,142 +777,137 @@
           <div class="mac-dot dot-yellow"></div>
           <div class="mac-dot dot-green"></div>
         </div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted);">
-          CASE_REF: <span style="color: var(--cyan);">CLM-SCENARIO-1</span> &bull; INPATIENT SURGERY
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-muted);">
+          LIVE_ENGINE: <span style="color: var(--cyan-neon);">GEMINI_3.5_VERTEX</span> &bull; DETERMINISTIC MATH
         </div>
-        <div style="font-size: 11px; font-weight: 700; color: #34D399; background: var(--emerald-glow); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(16,185,129,0.3);">
-          ● DETERMINISTIC ADJUDICATION
+        <div style="font-size: 11.5px; font-weight: 700; color: #34D399; background: var(--emerald-glow); padding: 3px 12px; border-radius: 12px; border: 1px solid rgba(16,185,129,0.35);">
+          ● 0% CO-PAY ELIGIBLE
         </div>
       </div>
 
       <div class="preview-grid">
         <div>
-          <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Hospital Billed vs Net Approved</div>
-          <div style="display: flex; align-items: baseline; gap: 14px; margin: 8px 0 12px;">
-            <div style="font-size: 32px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono', monospace;">₹38,640.00</div>
-            <div style="font-size: 16px; color: var(--text-muted); text-decoration: line-through; font-family: 'JetBrains Mono', monospace;">₹42,000.00</div>
+          <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Gross Billed vs Net Approved Payout</div>
+          <div style="display: flex; align-items: baseline; gap: 16px; margin: 10px 0 14px;">
+            <div style="font-size: 38px; font-weight: 900; color: #34D399; font-family: 'JetBrains Mono', monospace;">₹38,640.00</div>
+            <div style="font-size: 18px; color: var(--text-muted); text-decoration: line-through; font-family: 'JetBrains Mono', monospace;">₹42,000.00</div>
           </div>
-          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-            Gross bill within ₹50k sum insured. IRDAI non-medical consumables deduction: <strong>-₹3,360</strong>. 0% co-pay applied. Missing itemized pharmacy bill flagged with 1-click hospital email draft.
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+            Hospital gross bill within ₹50k sum insured. IRDAI non-medical consumables deduction: <strong>-₹3,360</strong>. Missing itemized pharmacy bill flagged with 1-click automated hospital billing email draft.
           </p>
         </div>
 
-        <div style="background: rgba(11, 17, 33, 0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px 20px;">
-          <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">Autonomous Agent Suite</div>
-          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
-            <div style="display: flex; justify-content: space-between;"><span style="color:#fff;">1. Intake Agent</span><span style="color:#34D399;">✓ 4 Docs Parsed</span></div>
-            <div style="display: flex; justify-content: space-between;"><span style="color:#fff;">2. Safety Agent</span><span style="color:#34D399;">✓ NMC Doctor Cleared</span></div>
-            <div style="display: flex; justify-content: space-between;"><span style="color:#fff;">3. Eligibility Agent</span><span style="color:#38BDF8;">✓ 92.5% Score</span></div>
-            <div style="display: flex; justify-content: space-between;"><span style="color:#fff;">4. Claim Prep Agent</span><span style="color:#34D399;">✓ IRDAI PDF Built</span></div>
-          </div>
+        <div class="agent-network-box">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Autonomous 6-Agent Status</div>
+          <div class="agent-node-row"><span class="agent-pill-name">📥 1. Intake Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ 4 Docs Parsed</span></div>
+          <div class="agent-node-row"><span class="agent-pill-name">🛡️ 2. Safety Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ NMC Cleared</span></div>
+          <div class="agent-node-row"><span class="agent-pill-name">⚖️ 3. Eligibility Agent</span><span style="color:#00E5FF; font-family:'JetBrains Mono';">✓ 92.5% Score</span></div>
+          <div class="agent-node-row"><span class="agent-pill-name">📄 4. Claim Prep Agent</span><span style="color:#34D399; font-family:'JetBrains Mono';">✓ IRDAI Form Built</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 6 Autonomous Agents Architecture Section -->
+  <!-- Bento Grid 6-Agent Architecture Section -->
   <section class="section-container">
     <div class="section-header">
-      <h2>The 6-Agent Autonomous Architecture</h2>
-      <p>Built with Google ADK / Genkit multi-agent patterns, Firestore native state management, and strict human safety gates.</p>
+      <h2>The 6-Agent Autonomous Engine</h2>
+      <p>Built with Google Agent Development Kit (ADK), Google Genkit multi-agent patterns, and 11 Firestore collections.</p>
     </div>
 
-    <div class="agent-cards-grid">
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">📥</div>
+    <div class="bento-grid">
+      <div class="bento-card">
+        <div class="bento-icon">📥</div>
         <h3>1. Intake Agent</h3>
-        <p>Uses Gemini 3.5 Multimodal models to classify medical bills, discharge summaries, and policy documents, scoring document legibility and detecting tampering.</p>
+        <p>Uses Gemini 3.5 Multimodal models to classify medical bills, discharge summaries, and policies, evaluating image quality and detecting fraud or tampering.</p>
       </div>
 
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">🛡️</div>
+      <div class="bento-card">
+        <div class="bento-icon">🛡️</div>
         <h3>2. Safety Agent</h3>
         <p>Shields DPDP Act 2023 personal data, verifies doctor credentials against National Medical Commission (NMC) registry, and benchmarks GIPSA hospital tariffs.</p>
       </div>
 
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">⚖️</div>
+      <div class="bento-card">
+        <div class="bento-icon">⚖️</div>
         <h3>3. Eligibility Agent</h3>
-        <p>Deterministic rules engine that calculates exact IRDAI Schedule 1 non-medical deductions, room rent caps, and co-payment formulas with 100% mathematical auditability.</p>
+        <p>Deterministic rules engine that calculates exact IRDAI Schedule 1 non-medical deductions, room rent caps, and co-payment formulas with zero hallucination.</p>
       </div>
 
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">🔍</div>
+      <div class="bento-card">
+        <div class="bento-icon">🔍</div>
         <h3>4. Evidence Agent</h3>
         <p>Cross-references mandatory IRDAI checklist, detects missing pharmacy and OT breakups, and generates pre-drafted emails to hospital billing desks.</p>
       </div>
 
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">📄</div>
+      <div class="bento-card">
+        <div class="bento-icon">📄</div>
         <h3>5. Claim Prep Agent</h3>
         <p>Compiles standardized IRDAI Mediclaim Form (Part A & B) PDFs using ReportLab, insurer cover letters, and claims payloads for TPA adjudication.</p>
       </div>
 
-      <div class="agent-feature-card">
-        <div class="agent-icon-wrap">⏰</div>
+      <div class="bento-card">
+        <div class="bento-icon">⏰</div>
         <h3>6. Follow-up Agent</h3>
         <p>Asynchronously tracks the strict 30-day post-discharge filing deadline, scheduling WhatsApp, Email, and calendar reminders to prevent claim forfeiture.</p>
       </div>
     </div>
   </section>
 
-  <!-- 3-Step Flow Section -->
+  <!-- Interactive GIPSA PPN Tariff Benchmark Showcase -->
   <section class="section-container">
-    <div class="section-header">
-      <h2>How ClaimPilot Works in 3 Steps</h2>
-      <p>From document upload to verified TPA submission in under 3 minutes.</p>
-    </div>
-
-    <div class="flow-steps-grid">
-      <div class="flow-step-box">
-        <span class="flow-step-num">STEP 01</span>
-        <h4>Drop Medical Docs</h4>
-        <p>Upload your hospital bills, discharge summary, and employee health card. Gemini 3.5 parses all entities with bounding box citations.</p>
-      </div>
-
-      <div class="flow-step-box">
-        <span class="flow-step-num">STEP 02</span>
-        <h4>Deterministic Rules Engine</h4>
-        <p>The system audits every rupee against your policy terms and IRDAI non-payable rules, flagging missing itemized bills automatically.</p>
-      </div>
-
-      <div class="flow-step-box">
-        <span class="flow-step-num">STEP 03</span>
-        <h4>Review & 1-Click Approval</h4>
-        <p>Inspect extracted facts, download the filled IRDAI Claim Form PDF, and sign off digitally with mandatory human consent.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Compliance & Safety Banner -->
-  <section class="section-container">
-    <div class="compliance-banner-wrap">
+    <div class="tariff-showcase-box">
       <div>
-        <h3 style="font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px;">Enterprise Trust & Safety Invariant</h3>
-        <p style="font-size: 13.5px; color: var(--text-secondary); max-width: 640px;">
-          ClaimPilot provides eligibility estimates based on policy terms, not legal advice. The system will <strong>never submit claims or dispatch emails</strong> without explicit, digitally signed human consent.
+        <span style="font-size: 11px; font-weight: 700; color: var(--emerald); background: var(--emerald-glow); padding: 4px 12px; border-radius: 12px;">PPN TARIFF BENCHMARK</span>
+        <h3 style="font-size: 32px; font-weight: 800; color: #fff; margin: 12px 0 10px; font-family: 'Outfit', sans-serif;">GIPSA Fair Price Intelligence</h3>
+        <p style="font-size: 14.5px; color: var(--text-secondary); line-height: 1.6;">
+          ClaimPilot benchmarks every procedure against standard General Insurance Public Sector Association (GIPSA) schedules.
         </p>
+        <div style="margin-top: 20px; display: flex; gap: 12px;">
+          <button class="btn btn-emerald-glow" onclick="showWorkspacePage(event)">Explore in Workspace &rarr;</button>
+        </div>
       </div>
-      <button class="btn btn-emerald-glow" onclick="showWorkspacePage(event); triggerScenario1();">Enter Workspace Now &rarr;</button>
+      <div style="background: rgba(11,17,33,0.85); border: 1px solid var(--border-glass); border-radius: var(--radius-xl); padding: 24px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px;">
+          <span>PROCEDURE</span>
+          <span>HOSPITAL BILL</span>
+          <span>GIPSA CAP</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
+          <span style="font-weight: 600; color: #fff;">Appendectomy</span>
+          <span style="font-family: 'JetBrains Mono';">₹42,000</span>
+          <span style="font-family: 'JetBrains Mono'; color: #34D399;">₹45,000 (Fair)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
+          <span style="font-weight: 600; color: #fff;">Cholecystectomy</span>
+          <span style="font-family: 'JetBrains Mono';">₹68,000</span>
+          <span style="font-family: 'JetBrains Mono'; color: #34D399;">₹70,000 (Fair)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 10px 0;">
+          <span style="font-weight: 600; color: #fff;">Coronary Angiography</span>
+          <span style="font-family: 'JetBrains Mono';">₹18,000</span>
+          <span style="font-family: 'JetBrains Mono'; color: #34D399;">₹20,000 (Fair)</span>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer>
+  <footer style="border-top: 1px solid var(--border-subtle); padding: 48px 56px; text-align: center; font-size: 13px; color: var(--text-muted); background: rgba(3, 7, 18, 0.95);">
     <p>&copy; 2026 ClaimPilot. Built for Indian employees claiming health insurance reimbursements. Powered by Google Cloud Vertex AI & Firestore.</p>
   </footer>
 
 </div>
 
 <!-- ==========================================================================
-     VIEW 2: LIVE CLAIMS WORKSPACE (SPACIOUS & UNCONGESTED)
+     VIEW 2: $100K CLAIMS WORKSPACE (SPACIOUS & LUXURIOUS)
      ========================================================================== -->
 <div class="view-container" id="workspaceView">
   <div class="workspace-layout">
 
     <!-- Scenario Switcher Strip -->
     <div class="workspace-scenario-strip">
-      <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+      <div style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
         ⚡ Instant Preset Scenarios:
       </div>
       <div class="scenario-pills-wrap">
@@ -708,7 +931,7 @@
       <div class="case-title-block">
         <div class="case-ref-tag">CASE REF: <strong id="valCaseId">CLM-SCENARIO-1</strong> &bull; INPATIENT REIMBURSEMENT</div>
         <h2 id="valCaseTitle">Inpatient Appendectomy Reimbursement (Star Health Corporate GHI)</h2>
-        <span style="font-size: 11px; font-weight: 700; color: #34D399; background: var(--emerald-glow); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(16,185,129,0.3);" id="valCaseStateBadge">
+        <span style="font-size: 11px; font-weight: 700; color: #34D399; background: var(--emerald-glow); padding: 4px 12px; border-radius: 14px; border: 1px solid rgba(16,185,129,0.35);" id="valCaseStateBadge">
           READY FOR REVIEW
         </span>
       </div>
@@ -733,7 +956,7 @@
       </div>
     </div>
 
-    <!-- 6-Agent Live Workflow Rail -->
+    <!-- 6-Agent Live Progress Rail -->
     <div class="agent-rail-container">
       <div class="agent-rail-grid">
         <div class="rail-step-card done" id="nodeIntake">
@@ -787,20 +1010,20 @@
       </div>
     </div>
 
-    <!-- Main Workspace Split: Left (Docs, Facts, Eligibility, Evidence) / Right (Human Approval, PDF, Activity) -->
+    <!-- Main Workspace Split -->
     <div class="workspace-columns-split">
 
       <!-- Left Column -->
       <div class="workspace-col-left">
 
         <!-- 1. Document Vault -->
-        <div class="glass-card" style="margin-bottom: 28px;">
+        <div class="glass-card" style="margin-bottom: 32px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff;">📁 Ingested Medical Vault</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);">Multimodal document parsing and visual tamper verification</p>
+              <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">📁 Ingested Medical Vault</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">Multimodal document parsing and visual tamper verification</p>
             </div>
-            <button class="btn btn-glass" style="font-size: 11.5px; padding: 6px 14px;" onclick="triggerScenario1()">📎 Reload 4 Demo Files</button>
+            <button class="btn btn-glass" style="font-size: 12px; padding: 6px 16px;" onclick="triggerScenario1()">📎 Reload 4 Demo Files</button>
           </div>
 
           <div class="doc-vault-grid">
@@ -845,13 +1068,13 @@
         </div>
 
         <!-- 2. Extracted Facts Matrix with Citations -->
-        <div class="glass-card" style="margin-bottom: 28px;">
+        <div class="glass-card" style="margin-bottom: 32px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff;">🔍 Extracted Facts with Page Citations</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);">Click "Edit" on any field to modify and recalculate deterministically</p>
+              <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">🔍 Extracted Facts with Page Citations</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">Click "Edit" on any field to modify and recalculate deterministically</p>
             </div>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #34D399; background: var(--emerald-glow); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(16,185,129,0.3);">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #34D399; background: var(--emerald-glow); padding: 4px 12px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.35);">
               100% AUDITABLE
             </span>
           </div>
@@ -862,42 +1085,42 @@
         </div>
 
         <!-- 3. Deterministic Eligibility Calculation Card -->
-        <div class="glass-card" style="margin-bottom: 28px;">
+        <div class="glass-card" style="margin-bottom: 32px;">
           <div>
-            <h3 style="font-size: 16px; font-weight: 800; color: #fff;">⚖️ Deterministic Eligibility Assessment</h3>
-            <p style="font-size: 12px; color: var(--text-secondary);">Strict IRDAI Schedule 1 rules engine calculation</p>
+            <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">⚖️ Deterministic Eligibility Assessment</h3>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">Strict IRDAI Schedule 1 rules engine calculation</p>
           </div>
 
           <div class="eligibility-banner-box">
             <div>
               <div style="font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Likely Approved Reimbursement</div>
               <div class="elig-payout-num" id="dispPayoutRange">₹36,540 — ₹38,640</div>
-              <div style="font-size: 12.5px; color: var(--text-secondary); max-width: 480px; margin-top: 8px; line-height: 1.5;" id="dispBasisText">
+              <div style="font-size: 13px; color: var(--text-secondary); max-width: 500px; margin-top: 8px; line-height: 1.55;" id="dispBasisText">
                 Gross bill of ₹42,000 is within corporate sum insured (₹50,000). Active inpatient surgery is covered. Non-medical exclusions (gloves, sanitizer) are ₹3,360. 0% co-pay applicable.
               </div>
             </div>
             <div style="text-align: center;">
-              <div style="width: 72px; height: 72px; border-radius: 50%; border: 4px solid #34D399; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono'; color: #34D399; box-shadow: 0 0 20px rgba(16,185,129,0.3);" id="dispScoreCircle">
+              <div style="width: 76px; height: 76px; border-radius: 50%; border: 4px solid #34D399; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; font-family: 'JetBrains Mono'; color: #34D399; box-shadow: 0 0 25px rgba(16,185,129,0.35);" id="dispScoreCircle">
                 92%
               </div>
-              <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 6px; font-weight: 700; text-transform: uppercase;">Confidence Score</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px; font-weight: 700; text-transform: uppercase;">Confidence Score</div>
             </div>
           </div>
 
-          <div style="background: rgba(11, 17, 33, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 18px 20px;">
-            <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <div style="background: rgba(11, 17, 33, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-lg); padding: 20px 22px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
               <span>Gross Billed Amount (Apollo Hospital)</span>
               <span style="font-family: 'JetBrains Mono'; font-weight: 700;" id="dispGrossRow">₹42,000.00</span>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--amber);">
+            <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--amber);">
               <span>Less: IRDAI Non-Payable Consumables (Sanitizer, PPE, Kit)</span>
               <span style="font-family: 'JetBrains Mono'; font-weight: 700;" id="dispDeductionRow">- ₹3,360.00</span>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--emerald);">
+            <div style="display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--emerald);">
               <span>Less: Corporate Co-payment (0% Employer Waiver)</span>
               <span style="font-family: 'JetBrains Mono'; font-weight: 700;">₹0.00</span>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 10px 0 2px; font-weight: 800; color: #34D399;">
+            <div style="display: flex; justify-content: space-between; font-size: 15px; padding: 12px 0 4px; font-weight: 800; color: #34D399;">
               <span>Net Approved Reimbursement Payout</span>
               <span style="font-family: 'JetBrains Mono';" id="dispNetApprovedRow">₹38,640.00</span>
             </div>
@@ -906,10 +1129,10 @@
 
         <!-- 4. Prioritized Evidence Checklist -->
         <div class="glass-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
             <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: #fff;">📋 Prioritized Evidence Checklist</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);">Mandatory IRDAI Inpatient Evidence Audit</p>
+              <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">📋 Prioritized Evidence Checklist</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">Mandatory IRDAI Inpatient Evidence Audit</p>
             </div>
             <span class="ev-badge-chip missing" id="badgeEvidenceMissing">1 Action Required</span>
           </div>
@@ -926,53 +1149,53 @@
 
         <!-- 1. Strict Human Review & Approval Screen -->
         <div class="approval-hero-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-            <h3 style="font-size: 16px; font-weight: 800; color: #fff;">🛡️ Human Review & Digital Sign-off</h3>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--cyan); background: var(--cyan-glow); padding: 3px 8px; border-radius: 6px; font-weight: 700;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">🛡️ Human Review & Digital Sign-off</h3>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--cyan-neon); background: var(--cyan-glow); padding: 4px 10px; border-radius: 8px; font-weight: 700;">
               MANDATORY GATE
             </span>
           </div>
-          <p style="font-size: 12px; color: var(--text-secondary); background: rgba(3, 7, 18, 0.7); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); line-height: 1.5; margin-bottom: 16px;">
+          <p style="font-size: 12.5px; color: var(--text-secondary); background: rgba(3, 7, 18, 0.75); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); line-height: 1.55; margin-bottom: 18px;">
             <strong>Safety Invariant:</strong> System will NEVER submit claims or dispatch emails without explicit human approval.
           </p>
-          <form onsubmit="handleHumanApproval(event)" style="display: flex; flex-direction: column; gap: 14px;">
-            <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: #fff; cursor: pointer;">
-              <input type="checkbox" id="chkDeclaration" checked required style="margin-top: 3px;">
+          <form onsubmit="handleHumanApproval(event)" style="display: flex; flex-direction: column; gap: 16px;">
+            <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 12.5px; color: #fff; cursor: pointer;">
+              <input type="checkbox" id="chkDeclaration" checked required style="margin-top: 4px;">
               <span>I confirm that the extracted facts and medical receipts are accurate to the best of my knowledge.</span>
             </label>
-            <div style="display: flex; gap: 10px;">
+            <div style="display: flex; gap: 12px;">
               <input type="text" class="input-glass-field" id="inputSignerName" value="Manpreet Kaur" placeholder="Signer Full Name" required>
-              <button type="submit" class="btn btn-emerald-glow" style="white-space: nowrap;">✍️ Approve & Submit</button>
+              <button type="submit" class="btn btn-emerald-glow btn-shimmer" style="white-space: nowrap;">✍️ Approve & Submit</button>
             </div>
           </form>
         </div>
 
         <!-- 2. Generated IRDAI Claim Form PDF & Package -->
-        <div class="glass-card" style="margin-bottom: 28px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+        <div class="glass-card" style="margin-bottom: 32px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 15px; font-weight: 800; color: #fff;">📑 Generated IRDAI Claim Form</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);">Official standard claim form (Part A & B)</p>
+              <h3 style="font-size: 16px; font-weight: 800; color: #fff; font-family: 'Outfit';">📑 Generated IRDAI Claim Form</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">Official standard claim form (Part A & B)</p>
             </div>
             <button class="btn btn-glass" onclick="downloadClaimPdf()">⬇️ Download PDF</button>
           </div>
-          <div style="background: rgba(11, 17, 33, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px 18px; font-size: 12.5px; line-height: 1.5;">
+          <div style="background: rgba(11, 17, 33, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 18px 20px; font-size: 13px; line-height: 1.55;">
             <div style="font-weight: 700; color: #fff; margin-bottom: 4px;">Standardized IRDAI Mediclaim Form (Part A & B)</div>
-            <div style="color: var(--text-secondary); margin-bottom: 12px;">
+            <div style="color: var(--text-secondary); margin-bottom: 14px;">
               Auto-filled with Patient: <strong>Manpreet Kaur</strong>, Hospital: <strong>Apollo Speciality</strong>, Policy: <strong>STAR-GHI-2024-9941</strong>, Net Eligible: <strong>₹38,640.00</strong>.
             </div>
             <div style="display: flex; gap: 10px;">
-              <button class="btn btn-glass" style="font-size: 11.5px; padding: 6px 14px;" onclick="viewCoverLetterModal()">✉️ View Cover Letter</button>
-              <button class="btn btn-glass" style="font-size: 11.5px; padding: 6px 14px;" onclick="viewBoundingBoxesModal()">📐 Citation Tokens</button>
+              <button class="btn btn-glass" style="font-size: 12px; padding: 7px 16px;" onclick="viewCoverLetterModal()">✉️ View Cover Letter</button>
+              <button class="btn btn-glass" style="font-size: 12px; padding: 7px 16px;" onclick="viewBoundingBoxesModal()">📐 Citation Tokens</button>
             </div>
           </div>
         </div>
 
         <!-- 3. Scheduled Reminders & Deadlines -->
-        <div class="glass-card" style="margin-bottom: 28px;">
-          <div style="margin-bottom: 14px;">
-            <h3 style="font-size: 15px; font-weight: 800; color: #fff;">⏰ Deadlines & Multi-Channel Reminders</h3>
-            <p style="font-size: 12px; color: var(--text-secondary);">30-Day IRDAI post-discharge monitoring</p>
+        <div class="glass-card" style="margin-bottom: 32px;">
+          <div style="margin-bottom: 16px;">
+            <h3 style="font-size: 16px; font-weight: 800; color: #fff; font-family: 'Outfit';">⏰ Deadlines & Multi-Channel Reminders</h3>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">30-Day IRDAI post-discharge monitoring</p>
           </div>
           <div id="remindersContainer">
             <!-- Reminders rendered dynamically -->
@@ -981,12 +1204,12 @@
 
         <!-- 4. Append-Only Audit Trail -->
         <div class="glass-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
             <div>
-              <h3 style="font-size: 15px; font-weight: 800; color: #fff;">📜 Activity Timeline & Audit Log</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);">Immutable multi-agent trace log</p>
+              <h3 style="font-size: 16px; font-weight: 800; color: #fff; font-family: 'Outfit';">📜 Activity Timeline & Audit Log</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">Immutable multi-agent trace log</p>
             </div>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--cyan);">APPEND-ONLY</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--cyan-neon);">APPEND-ONLY</span>
           </div>
           <div style="max-height: 380px; overflow-y: auto; padding-right: 6px;" id="timelineContainer">
             <!-- Timeline steps rendered dynamically -->
@@ -1004,50 +1227,50 @@
 <button class="copilot-bubble-btn" onclick="toggleCopilot()">💬 Ask Claims Copilot</button>
 <div class="copilot-drawer-panel" id="copilotDrawer">
   <div class="copilot-drawer-header">
-    <div style="font-size: 13.5px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">🤖 Claims Copilot (Gemini 3.5)</div>
+    <div style="font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Outfit';">🤖 Claims Copilot (Gemini 3.5)</div>
     <button class="btn-close-modal" onclick="toggleCopilot()">&times;</button>
   </div>
-  <div style="display: flex; gap: 6px; padding: 8px 16px; background: #070B14; overflow-x: auto; border-bottom: 1px solid var(--border-glass);">
-    <button style="font-size: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan); padding: 4px 8px; border-radius: 12px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('Why was ₹3,360 deducted?')">Why ₹3,360 deduction?</button>
-    <button style="font-size: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan); padding: 4px 8px; border-radius: 12px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('What is IRDAI 30-day filing rule?')">IRDAI 30-Day Rule?</button>
-    <button style="font-size: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan); padding: 4px 8px; border-radius: 12px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('Is laparoscopic surgery covered?')">Laparoscopic coverage?</button>
+  <div style="display: flex; gap: 8px; padding: 10px 18px; background: #070B14; overflow-x: auto; border-bottom: 1px solid var(--border-glass);">
+    <button style="font-size: 10.5px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan-neon); padding: 5px 10px; border-radius: 14px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('Why was ₹3,360 deducted?')">Why ₹3,360 deduction?</button>
+    <button style="font-size: 10.5px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan-neon); padding: 5px 10px; border-radius: 14px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('What is IRDAI 30-day filing rule?')">IRDAI 30-Day Rule?</button>
+    <button style="font-size: 10.5px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--cyan-neon); padding: 5px 10px; border-radius: 14px; cursor: pointer; white-space: nowrap; font-family: 'JetBrains Mono';" onclick="quickAskCopilot('Is laparoscopic surgery covered?')">Laparoscopic coverage?</button>
   </div>
   <div class="copilot-drawer-body" id="copilotMessages">
     <div class="copilot-chat-bubble bot">
       Hello Manpreet! I am your AI Claims Copilot powered by Gemini. Ask me about your ₹42,000 claim, why ₹3,360 was deducted for IRDAI non-payables, or hospital regulations.
     </div>
   </div>
-  <form style="padding: 14px 18px; border-top: 1px solid var(--border-glass); display: flex; gap: 8px; background: #090E1A;" onsubmit="handleCopilotChat(event)">
+  <form style="padding: 16px 20px; border-top: 1px solid var(--border-glass); display: flex; gap: 10px; background: #090E1A;" onsubmit="handleCopilotChat(event)">
     <input type="text" class="input-glass-field" id="copilotQuery" placeholder="Ask about rules, deductions..." required>
-    <button type="submit" class="btn btn-primary-glow" style="padding: 6px 16px;">Send</button>
+    <button type="submit" class="btn btn-primary-glow" style="padding: 8px 18px;">Send</button>
   </form>
 </div>
 
 <!-- Modal 1: 1-Click Hospital Missing Itemized Bill Email Modal -->
 <div class="modal-overlay" id="modalHospitalEmail">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">✉️ Ready-to-Send Hospital Bill Request Email</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">✉️ Ready-to-Send Hospital Bill Request Email</h3>
       <button class="btn-close-modal" onclick="closeModal('modalHospitalEmail')">&times;</button>
     </div>
-    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+    <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px;">
       ClaimPilot identified that an itemized pharmacy and OT consumables breakdown is required by your TPA for full reimbursement. Review the pre-composed email before dispatching.
     </p>
-    <div style="margin-bottom: 12px;">
-      <label style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Recipient</label>
+    <div style="margin-bottom: 14px;">
+      <label style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Recipient</label>
       <input type="text" class="input-glass-field" id="emailRecipient" value="billing@apollohospitals.demo" readonly>
     </div>
-    <div style="margin-bottom: 12px;">
-      <label style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Subject</label>
+    <div style="margin-bottom: 14px;">
+      <label style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Subject</label>
       <input type="text" class="input-glass-field" id="emailSubject" value="Request for Itemized Pharmacy & Consumables Bill — Patient: Manpreet Kaur (INV-BLR-2026-8812)" readonly>
     </div>
-    <div style="margin-bottom: 18px;">
-      <label style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Email Body</label>
-      <textarea class="input-glass-field" id="emailBody" rows="7" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;"></textarea>
+    <div style="margin-bottom: 20px;">
+      <label style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Email Body</label>
+      <textarea class="input-glass-field" id="emailBody" rows="7" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"></textarea>
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
       <button class="btn btn-glass" onclick="closeModal('modalHospitalEmail')">Cancel</button>
-      <button class="btn btn-primary-glow" onclick="sendHospitalEmail()">🚀 Dispatch Email to Hospital</button>
+      <button class="btn btn-primary-glow btn-shimmer" onclick="sendHospitalEmail()">🚀 Dispatch Email to Hospital</button>
     </div>
   </div>
 </div>
@@ -1055,21 +1278,21 @@
 <!-- Modal 2: Fact In-line Edit Modal -->
 <div class="modal-overlay" id="modalEditFact">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">✏️ Correct Extracted Fact (Human-in-the-Loop)</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">✏️ Correct Extracted Fact (Human-in-the-Loop)</h3>
       <button class="btn-close-modal" onclick="closeModal('modalEditFact')">&times;</button>
     </div>
-    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+    <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px;">
       Updating an extracted fact sets its confidence to 100% human-verified and deterministically recalculates all reimbursement limits.
     </p>
     <input type="hidden" id="editFactKey">
-    <div style="margin-bottom: 16px;">
-      <label style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="editFactLabel">Field Name</label>
+    <div style="margin-bottom: 18px;">
+      <label style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;" id="editFactLabel">Field Name</label>
       <input type="text" class="input-glass-field" id="editFactValue" required>
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
       <button class="btn btn-glass" onclick="closeModal('modalEditFact')">Cancel</button>
-      <button class="btn btn-primary-glow" onclick="saveFactCorrection()">💾 Save & Recalculate</button>
+      <button class="btn btn-primary-glow btn-shimmer" onclick="saveFactCorrection()">💾 Save & Recalculate</button>
     </div>
   </div>
 </div>
@@ -1077,12 +1300,12 @@
 <!-- Modal 3: TPA Cover Letter Modal -->
 <div class="modal-overlay" id="modalCoverLetter">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">📄 Insurer Reimbursement Cover Letter</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">📄 Insurer Reimbursement Cover Letter</h3>
       <button class="btn-close-modal" onclick="closeModal('modalCoverLetter')">&times;</button>
     </div>
-    <textarea class="input-glass-field" id="coverLetterText" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;" readonly></textarea>
-    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+    <textarea class="input-glass-field" id="coverLetterText" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;" readonly></textarea>
+    <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
       <button class="btn btn-glass" onclick="closeModal('modalCoverLetter')">Close</button>
     </div>
   </div>
@@ -1091,72 +1314,72 @@
 <!-- Modal 4: Gemini API Key Modal -->
 <div class="modal-overlay" id="modalApiKey">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">🔑 Configure Google Gemini API Key</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">🔑 Configure Google Gemini API Key</h3>
       <button class="btn-close-modal" onclick="closeModal('modalApiKey')">&times;</button>
     </div>
-    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+    <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px;">
       Enter your Gemini API key for live multimodal extraction and live interactive Copilot chat.
     </p>
-    <div style="margin-bottom: 18px;">
+    <div style="margin-bottom: 20px;">
       <input type="password" class="input-glass-field" id="inputApiKey" placeholder="AIzaSy...">
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
       <button class="btn btn-glass" onclick="closeModal('modalApiKey')">Cancel</button>
-      <button class="btn btn-primary-glow" onclick="saveApiKey()">Save API Key</button>
+      <button class="btn btn-primary-glow btn-shimmer" onclick="saveApiKey()">Save API Key</button>
     </div>
   </div>
 </div>
 
 <!-- Modal 5: Enterprise TPA Analytics Modal -->
 <div class="modal-overlay" id="modalAnalytics">
-  <div class="modal-box-glass" style="max-width: 680px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">📊 Enterprise TPA & Health Analytics</h3>
+  <div class="modal-box-glass" style="max-width: 700px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">📊 Enterprise TPA & Health Analytics</h3>
       <button class="btn-close-modal" onclick="closeModal('modalAnalytics')">&times;</button>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px;">
-      <div style="background: rgba(11,17,33,0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px;">
-        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Capital Recovered</div>
-        <div style="font-size: 22px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono'; margin-top: 4px;">₹3.48 Cr</div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px;">
+      <div style="background: rgba(11,17,33,0.75); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 18px;">
+        <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Capital Recovered</div>
+        <div style="font-size: 24px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono'; margin-top: 4px;">₹3.48 Cr</div>
       </div>
-      <div style="background: rgba(11,17,33,0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px;">
-        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Avg Adjudication Time</div>
-        <div style="font-size: 22px; font-weight: 800; color: var(--cyan); font-family: 'JetBrains Mono'; margin-top: 4px;">2.4 mins</div>
+      <div style="background: rgba(11,17,33,0.75); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 18px;">
+        <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Avg Adjudication Speed</div>
+        <div style="font-size: 24px; font-weight: 800; color: var(--cyan-neon); font-family: 'JetBrains Mono'; margin-top: 4px;">2.4 mins</div>
       </div>
-      <div style="background: rgba(11,17,33,0.7); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px;">
-        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Fraud Prevented</div>
-        <div style="font-size: 22px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono'; margin-top: 4px;">₹58.2 Lakhs</div>
+      <div style="background: rgba(11,17,33,0.75); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 18px;">
+        <div style="font-size: 10.5px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Fraud Prevented</div>
+        <div style="font-size: 24px; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono'; margin-top: 4px;">₹58.2 Lakhs</div>
       </div>
     </div>
-    <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px;">Payer Settlement Breakdown</div>
-    <div style="background: rgba(11, 17, 33, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 14px;">
+    <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">Payer Settlement Breakdown</div>
+    <div style="background: rgba(11, 17, 33, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px;">
       <div style="display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-bottom: 1px solid var(--border-glass); color: var(--text-muted); font-weight: 700;">
         <span>INSURER</span>
         <span>VOLUME</span>
         <span>APPROVAL SPEED</span>
         <span>PASS RATE</span>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding: 8px 0;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0;">
         <span style="color: #fff; font-weight: 600;">Star Health & Allied</span>
         <span style="font-family: 'JetBrains Mono';">580</span>
-        <span style="font-family: 'JetBrains Mono'; color: var(--cyan);">3.8m</span>
+        <span style="font-family: 'JetBrains Mono'; color: var(--cyan-neon);">3.8m</span>
         <span style="font-family: 'JetBrains Mono'; color: #34D399;">95.8%</span>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding: 8px 0;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0;">
         <span style="color: #fff; font-weight: 600;">HDFC ERGO Health</span>
         <span style="font-family: 'JetBrains Mono';">440</span>
-        <span style="font-family: 'JetBrains Mono'; color: var(--cyan);">2.9m</span>
+        <span style="font-family: 'JetBrains Mono'; color: var(--cyan-neon);">2.9m</span>
         <span style="font-family: 'JetBrains Mono'; color: #34D399;">98.2%</span>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding: 8px 0;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0;">
         <span style="color: #fff; font-weight: 600;">ICICI Lombard GHI</span>
         <span style="font-family: 'JetBrains Mono';">350</span>
-        <span style="font-family: 'JetBrains Mono'; color: var(--cyan);">3.1m</span>
+        <span style="font-family: 'JetBrains Mono'; color: var(--cyan-neon);">3.1m</span>
         <span style="font-family: 'JetBrains Mono'; color: #34D399;">94.6%</span>
       </div>
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+    <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
       <button class="btn btn-glass" onclick="closeModal('modalAnalytics')">Close</button>
     </div>
   </div>
@@ -1165,17 +1388,17 @@
 <!-- Modal 6: Bounding Box Citations Modal -->
 <div class="modal-overlay" id="modalBoundingBoxes">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">📐 Document Bounding Box Citation Tokens</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">📐 Document Bounding Box Citation Tokens</h3>
       <button class="btn-close-modal" onclick="closeModal('modalBoundingBoxes')">&times;</button>
     </div>
-    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">
+    <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px;">
       Visual token coordinates used by Gemini to cite every medical entity back to the source PDF pages.
     </p>
-    <div style="background: #030712; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; max-height: 280px; overflow-y: auto;" id="dispAnnotationsBox">
+    <div style="background: #030712; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 18px; font-family: 'JetBrains Mono', monospace; font-size: 12px; max-height: 300px; overflow-y: auto;" id="dispAnnotationsBox">
       Loading citation bounding boxes...
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+    <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
       <button class="btn btn-glass" onclick="closeModal('modalBoundingBoxes')">Close</button>
     </div>
   </div>
@@ -1184,18 +1407,18 @@
 <!-- Modal 7: Doctor NMC Verification Modal -->
 <div class="modal-overlay" id="modalDoctorCheck">
   <div class="modal-box-glass">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <h3 style="font-size: 16px; font-weight: 700; color: #fff;">🛡️ National Medical Commission (NMC) Practitioner Verification</h3>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; font-family: 'Outfit';">🛡️ National Medical Commission (NMC) Practitioner Verification</h3>
       <button class="btn-close-modal" onclick="closeModal('modalDoctorCheck')">&times;</button>
     </div>
-    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px;">
+    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-md); padding: 20px; margin-bottom: 18px;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-        <span style="font-weight: 700; color: #fff; font-size: 14px;">Dr. Rajesh Mehta, MS General Surgery</span>
-        <span style="font-family: 'JetBrains Mono'; font-size: 10.5px; color: #34D399; background: var(--emerald-glow); padding: 4px 10px; border-radius: 6px; font-weight: 700;">NMC VERIFIED</span>
+        <span style="font-weight: 800; color: #fff; font-size: 15px;">Dr. Rajesh Mehta, MS General Surgery</span>
+        <span style="font-family: 'JetBrains Mono'; font-size: 11px; color: #34D399; background: var(--emerald-glow); padding: 4px 12px; border-radius: 6px; font-weight: 700;">NMC VERIFIED</span>
       </div>
-      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.55;">
+      <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
         State Medical Council: <strong>Maharashtra Medical Council (MMC)</strong><br>
-        Registration Number: <strong style="color: var(--cyan);">MMC-2012-08-2910</strong><br>
+        Registration Number: <strong style="color: var(--cyan-neon);">MMC-2012-08-2910</strong><br>
         Specialty Qualification: <strong>M.B.B.S (2007), M.S. General Surgery (2012)</strong><br>
         Practitioner Trust Score: <strong style="color: #34D399;">99.4% (Legitimate Practitioner)</strong>
       </div>
@@ -1213,8 +1436,53 @@ let currentClaimData = null;
 let activeApiKey = localStorage.getItem("claimpilot_gemini_key") || "";
 
 window.addEventListener("DOMContentLoaded", () => {
+  initTheme();
   loadInitialState();
 });
+
+function initTheme() {
+  const saved = localStorage.getItem("claimpilot_theme") || "green";
+  setTheme(saved);
+}
+
+function setTheme(theme) {
+  document.body.classList.remove("green-theme", "light-theme");
+  const btn = document.getElementById("themeToggleBtn");
+  
+  if (theme === "green") {
+    document.body.classList.add("green-theme");
+    if (btn) btn.innerHTML = "🌿 Glassy Green";
+    localStorage.setItem("claimpilot_theme", "green");
+  } else if (theme === "light") {
+    document.body.classList.add("light-theme");
+    if (btn) btn.innerHTML = "☀️ White Theme";
+    localStorage.setItem("claimpilot_theme", "light");
+  } else {
+    if (btn) btn.innerHTML = "🌙 OLED Dark";
+    localStorage.setItem("claimpilot_theme", "dark");
+  }
+}
+
+function cycleTheme() {
+  const current = localStorage.getItem("claimpilot_theme") || "green";
+  let next = "dark";
+  if (current === "green") next = "dark";
+  else if (current === "dark") next = "light";
+  else if (current === "light") next = "green";
+  
+  setTheme(next);
+  if (next === "green") showToast("Switched to Glassy Emerald Green Theme", "🌿");
+  else if (next === "light") showToast("Switched to Clean White Theme", "☀️");
+  else showToast("Switched to OLED Dark Theme", "🌙");
+}
+
+function showToast(msg, icon = "⚡") {
+  const toast = document.getElementById("globalToast");
+  document.getElementById("toastIcon").textContent = icon;
+  document.getElementById("toastMsg").textContent = msg;
+  toast.style.display = "flex";
+  setTimeout(() => { toast.style.display = "none"; }, 3500);
+}
 
 function showLandingPage(e) {
   if (e) e.preventDefault();
@@ -1307,7 +1575,7 @@ function renderClaimData(data) {
         <button class="btn-edit-inline" onclick="openFactEditModal('${f.key}', '${f.display_label}', '${f.value}')">Edit</button>
       </div>
       <div class="fact-cite-footer">
-        <span style="color: var(--cyan); font-family: 'JetBrains Mono';">p.${cit.source_page || 1} &bull; ${cit.document_name || 'Verified'}</span>
+        <span style="color: var(--cyan-neon); font-family: 'JetBrains Mono';">p.${cit.source_page || 1} &bull; ${cit.document_name || 'Verified'}</span>
         <span style="color: #34D399; font-family: 'JetBrains Mono'; font-weight: 600;">${Math.round((f.confidence || 0.98)*100)}% conf</span>
       </div>
     `;
@@ -1328,15 +1596,15 @@ function renderClaimData(data) {
     
     let actionBtnHtml = "";
     if (isMissing && item.action_type === "REQUEST_FROM_HOSPITAL") {
-      actionBtnHtml = `<button class="btn btn-primary-glow" style="font-size: 11.5px; padding: 6px 14px;" onclick="openHospitalEmailModal()">✉️ Request from Hospital</button>`;
+      actionBtnHtml = `<button class="btn btn-primary-glow btn-shimmer" style="font-size: 12px; padding: 6px 16px;" onclick="openHospitalEmailModal()">✉️ Request from Hospital</button>`;
     }
 
     div.innerHTML = `
-      <div style="display: flex; align-items: flex-start; gap: 14px;">
-        <div style="font-size: 18px; margin-top: 2px;">${isMissing ? '⚠️' : '✅'}</div>
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 20px; margin-top: 2px;">${isMissing ? '⚠️' : '✅'}</div>
         <div>
-          <div style="font-size: 13.5px; font-weight: 700; color: #fff;">${item.title}</div>
-          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">${item.description}</div>
+          <div style="font-size: 14px; font-weight: 700; color: #fff;">${item.title}</div>
+          <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">${item.description}</div>
         </div>
       </div>
       <div style="display: flex; align-items: center; gap: 10px;">
@@ -1362,13 +1630,13 @@ function renderClaimData(data) {
   remContainer.innerHTML = "";
   reminders.forEach(r => {
     const remCard = document.createElement("div");
-    remCard.style.cssText = "background: rgba(11, 17, 33, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px;";
+    remCard.style.cssText = "background: rgba(11, 17, 33, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px;";
     remCard.innerHTML = `
       <div>
-        <div style="font-size: 12.5px; font-weight: 700; color: #fff;">🔔 ${r.title}</div>
-        <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">${r.message_body}</div>
+        <div style="font-size: 13px; font-weight: 700; color: #fff;">🔔 ${r.title}</div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">${r.message_body}</div>
       </div>
-      <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--cyan); font-weight: 700;">${r.deadline_date}</div>
+      <div style="font-family: 'JetBrains Mono'; font-size: 11.5px; color: var(--cyan-neon); font-weight: 700;">${r.deadline_date}</div>
     `;
     remContainer.appendChild(remCard);
   });
@@ -1378,16 +1646,16 @@ function renderClaimData(data) {
   tlContainer.innerHTML = "";
   auditEvents.slice().reverse().forEach(ev => {
     const tl = document.createElement("div");
-    tl.style.cssText = "border-left: 2px solid var(--border-glass); padding-left: 18px; margin-left: 6px; padding-bottom: 18px; position: relative;";
+    tl.style.cssText = "border-left: 2px solid var(--border-glass); padding-left: 20px; margin-left: 6px; padding-bottom: 20px; position: relative;";
     const timeStr = ev.timestamp ? new Date(ev.timestamp).toLocaleTimeString() : "Live";
     tl.innerHTML = `
-      <div style="position: absolute; left: -7px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan); border: 2px solid #030712;"></div>
-      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); margin-bottom: 4px;">
-        <span style="font-family: 'JetBrains Mono'; color: var(--cyan); font-weight: 700;">${ev.agent_name}</span>
+      <div style="position: absolute; left: -7px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan-neon); border: 2px solid #030712; box-shadow: 0 0 8px var(--cyan-neon);"></div>
+      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+        <span style="font-family: 'JetBrains Mono'; color: var(--cyan-neon); font-weight: 700;">${ev.agent_name}</span>
         <span>${timeStr}</span>
       </div>
-      <div style="font-size: 12.5px; font-weight: 700; color: #fff; margin-bottom: 2px;">${ev.title}</div>
-      <div style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.45;">${ev.detail}</div>
+      <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px;">${ev.title}</div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">${ev.detail}</div>
     `;
     tlContainer.appendChild(tl);
   });
@@ -1395,11 +1663,13 @@ function renderClaimData(data) {
 
 // 1-Click Scenario 1 Trigger
 async function triggerScenario1() {
+  showToast("Executing 6-Agent Autonomous Workflow...", "⚙️");
   try {
     const res = await fetch("/api/demo/seed-scenario-1", { method: "POST" });
     const json = await res.json();
     currentClaimId = json.claim_case_id;
     await refreshClaimView();
+    showToast("Scenario 1 Seeded! Reimbursement Approved: ₹38,640", "✅");
   } catch (err) {
     console.error("Error triggering demo scenario:", err);
   }
@@ -1409,11 +1679,11 @@ function switchScenario(scKey) {
   document.querySelectorAll(".scenario-btn-pill").forEach(p => p.classList.remove("active"));
   event.currentTarget.classList.add("active");
   if (scKey === 'STAR_HDFC_DUAL') {
-    alert("Dual Policy Split Optimization: Claim split deterministically between Star Health (Primary ₹50k) and HDFC ERGO (Super Top-up). Payout maximized to 100%!");
+    showToast("Dual Policy Split: Star Health (₹50k) + HDFC ERGO Top-up", "⚖️");
   } else if (scKey === 'COSMETIC_RHINO') {
-    alert("Cosmetic Exclusion Refusal: Claim flagged under Section 4.3 (Aesthetic). Auto-generated IRDAI Clinical Necessity Appeal ready for treating surgeon review.");
+    showToast("Cosmetic Exclusion: IRDAI Clinical Appeal drafted", "🛡️");
   } else if (scKey === 'FAKE_DOCTOR_NMC') {
-    alert("NMC Doctor Registry Escalation: Treating doctor MMC registration not found in National Medical Commission database. State transitioned to ESCALATED_TO_HUMAN.");
+    showToast("NMC Doctor Escalation: Unregistered practitioner flagged", "🚨");
   }
 }
 
@@ -1440,7 +1710,7 @@ async function handleHumanApproval(event) {
       })
     });
     const json = await res.json();
-    alert(`Claim successfully approved and digitally signed by ${signerName}!\nDispatched to TPA Claims API.`);
+    showToast(`Claim approved & signed by ${signerName}! Dispatched to TPA.`, "✍️");
     await refreshClaimView();
   } catch (err) {
     alert("Error saving approval: " + err.message);
@@ -1469,6 +1739,7 @@ async function saveFactCorrection() {
       body: JSON.stringify({ key: key, value: val })
     });
     closeModal("modalEditFact");
+    showToast(`Fact '${key}' updated and recalculated!`, "💾");
     await refreshClaimView();
   } catch (err) {
     alert("Error updating fact: " + err.message);
@@ -1484,7 +1755,7 @@ async function sendHospitalEmail() {
   try {
     const res = await fetch(`/api/claim-cases/${currentClaimId}/send-hospital-email`, { method: "POST" });
     const json = await res.json();
-    alert(`Email successfully dispatched to ${json.recipient}!\nTimeline event logged.`);
+    showToast(`Email dispatched to ${json.recipient}!`, "✉️");
     closeModal("modalHospitalEmail");
     await refreshClaimView();
   } catch (err) {
@@ -1575,7 +1846,7 @@ function saveApiKey() {
     });
   }
   closeModal("modalApiKey");
-  alert("Gemini API key configured for live multimodal extraction.");
+  showToast("Gemini API key configured for live multimodal parsing.", "🔑");
 }
 
 function triggerFileSelect(type) {
@@ -1584,7 +1855,7 @@ function triggerFileSelect(type) {
 
 function handleFileSelected(e) {
   if (e.target.files && e.target.files.length > 0) {
-    alert(`Uploaded "${e.target.files[0].name}". Ingesting document into multi-agent pipeline...`);
+    showToast(`Uploaded "${e.target.files[0].name}". Processing...`, "📁");
     triggerScenario1();
   }
 }
