@@ -55,6 +55,8 @@ from agents.eligibility_agent import run_eligibility_agent
 from agents.evidence_agent import run_evidence_agent
 from agents.claim_prep_agent import run_claim_prep_agent, generate_claim_form_pdf
 from agents.follow_up_agent import run_follow_up_agent
+from agents.denial_predictor_agent import predict_denial_risk
+from services.zip_bundler import build_claim_zip_bundle
 
 # Legacy & Helper Services
 from agents import intake_agent, decision_agent, execution_agent
@@ -508,6 +510,32 @@ def download_claim_form_pdf(claim_id: str):
 
 
 # ==================== Demo Mode & 1-Click Scenarios ====================
+
+@app.get("/api/claim-cases/{claim_id}/denial-prediction")
+def get_denial_prediction(claim_id: str):
+    """Evaluates and returns pre-submission Denial and Query Risk Prediction."""
+    try:
+        return predict_denial_risk(claim_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error evaluating denial prediction: {str(e)}")
+
+
+@app.get("/api/claim-cases/{claim_id}/download-bundle-zip")
+def download_claim_bundle_zip(claim_id: str):
+    """Downloads the complete S.I.A. Audit-Ready Submission ZIP archive."""
+    try:
+        zip_path = build_claim_zip_bundle(claim_id)
+        if not zip_path.exists():
+            raise HTTPException(status_code=404, detail="Claim ZIP bundle generation failed")
+        return FileResponse(
+            zip_path,
+            media_type="application/zip",
+            filename=f"SIA_Claim_Package_{claim_id}.zip"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating ZIP bundle: {str(e)}")
+
+
 @app.post("/api/demo/seed-scenario-1")
 def seed_scenario_1():
     """
@@ -730,7 +758,7 @@ def health():
         "status": "ok",
         "service": "S.I.A. (Smart Insurance Assistant) Multi-Agent Pipeline",
         "version": "3.0.0",
-        "agents": ["IntakeAgent", "SafetyAgent", "EligibilityAgent", "EvidenceAgent", "ClaimPrepAgent", "FollowUpAgent"],
+        "agents": ["IntakeAgent", "SafetyAgent", "EligibilityAgent", "EvidenceAgent", "ClaimPrepAgent", "FollowUpAgent", "DenialPredictorAgent"],
         "firestore_status": "connected",
         "gemini_status": "ready"
     }

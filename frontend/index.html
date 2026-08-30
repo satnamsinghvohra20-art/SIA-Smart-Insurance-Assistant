@@ -1199,8 +1199,7 @@
     </div>
   </div>
   <form style="padding: 16px 20px; border-top: 1px solid var(--border-glass); display: flex; gap: 10px; background: #090E1A;" onsubmit="handleCopilotChat(event)">
-    <input type="text" class="input-glass-field" id="copilotQuery" placeholder="Ask about rules, deductions..." required>
-    <button type="submit" class="btn btn-primary-glow" style="padding: 8px 18px;">Send</button>
+    <button type="button" class="btn btn-secondary" id="btnVoiceInput" onclick="toggleVoiceRecognition()" title="Voice Dictation" style="padding: 8px 12px; font-size: 14px;">🎤</button><input type="text" class="input-glass-field" id="copilotQuery" placeholder="Ask or speak questions..." required><button type="button" class="btn btn-secondary" id="btnVoiceTTS" onclick="toggleSpeechSynthesis()" title="Toggle Voice Speech" style="padding: 8px 12px; font-size: 14px;">🔊</button><button type="submit" class="btn btn-primary-glow" style="padding: 8px 18px;">Send</button>
   </form>
 </div>
 
@@ -2039,6 +2038,63 @@ async function viewBoundingBoxesModal() {
   } catch (e) {
     box.textContent = "Visual bounding box coordinate tokens loaded for 11 extracted fields across 4 source PDFs.";
   }
+}
+
+
+// ZIP Bundle Download
+function downloadClaimZipBundle() {
+  window.open(`/api/claim-cases/${currentClaimId}/download-bundle-zip`, "_blank");
+}
+
+// Voice Speech Synthesis & Web Speech API Recognition
+let speechEnabled = true;
+function toggleSpeechSynthesis() {
+  speechEnabled = !speechEnabled;
+  const btn = document.getElementById("btnVoiceTTS");
+  if (btn) btn.textContent = speechEnabled ? "🔊" : "🔇";
+  showToast(speechEnabled ? "Voice narration enabled" : "Voice narration muted", "info");
+}
+
+function speakText(text) {
+  if (!speechEnabled || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean = text.replace(/[#*`_~]/g, '');
+  const utter = new SpeechSynthesisUtterance(clean);
+  utter.rate = 1.05;
+  utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleVoiceRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast("Speech recognition not supported in this browser. Please use Chrome or Edge.", "error");
+    return;
+  }
+  const btn = document.getElementById("btnVoiceInput");
+  btn.style.background = "#EF4444";
+  btn.textContent = "🔴";
+  showToast("Listening... Speak your insurance question", "info");
+
+  const recognizer = new SpeechRecognition();
+  recognizer.lang = "en-IN";
+  recognizer.interimResults = false;
+  recognizer.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("copilotQuery").value = transcript;
+    btn.style.background = "";
+    btn.textContent = "🎤";
+    handleCopilotChat(new Event('submit'));
+  };
+  recognizer.onerror = () => {
+    btn.style.background = "";
+    btn.textContent = "🎤";
+  };
+  recognizer.onend = () => {
+    btn.style.background = "";
+    btn.textContent = "🎤";
+  };
+  recognizer.start();
 }
 
 // Copilot Chat

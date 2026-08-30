@@ -1,12 +1,13 @@
-"""
+﻿"""
 S.I.A. (Smart Insurance Assistant) Multi-Agent Orchestrator
-Coordinates the autonomous 6-agent pipeline following Google ADK / Genkit multi-agent patterns:
+Coordinates the autonomous multi-agent pipeline following Google ADK / Genkit multi-agent patterns:
 1. Intake Agent
 2. Safety Agent
 3. Eligibility Agent
 4. Evidence Agent
 5. Claim Preparation Agent
 6. Follow-up Agent
+7. Denial & Query Predictor Agent
 
 Guarantees:
 - Idempotency (deduplicates repeated uploads by hash and case ID).
@@ -29,6 +30,7 @@ from agents.eligibility_agent import run_eligibility_agent
 from agents.evidence_agent import run_evidence_agent
 from agents.claim_prep_agent import run_claim_prep_agent
 from agents.follow_up_agent import run_follow_up_agent
+from agents.denial_predictor_agent import predict_denial_risk
 
 
 class SIAOrchestrator:
@@ -49,7 +51,7 @@ class SIAOrchestrator:
     @staticmethod
     def execute_pipeline(claim_case_id: str, raw_documents: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
         """
-        Runs the full 6-agent pipeline sequentially with state tracking, error handling, and telemetry.
+        Runs the full multi-agent pipeline sequentially with state tracking, error handling, and telemetry.
         """
         start_time = time.time()
         
@@ -61,7 +63,7 @@ class SIAOrchestrator:
             agent_name="Orchestrator",
             event_type="CLASSIFICATION",
             title="Multi-Agent Pipeline Initialized",
-            detail=f"Starting autonomous 6-agent adjudication workflow for case {claim_case_id}.",
+            detail=f"Starting autonomous S.I.A. adjudication workflow for case {claim_case_id}.",
             severity="INFO"
         ))
 
@@ -142,6 +144,9 @@ class SIAOrchestrator:
         # Step 6: Follow-up Agent (Deadlines & WhatsApp/Email Reminders)
         follow_up_res = run_follow_up_agent(claim_case_id)
 
+        # Step 7: Denial Predictor Agent (Pre-submission TPA risk assessment)
+        denial_res = predict_denial_risk(claim_case_id)
+
         total_latency = (time.time() - start_time) * 1000
 
         # Determine Final Pipeline State
@@ -156,7 +161,7 @@ class SIAOrchestrator:
             agent_name="Orchestrator",
             event_type="DISPATCH",
             title="Multi-Agent Pipeline Finished",
-            detail=f"Workflow completed in {total_latency:.1f}ms across 6 agents. Status: {final_state.value}.",
+            detail=f"Workflow completed in {total_latency:.1f}ms across all agents. Status: {final_state.value}.",
             severity="SUCCESS" if final_state == ClaimState.READY_FOR_REVIEW else "ALERT"
         ))
 
@@ -169,10 +174,10 @@ class SIAOrchestrator:
             "eligibility": eligibility_res.model_dump(),
             "evidence": evidence_res.model_dump(),
             "drafted_claim": claim_prep_res.model_dump(),
-            "reminders": [r.model_dump() for r in follow_up_res]
+            "reminders": [r.model_dump() for r in follow_up_res],
+            "denial_prediction": denial_res
         }
 
 
 # Backward compatibility alias
 ClaimPilotOrchestrator = SIAOrchestrator
-

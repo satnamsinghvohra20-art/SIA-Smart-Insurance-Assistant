@@ -1,0 +1,39 @@
+﻿name: S.I.A. Continuous Integration & Multi-Agent Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Autonomous Multi-Agent Suite & Benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: "pip"
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+
+    - name: Run Full Agent & Firestore Suite
+      run: |
+        python backend/test_full_suite.py
+
+    - name: Run Dynamic Multi-Scenario Pipeline
+      run: |
+        python backend/test_pipeline.py
+
+    - name: Run 50-Scenario Determinism Benchmark
+      run: |
+        python backend/benchmark_accuracy.py

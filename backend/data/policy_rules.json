@@ -1,4 +1,4 @@
-{
+﻿{
   "policies": [
     {
       "id": "star_health_family_optima",
@@ -86,6 +86,38 @@
       ]
     },
     {
+      "id": "aditya_birla_activ_health",
+      "policy_number_prefix": "ADITYA-BIRLA",
+      "name": "Aditya Birla — Activ Health Platinum Enhanced",
+      "tpa_name": "Aditya Birla Health Insurance In-House TPA",
+      "sum_insured": 1000000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 730,
+      "filing_window_days": 30,
+      "room_rent_capping": 12000.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic procedures"
+      ]
+    },
+    {
+      "id": "manipal_cigna_prohealth",
+      "policy_number_prefix": "MANIPAL-CIGNA",
+      "name": "ManipalCigna — ProHealth Premier Plan",
+      "tpa_name": "ManipalCigna Health In-House TPA",
+      "sum_insured": 1500000.00,
+      "co_pay_percent": 0,
+      "waiting_period_days": 30,
+      "pre_existing_waiting_days": 730,
+      "filing_window_days": 30,
+      "room_rent_capping": 25000.00,
+      "excluded_procedures": [
+        "cosmetic surgery",
+        "aesthetic treatments"
+      ]
+    },
+    {
       "id": "tata_aig_medicare",
       "policy_number_prefix": "TATA-AIG",
       "name": "Tata AIG — MediCare Premier Plan",
@@ -115,22 +147,6 @@
       "excluded_procedures": [
         "cosmetic rhinoplasty",
         "aesthetic procedures"
-      ]
-    },
-    {
-      "id": "new_india_premier",
-      "policy_number_prefix": "NEW-INDIA",
-      "name": "New India Assurance — Premier Mediclaim Policy",
-      "tpa_name": "MDIndia Health Insurance TPA Pvt. Ltd.",
-      "sum_insured": 500000.00,
-      "co_pay_percent": 10,
-      "waiting_period_days": 30,
-      "pre_existing_waiting_days": 1460,
-      "filing_window_days": 30,
-      "room_rent_capping": 5000.00,
-      "excluded_procedures": [
-        "cosmetic surgery",
-        "aesthetic treatments"
       ]
     },
     {
