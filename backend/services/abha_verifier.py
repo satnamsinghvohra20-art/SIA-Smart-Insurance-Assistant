@@ -18,7 +18,9 @@ def verify_abha_identity(
     clean_name = (patient_name or "Policyholder").strip()
     
     # 1. Parse ABHA Address or Number
-    raw_id = (abha_input or "").strip()
+    if isinstance(abha_input, dict):
+        abha_input = abha_input.get("value", "")
+    raw_id = str(abha_input or "").strip()
     if not raw_id and clean_name:
         raw_id = f"{clean_name.lower().replace(' ', '.')}@abdm"
 

@@ -252,7 +252,7 @@ def run_intake(
     for k, v in parsed_fields.items():
         conf = 0.98 if v else 0.85
         needs_rev = False
-        val_str = str(v)
+        val_str = str(v.get("value") if isinstance(v, dict) else v)
         if privacy_shield and k in ["patient_name", "policy_number", "contact_number"]:
             val_str = mask_pii(val_str)
         fields_dict[k] = {

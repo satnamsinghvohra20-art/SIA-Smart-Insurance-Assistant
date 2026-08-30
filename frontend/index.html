@@ -1506,6 +1506,119 @@
 
 <!-- JavaScript Application Controller -->
 <script>
+
+// ==================== Multi-Lingual Localization System ====================
+let currentLang = "en";
+const TRANSLATIONS = {
+  en: {
+    heroTitle: "Autonomous Multi-Agent Health Reimbursement & Adjudication Suite",
+    preauthBtn: "Pre-Admission Cost Estimator",
+    voicePrompt: "Listening in Indian English... Speak now!",
+    copilotDefault: "Ask me anything about your claim deductions, policy rules, or TPA requirements."
+  },
+  hi: {
+    heroTitle: "स्वायत्त मल्टी-एजेंट स्वास्थ्य बीमा दावा और निर्णय प्रणाली",
+    preauthBtn: "अस्पताल भर्ती पूर्व लागत अनुमानक",
+    voicePrompt: "हिन्दी में सुन रहे हैं... कृपया बोलें!",
+    copilotDefault: "मुझसे अपने क्लेम कटौती, पॉलिसी नियमों या TPA आवश्यकताओं के बारे में कुछ भी पूछें।"
+  },
+  ta: {
+    heroTitle: "தானியங்கி பல-முகவர் சுகாதார காப்பீட்டு தீர்வு தளம்",
+    preauthBtn: "மருத்துவமனை முன் செலவு மதிப்பீட்டாளர்",
+    voicePrompt: "தமிழில் கேட்கிறது... இப்போது பேசுங்கள்!",
+    copilotDefault: "உங்கள் காப்பீட்டு கழிவுகள் அல்லது TPA தேவைகள் பற்றி என்னிடம் கேளுங்கள்."
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const btn = document.getElementById("preauthBtnText");
+  if (btn) btn.textContent = t.preauthBtn;
+  
+  // Update Web Speech lang
+  if (recognition) {
+    recognition.lang = lang === "hi" ? "hi-IN" : lang === "ta" ? "ta-IN" : "en-IN";
+  }
+  showToast(`Language switched to ${lang === 'hi' ? 'हिन्दी (Hindi)' : lang === 'ta' ? 'தமிழ் (Tamil)' : 'English'}`);
+}
+
+// ==================== Pre-Admission Estimator Modal Controller ====================
+function openPreauthModal() {
+  const modal = document.getElementById("preauthModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closePreauthModal() {
+  const modal = document.getElementById("preauthModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function calculatePreauthEstimate() {
+  const proc = document.getElementById("estimatorProcedure").value;
+  const room = document.getElementById("estimatorRoom").value;
+  const resDiv = document.getElementById("estimatorResults");
+
+  try {
+    const res = await fetch(`/api/preauth/estimate?procedure=${proc}&room_category=${room}`);
+    const data = await res.json();
+
+    resDiv.style.display = "block";
+    resDiv.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px;">
+        <span style="font-weight: 700; color: #fff; font-size: 1.05rem;">${data.procedure}</span>
+        <span style="color: var(--cyan); font-weight: 800; font-size: 1.1rem;">${data.coverage_percentage}% Covered</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; text-align: center;">
+        <div style="background: rgba(6, 48, 33, 0.6); padding: 10px; border-radius: 12px;">
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Estimated Hospital Bill</div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: #fff;">₹${data.gross_hospital_estimate.toLocaleString()}</div>
+        </div>
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 12px;">
+          <div style="font-size: 0.72rem; color: var(--cyan);">Insurance Payout</div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: var(--cyan);">₹${data.expected_insurance_payout.toLocaleString()}</div>
+        </div>
+        <div style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); padding: 10px; border-radius: 12px;">
+          <div style="font-size: 0.72rem; color: #F43F5E;">Your Out-of-Pocket</div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: #F43F5E;">₹${data.expected_patient_out_of_pocket.toLocaleString()}</div>
+        </div>
+      </div>
+
+      ${data.proportionate_room_rent_penalty > 0 ? `
+        <div style="background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.35); border-radius: 10px; padding: 10px; margin-bottom: 10px; font-size: 0.8rem; color: #FBBF24;">
+          ⚠️ <strong>Room Rent Penalty:</strong> ₹${data.proportionate_room_rent_penalty.toLocaleString()} proportionate deduction applied due to room cap excess!
+        </div>
+      ` : ''}
+
+      <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;">
+        ${data.guidance_tips.map(tip => `<div>${tip}</div>`).join('')}
+      </div>
+    `;
+  } catch (err) {
+    showToast("Failed to calculate pre-admission estimate", true);
+  }
+}
+
+// ==================== Interactive Document Bounding Box Visualizer ====================
+function highlightDocumentBoundingBox(factKey) {
+  const box = document.getElementById(`doc-box-${factKey}`);
+  if (box) {
+    box.style.border = "2px solid #10B981";
+    box.style.boxShadow = "0 0 20px #10B981";
+    box.style.background = "rgba(16, 185, 129, 0.25)";
+  }
+}
+
+function unhighlightDocumentBoundingBox(factKey) {
+  const box = document.getElementById(`doc-box-${factKey}`);
+  if (box) {
+    box.style.border = "1px dashed rgba(52, 211, 153, 0.4)";
+    box.style.boxShadow = "none";
+    box.style.background = "rgba(6, 48, 33, 0.35)";
+  }
+}
+
 let currentClaimId = "CLM-SCENARIO-1";
 let currentClaimData = null;
 let activeApiKey = localStorage.getItem("sia_gemini_key") || "";
@@ -2174,5 +2287,53 @@ function handleFileSelected(e) {
   }
 }
 </script>
+
+<!-- Pre-Admission Out-of-Pocket Estimator Modal -->
+<div id="preauthModal" style="display: none; position: fixed; inset: 0; background: rgba(2, 24, 16, 0.88); backdrop-filter: blur(12px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: var(--bg-surface); border: 1px solid var(--border-glow); border-radius: 24px; max-width: 680px; width: 100%; padding: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h3 style="font-size: 1.4rem; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <span>🏥</span> Pre-Admission Out-of-Pocket Estimator
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Forecast hospital bill deductions, GIPSA fair rates, and room rent penalties before admission.</p>
+      </div>
+      <button onclick="closePreauthModal()" style="background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.4); color: #F43F5E; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Procedure / Surgery</label>
+        <select id="estimatorProcedure" style="width: 100%; padding: 10px 14px; background: rgba(4, 34, 23, 0.95); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; font-size: 0.88rem;">
+          <option value="appendectomy">Laparoscopic Appendectomy (₹60k)</option>
+          <option value="cataract">Cataract Surgery with Foldable IOL (₹48k)</option>
+          <option value="knee_replacement">Total Knee Replacement (₹2.4L)</option>
+          <option value="cholecystectomy">Laparoscopic Cholecystectomy (₹75k)</option>
+          <option value="hernia">Inguinal Hernia Mesh Repair (₹65k)</option>
+          <option value="dengue">Dengue Inpatient Care (₹38k)</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Chosen Room Category</label>
+        <select id="estimatorRoom" style="width: 100%; padding: 10px 14px; background: rgba(4, 34, 23, 0.95); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; font-size: 0.88rem;">
+          <option value="single_private">Single Private Room (₹7,500/day)</option>
+          <option value="twin_sharing">Twin Sharing Room (₹3,500/day)</option>
+          <option value="deluxe_suite">Deluxe Suite Room (₹15,000/day)</option>
+          <option value="general_ward">General Ward (₹1,500/day)</option>
+        </select>
+      </div>
+    </div>
+
+    <button onclick="calculatePreauthEstimate()" class="btn btn-primary" style="width: 100%; margin-bottom: 20px; justify-content: center; padding: 12px; font-size: 0.95rem;">
+      <span>⚡</span> Calculate Estimated Coverage & Out-of-Pocket
+    </button>
+
+    <div id="estimatorResults" style="display: none; background: rgba(2, 24, 16, 0.7); border: 1px solid var(--border-glass); border-radius: 16px; padding: 18px;">
+      <!-- Populated dynamically via JS -->
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

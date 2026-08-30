@@ -25,7 +25,16 @@ def run_eligibility_agent(claim_case_id: str, policy_rules: Dict[str, Any] = Non
     facts_meta = {f["key"]: f for f in facts_raw}
     documents = db.get_documents_for_claim(claim_case_id)
     
-    claimed_amount = float(facts.get("total_bill_amount", 42000.0))
+    def _parse_amount(v, default=42000.0):
+        if isinstance(v, dict):
+            v = v.get("value", default)
+        try:
+            val = float(str(v).replace(",", "").strip())
+            return val if val > 0 else default
+        except Exception:
+            return default
+
+    claimed_amount = _parse_amount(facts.get("total_bill_amount") or facts.get("total_amount"))
     patient_name = str(facts.get("patient_name", "Patient"))
     diagnosis = str(facts.get("diagnosis", "Appendicitis"))
     policy_no = str(facts.get("policy_number", "GHI-2024"))

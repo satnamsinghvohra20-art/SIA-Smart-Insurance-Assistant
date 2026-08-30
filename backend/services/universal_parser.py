@@ -1,4 +1,4 @@
-"""
+﻿"""
 UNIVERSAL DYNAMIC DOCUMENT PARSER & LIVE EXTRACTION ENGINE
 -----------------------------------------------------------
 Performs real-time multimodal entity extraction on ANY real-world hospital bill,
@@ -25,10 +25,18 @@ def parse_any_medical_document(text: str) -> dict:
                 for k, v in gemini_data.items():
                     if v is not None and str(v).strip() and str(v).lower() != "null":
                         set_field(k, v, 0.98)
+                        if k == "total_bill_amount":
+                            set_field("total_amount", v, 0.98)
+                        elif k == "total_amount":
+                            set_field("total_bill_amount", v, 0.98)
                 if len(fields) >= 4:
+                    if "total_bill_amount" in fields and "total_amount" not in fields:
+                        fields["total_amount"] = fields["total_bill_amount"]
+                    if "total_amount" in fields and "total_bill_amount" not in fields:
+                        fields["total_bill_amount"] = fields["total_amount"]
                     return fields
-        except Exception as e:
-            print(f"Live Gemini extraction notice: {e}")
+        except Exception:
+            pass
 
     # 1. Hospital Name Extraction
     hosp_match = re.search(
@@ -41,7 +49,6 @@ def parse_any_medical_document(text: str) -> dict:
         clean_hosp = raw_hosp.split("\n")[0].strip()
         set_field("hospital_name", clean_hosp, 0.95)
     else:
-        # Check first non-empty lines for hospital name header
         lines = [line.strip() for line in text.split("\n") if len(line.strip()) > 3]
         if lines:
             set_field("hospital_name", lines[0].title(), 0.80)
@@ -84,8 +91,10 @@ def parse_any_medical_document(text: str) -> dict:
 
     if total_val:
         set_field("total_amount", total_val, 0.96)
+        set_field("total_bill_amount", total_val, 0.96)
     else:
         set_field("total_amount", None, 0.40)
+        set_field("total_bill_amount", None, 0.40)
 
     # 4. Aadhaar & PAN Extraction
     aadh_match = re.search(r"(?:Aadhaar(?:\s+No)?|UIDAI)[:\s]+([\d\-\sX]{12,16})", text, re.IGNORECASE)
@@ -104,9 +113,77 @@ def parse_any_medical_document(text: str) -> dict:
     else:
         set_field("pan_number", None, 0.40)
 
-    # 5. Policy Number Extraction
+    # 5. Dates
+    adm_match = re.search(
+        r"(?:DOA|Date\s+of\s+Admission|Admission\s+Date)[:\s]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})",
+        text,
+        re.IGNORECASE,
+    )
+    if adm_match:
+        set_field("admission_date", adm_match.group(1).strip(), 0.95)
+    else:
+        set_field("admission_date", None, 0.40)
+
+    dis_match = re.search(
+        r"(?:DOD|Date\s+of\s+Discharge|Discharge\s+Date)[:\s]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})",
+        text,
+        re.IGNORECASE,
+    )
+    if dis_match:
+        set_field("discharge_date", dis_match.group(1).strip(), 0.95)
+    else:
+        set_field("discharge_date", None, 0.40)
+
+    # 6. Diagnosis & Procedure
+    diag_match = re.search(
+        r"(?:Diagnosis|Final\s+Diagnosis|Clinical\s+Impression|Provisional\s+Diagnosis)[:\s]+([^\n\r\|]{4,80})",
+        text,
+        re.IGNORECASE,
+    )
+    if diag_match:
+        set_field("diagnosis", diag_match.group(1).strip(), 0.92)
+    else:
+        set_field("diagnosis", None, 0.40)
+
+    proc_match = re.search(
+        r"(?:Procedure|Surgery|Operation\s+Done|Intervention)[:\s]+([^\n\r\|]{4,80})",
+        text,
+        re.IGNORECASE,
+    )
+    if proc_match:
+        set_field("procedure_performed", proc_match.group(1).strip(), 0.92)
+    else:
+        set_field("procedure_performed", None, 0.40)
+
+    # 7. Doctor & Reg No
+    doc_match = re.search(
+        r"(?:Doctor|Dr\.?|Consultant|Surgeon)[:\s]+([A-Za-z\s\.]{3,35})(?:,|\(|$|\n)",
+        text,
+        re.IGNORECASE,
+    )
+    if doc_match:
+        doc_name = doc_match.group(1).strip()
+        if not doc_name.lower().startswith("dr"):
+            doc_name = "Dr. " + doc_name
+        set_field("treating_doctor", doc_name, 0.93)
+    else:
+        set_field("treating_doctor", None, 0.40)
+
+    reg_match = re.search(
+        r"(?:Reg\.?\s*No|Registration\s*No|MMC|DMC|KMC|SMC)[:\s]+([A-Z0-9\-\/]{4,20})",
+        text,
+        re.IGNORECASE,
+    )
+    if reg_match:
+        set_field("doctor_reg_no", reg_match.group(1).strip(), 0.95)
+        set_field("treating_doctor_reg_no", reg_match.group(1).strip(), 0.95)
+    else:
+        set_field("doctor_reg_no", None, 0.40)
+        set_field("treating_doctor_reg_no", None, 0.40)
+
+    # 8. Policy Number
     pol_match = re.search(
-        r"(?:Policy(?:\s+No|\s+Number)?|TPA\s+ID|UHID|Member\s+ID|Insurance\s+No)[:\s]+([A-Z0-9\-\/]{6,25})",
+        r"(?:Policy\s*(?:No|Number|\#)|Insurance\s*ID)[:\s]+([A-Z0-9\-\/]{6,25})",
         text,
         re.IGNORECASE,
     )
@@ -115,115 +192,25 @@ def parse_any_medical_document(text: str) -> dict:
     else:
         set_field("policy_number", None, 0.40)
 
-    # 6. Diagnosis & Procedure Extraction
-    diag_match = re.search(
-        r"(?:Primary\s+Diagnosis|Clinical\s+Diagnosis|Provisional\s+Diagnosis|Diagnosis|Impression)[:\s]+([^\n\r\|\.]{4,60})",
-        text,
-        re.IGNORECASE,
-    )
-    if diag_match:
-        set_field("diagnosis", diag_match.group(1).strip(), 0.94)
-    else:
-        if "append" in text.lower():
-            set_field("diagnosis", "Acute Appendicitis (K35.80)", 0.90)
-        elif "rhinoplasty" in text.lower():
-            set_field("diagnosis", "Cosmetic Rhinoplasty (Elective Aesthetic)", 0.90)
-        elif "dengue" in text.lower():
-            set_field("diagnosis", "Dengue Fever with Thrombocytopenia", 0.90)
-        elif "cholecyst" in text.lower():
-            set_field("diagnosis", "Symptomatic Cholelithiasis (Gallstones)", 0.90)
-        elif "knee" in text.lower() or "osteoarthritis" in text.lower():
-            set_field("diagnosis", "Severe Bilateral Osteoarthritis Knee (M17.0)", 0.90)
-        elif "cataract" in text.lower():
-            set_field("diagnosis", "Senile Nuclear Cataract", 0.90)
-        elif "hernia" in text.lower():
-            set_field("diagnosis", "Inguinal Hernia (K40.9)", 0.90)
-        else:
-            set_field("diagnosis", "Inpatient Hospitalization", 0.70)
-
-    proc_match = re.search(
-        r"(?:Procedure(?:\s+Performed)?|Surgical\s+Procedure|Surgery|Treatment)[:\s]+([^\n\r\|\.]{4,60})",
-        text,
-        re.IGNORECASE,
-    )
-    if proc_match:
-        set_field("procedure", proc_match.group(1).strip(), 0.94)
-    else:
-        if "append" in text.lower():
-            set_field("procedure", "Laparoscopic Appendectomy", 0.90)
-        elif "rhinoplasty" in text.lower():
-            set_field("procedure", "Open Septorhinoplasty Revision", 0.90)
-        elif "cholecyst" in text.lower():
-            set_field("procedure", "Laparoscopic Cholecystectomy", 0.90)
-        elif "knee" in text.lower():
-            set_field("procedure", "Total Knee Replacement (TKR)", 0.90)
-        elif "cataract" in text.lower():
-            set_field("procedure", "Phacoemulsification with Foldable IOL", 0.90)
-        elif "hernia" in text.lower():
-            set_field("procedure", "Laparoscopic Hernioplasty with Mesh", 0.90)
-        elif "dengue" in text.lower():
-            set_field("procedure", "Inpatient Conservative Medical Management", 0.90)
-        else:
-            set_field("procedure", "Inpatient Hospital Care", 0.70)
-
-    # 7. Dates (Admission, Discharge, Bill Date)
-    dates = re.findall(r"\b(\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})\b", text)
-    if len(dates) >= 2:
-        set_field("admission_date", dates[0], 0.94)
-        set_field("discharge_date", dates[1], 0.94)
-    elif len(dates) == 1:
-        set_field("admission_date", dates[0], 0.85)
-        set_field("discharge_date", dates[0], 0.75)
-    else:
-        set_field("admission_date", None, 0.40)
-        set_field("discharge_date", None, 0.40)
-
-    set_field("bill_date", datetime.now().strftime("%d-%m-%Y"), 0.99)
-
-    # 8. Treating Doctor & Medical Council Registration
-    doc_match = re.search(
-        r"(?:Treating\s+Doctor|Consultant|Surgeon|Doctor|Dr\.)[:\s]+(Dr\.?\s+[A-Za-z\s\.,]{3,35})",
-        text,
-        re.IGNORECASE,
-    )
-    if doc_match:
-        raw_doc = doc_match.group(1).strip().replace("\n", " ")
-        set_field("treating_doctor", raw_doc, 0.95)
-    else:
-        gen_doc = re.search(r"\b(Dr\.?\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\b", text)
-        if gen_doc:
-            set_field("treating_doctor", gen_doc.group(1).strip(), 0.90)
-        else:
-            set_field("treating_doctor", None, 0.40)
-
-    reg_match = re.search(r"((?:MMC|DMC|KMC|HNMC|UPMC|TNM|WBMC|MCI|NMC)[\s\-/]*[A-Z0-9\-/]+)", text, re.IGNORECASE)
-    if reg_match:
-        set_field("doctor_reg_number", reg_match.group(1).strip().replace(" ", ""), 0.96)
-    else:
-        set_field("doctor_reg_number", None, 0.40)
-
-    # 9. Hospital GSTIN
-    gst_match = re.search(r"\b(\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1})\b", text)
-    if gst_match:
-        set_field("hospital_gstin", gst_match.group(1).strip(), 0.98)
-    else:
-        set_field("hospital_gstin", None, 0.40)
+    # Dual mapping guarantee
+    if "total_bill_amount" in fields and "total_amount" not in fields:
+        fields["total_amount"] = fields["total_bill_amount"]
+    if "total_amount" in fields and "total_bill_amount" not in fields:
+        fields["total_bill_amount"] = fields["total_amount"]
 
     return fields
 
 
 class UniversalMedicalParser:
     def parse_text(self, text: str) -> dict:
-        raw_fields = parse_any_medical_document(text)
-        result = {}
-        for k, v in raw_fields.items():
-            if isinstance(v, dict) and "value" in v:
-                result[k] = v["value"]
-            else:
-                result[k] = v
-        if "total_amount" in result and "total_bill_amount" not in result:
-            result["total_bill_amount"] = result["total_amount"]
-        if "doctor_reg_number" in result and "doctor_reg_no" not in result:
-            result["doctor_reg_no"] = result["doctor_reg_number"]
-        return result
+        return parse_any_medical_document(text)
 
+    def parse_document(self, text: str) -> dict:
+        return parse_any_medical_document(text)
+
+    def parse(self, text: str) -> dict:
+        return parse_any_medical_document(text)
+
+    @staticmethod
+    def parse_static(text: str) -> dict:
+        return parse_any_medical_document(text)
