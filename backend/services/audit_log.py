@@ -91,6 +91,7 @@ def get_telemetry() -> dict:
             "average_latency_ms": avg_latency,
             "benchmark_comparison": {
                 "manual_process_time": "45 minutes",
+                "sia_time": "3.8 minutes",
                 "claimpilot_time": "3.8 minutes",
                 "accuracy_benchmark": "98.4%",
                 "cost_per_claim_inr": "₹0.42 ($0.005)",

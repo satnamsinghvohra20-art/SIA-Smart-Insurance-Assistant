@@ -64,7 +64,7 @@ def run_follow_up_agent(claim_case_id: str) -> List[Reminder]:
         message_body=(
             f"Dear {patient_name}, your health reimbursement claim for {hospital_name} "
             f"must be submitted to Star Health by {deadline_date} ({days_remaining} days left). "
-            f"Please approve your claim packet in ClaimPilot to dispatch immediately."
+            f"Please approve your claim packet in S.I.A. to dispatch immediately."
         )
     )
     db.save_reminder(rem1)
@@ -84,7 +84,7 @@ def run_follow_up_agent(claim_case_id: str) -> List[Reminder]:
             status="SCHEDULED",
             message_body=(
                 f"Reminder: Follow up with {hospital_name} billing desk for the itemized pharmacy breakup. "
-                f"Use the pre-composed 1-click email in ClaimPilot."
+                f"Use the pre-composed 1-click email in S.I.A."
             )
         )
         db.save_reminder(rem2)

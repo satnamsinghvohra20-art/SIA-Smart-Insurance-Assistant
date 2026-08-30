@@ -2,7 +2,7 @@
 IRDAI LEGAL DISPUTE & GRIEVANCE APPEAL LETTER GENERATOR
 -------------------------------------------------------
 When a claim is rejected (e.g. exclusion ambiguity, missed window, or disputed co-pay),
-ClaimPilot's Legal Agent auto-drafts a formal appeal petition to the Insurance Ombudsman
+S.I.A.'s Legal Agent auto-drafts a formal appeal petition to the Insurance Ombudsman
 and TPA Grievance Officer citing IRDAI Protection of Policyholders' Interests Regulations 2024.
 """
 from datetime import datetime
@@ -58,7 +58,7 @@ Attached Documents:
 Claimant: {patient_name}
 Policy Number: {policy_number}
 Claim Reference: {claim_id}
-Generated via ClaimPilot Autonomous Legal Subagent
+Generated via S.I.A. (Smart Insurance Assistant) Autonomous Legal Subagent
 """
 
     return {

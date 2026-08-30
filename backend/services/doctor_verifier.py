@@ -7,7 +7,7 @@ Professionals Registry (ABDM HPR).
 
 WHY THIS MATTERS FOR HACKATHONS & INSURANCE:
   Fraudulent / fake medical bills with non-existent doctor registration numbers
-  account for ~18% of fraudulent claims in India. ClaimPilot verifies every practitioner
+  account for ~18% of fraudulent claims in India. S.I.A. verifies every practitioner
   before claim approval.
 """
 import json

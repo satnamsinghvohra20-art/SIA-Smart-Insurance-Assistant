@@ -1,12 +1,12 @@
-# ClaimPilot — Grand Prize Winning Pitch Deck
+# S.I.A. (Smart Insurance Assistant) — Grand Prize Winning Pitch Deck
 ## The Autonomous Multi-Agent Health Insurance Reimbursement Engine for India
 
 ---
 
 ### Slide 1: Title & Hook
-* **Title:** ClaimPilot
+* **Title:** S.I.A. (Smart Insurance Assistant)
 * **Subtitle:** Autonomous Multi-Agent Health Insurance Reimbursement Suite
-* **One-Liner:** *"ClaimPilot finds the health insurance money you're already entitled to — and does the paperwork for you."*
+* **One-Liner:** *"S.I.A. finds the health insurance money you're already entitled to — and does the paperwork for you."*
 * **Team / Track:** Healthcare & FinTech / Autonomous AI Agents
 
 ---
@@ -21,7 +21,7 @@
 
 ---
 
-### Slide 3: The ClaimPilot Solution
+### Slide 3: The S.I.A. Solution
 * An **Autonomous 3-Agent Pipeline** that takes raw PDF hospital bills, discharge summaries, and doctor prescription photos, and:
   - Extracts 14 clinical/financial fields with live multimodal OCR.
   - Cross-verifies diagnosis and billed pharmacy across the 3-document bundle.
@@ -44,7 +44,7 @@
 
 ### Slide 5: Game-Changing Feature #1 — NMC Doctor & Medical Verification
 * **The Problem:** Fake doctor stamps cause ~18% of fraudulent claim rejections in India.
-* **The ClaimPilot Innovation:**
+* **The S.I.A. Innovation:**
   - Real-time cross-referencing against the **National Medical Commission (NMC)** and State Councils (MMC, DMC, KMC, etc.).
   - Cross-verifies operating surgeon qualifications against the procedure performed (e.g. MS General Surgery for Appendectomy).
   - ABDM Healthcare Professionals Registry (HPR) digital handle verification.
@@ -53,7 +53,7 @@
 
 ### Slide 6: Game-Changing Feature #2 — Dual-Policy Split Claim Optimizer
 * **The Problem:** Many salaried Indians have a primary personal policy (with a 10% co-pay) AND a corporate group policy (0% co-pay).
-* **The ClaimPilot Innovation:**
+* **The S.I.A. Innovation:**
   - Detects secondary corporate coverage and auto-routes the remaining ₹7,750 co-pay claim.
   - Achieves **100% Total Reimbursement** with **₹0 out-of-pocket loss**.
 
@@ -61,7 +61,7 @@
 
 ### Slide 7: Game-Changing Feature #3 — Auto-Drafted Legal Ombudsman Appeal
 * **The Problem:** When a claim is rejected, claimants give up due to legal complexity.
-* **The ClaimPilot Innovation:**
+* **The S.I.A. Innovation:**
   - Automatically generates a formal **IRDAI Grievance Appeal Petition** to the Insurance Ombudsman.
   - Cites **Section 45 of Insurance Act 1938** & **IRDAI Protection of Policyholders Regulations 2024**.
   - Invokes mandatory 14-day turnaround time (TAT) relief.
@@ -69,7 +69,7 @@
 ---
 
 ### Slide 8: Impact & Unit Economics
-| Metric | Traditional Reimbursement | ClaimPilot Multi-Agent | Improvement |
+| Metric | Traditional Reimbursement | S.I.A. Multi-Agent | Improvement |
 |---|---|---|---|
 | **Filing Time** | 45 – 60 minutes | **3.8 minutes** | **92% Faster** |
 | **Clerical Error Rate** | 38% | **< 1.5%** | **96% Reduction** |
@@ -88,7 +88,7 @@
 
 ---
 
-### Slide 10: Summary & Why ClaimPilot Wins
+### Slide 10: Summary & Why S.I.A. Wins
 1. **Real-World Impact:** Solves a genuine, high-friction problem for 400M+ insured Indians.
 2. **Google Cloud Alignment:** Gemini Multimodal, Cloud Run, Pub/Sub, Firestore.
 3. **Safety & Zero Hallucination:** Generative multimodal extraction cleanly separated from 100% deterministic financial math.

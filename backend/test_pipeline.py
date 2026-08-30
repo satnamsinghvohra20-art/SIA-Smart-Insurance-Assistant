@@ -1,5 +1,5 @@
 """
-Automated end-to-end pipeline test script for ClaimPilot (Grand Prize Suite).
+Automated end-to-end pipeline test script for S.I.A. (Smart Insurance Assistant).
 Tests dynamic ingestion, ABHA ID verification, NMC doctor verification,
 Forensic Fraud & NABH audit, line-item tariff analyzer, GIPSA/PPN fair rate benchmarking,
 visual OCR bounding boxes, Claims Copilot Q&A, and IRDAI claim form PDF generation.

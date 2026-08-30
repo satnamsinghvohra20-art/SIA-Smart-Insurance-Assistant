@@ -1,6 +1,6 @@
 """
-ClaimPilot Authentication & Policyholder Identity Service
----------------------------------------------------------
+S.I.A. (Smart Insurance Assistant) Authentication & Policyholder Identity Service
+---------------------------------------------------------------------------------
 Supports multi-factor policyholder login via:
 1. Health Insurance Policy Number + OTP
 2. National Health Authority (NHA) Ayushman Bharat Health Account (ABHA ID)

@@ -1,5 +1,5 @@
 """
-Firestore Data Access Layer for ClaimPilot
+Firestore Data Access Layer for S.I.A. (Smart Insurance Assistant)
 Implements all 11 required collections:
 1. users
 2. claim_cases

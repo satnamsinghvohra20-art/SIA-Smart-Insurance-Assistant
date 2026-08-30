@@ -1,5 +1,5 @@
 """
-ClaimPilot Data Models & Schemas
+S.I.A. (Smart Insurance Assistant) Data Models & Schemas
 Defines all 11 collections, state enums, agent contracts, and the exact required EligibilityAssessment schema.
 """
 from enum import Enum

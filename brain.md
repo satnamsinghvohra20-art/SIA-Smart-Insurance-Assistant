@@ -1,11 +1,11 @@
-# ClaimPilot — Autonomous Multi-Agent Insurance Reimbursement Engine
+# S.I.A. (Smart Insurance Assistant) — Autonomous Multi-Agent Insurance Reimbursement Engine
 ## System Architecture, Brain Specifications & Judging Guide
 
 ---
 
 ## 1. Executive Summary & One-Liner
 
-> **"ClaimPilot: The autonomous multi-agent system that finds the health insurance money and benefits you're already entitled to — and does the paperwork for you."**
+> **"S.I.A. (Smart Insurance Assistant): The autonomous multi-agent system that finds the health insurance money and benefits you're already entitled to — and does the paperwork for you."**
 
 - **Target Wedge**: Employee & Individual Health Insurance Reimbursement Claims (Mediclaim / Group Health Insurance in India).
 - **The Core Problem**: In India, over **₹15,000 crore** in legitimate insurance reimbursements go unclaimed annually due to paperwork fatigue, complex exclusion clauses, missed 30-day filing deadlines, and tedious manual physical forms.
@@ -15,7 +15,7 @@
 
 ## 2. Multi-Agent Architecture & Data Flow
 
-ClaimPilot uses a **3-Agent Pipeline** mapped directly onto Google Cloud architecture (Vertex AI, Cloud Run, Firestore, and Pub/Sub):
+S.I.A. uses a **3-Agent / 6-Agent Pipeline** mapped directly onto Google Cloud architecture (Vertex AI, Cloud Run, Firestore, and Pub/Sub):
 
 ```
 ┌────────────────────────────────┐       ┌────────────────────────────────┐       ┌────────────────────────────────┐
@@ -92,12 +92,12 @@ ClaimPilot uses a **3-Agent Pipeline** mapped directly onto Google Cloud archite
 
 | Time | Stage | Key Visual & Talking Points |
 |---|---|---|
-| **0:00–0:20** | **The Hook** | "In India, over ₹15,000 crore in health insurance claims go unclaimed every year. Filing is a maze of paper forms. ClaimPilot fixes this in under 4 minutes." Show the **⚡ 45m vs. 4m** benchmark card. |
+| **0:00–0:20** | **The Hook** | "In India, over ₹15,000 crore in health insurance claims go unclaimed every year. Filing is a maze of paper forms. S.I.A. fixes this in under 4 minutes." Show the **⚡ 45m vs. 4m** benchmark card. |
 | **0:20–0:50** | **Intake & 3-Doc Bundle** | Drop sample PDF bill or pick `Happy Path`. Toggle **🛡️ DPDP Privacy Shield** (show Aadhaar masking). Run Intake → Show **98% Clinical Consistency** badge and confidence scores. |
 | **0:50–1:40** | **Deterministic Rules** | Run Decision Agent → Show ₹69,750 approved amount. Explain: *"Eligibility math is 100% deterministic over structured policy rules, so zero hallucinations."* Point out the **Dual-Policy Split Optimizer** recovering the ₹7,750 co-pay! |
 | **1:40–2:15** | **IRDAI Form & WhatsApp Gate** | Run Execution Agent → Click **Download Form PDF** to reveal the IRDAI claim form. Click **✓ Approve & Dispatch** → The slide-out **WhatsApp Phone** opens with live milestone push notifications! |
 | **2:15–2:45** | **Graceful Failure / Recovery** | Switch to **`Excluded Procedure`** (Cosmetic Rhinoplasty) to prove the agent transparently rejects invalid claims with policy clause citations. |
-| **2:45–3:00** | **Architecture & Close** | Open the **📐 Blueprint** modal: *"Built on Vertex AI, Cloud Run, Firestore, and Pub/Sub. ClaimPilot ensures you never leave your hard-earned money on the table."* |
+| **2:45–3:00** | **Architecture & Close** | Open the **📐 Blueprint** modal: *"Built on Vertex AI, Cloud Run, Firestore, and Pub/Sub. S.I.A. (Smart Insurance Assistant) ensures you never leave your hard-earned money on the table."* |
 
 ---
 

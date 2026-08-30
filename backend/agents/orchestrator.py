@@ -1,5 +1,5 @@
 """
-ClaimPilot Multi-Agent Orchestrator
+S.I.A. (Smart Insurance Assistant) Multi-Agent Orchestrator
 Coordinates the autonomous 6-agent pipeline following Google ADK / Genkit multi-agent patterns:
 1. Intake Agent
 2. Safety Agent
@@ -31,7 +31,7 @@ from agents.claim_prep_agent import run_claim_prep_agent
 from agents.follow_up_agent import run_follow_up_agent
 
 
-class ClaimPilotOrchestrator:
+class SIAOrchestrator:
     @staticmethod
     def create_claim_case(title: str = "Corporate Health Reimbursement Claim", user_id: str = "usr_demo123") -> ClaimCase:
         claim_id = f"CLM-{uuid.uuid4().hex[:6].upper()}"
@@ -171,3 +171,8 @@ class ClaimPilotOrchestrator:
             "drafted_claim": claim_prep_res.model_dump(),
             "reminders": [r.model_dump() for r in follow_up_res]
         }
+
+
+# Backward compatibility alias
+ClaimPilotOrchestrator = SIAOrchestrator
+

@@ -1,5 +1,5 @@
 """
-Test Full Multi-Agent Suite for ClaimPilot
+Test Full Multi-Agent Suite for S.I.A. (Smart Insurance Assistant)
 Verifies:
 1. Scenario 1 end-to-end execution across all 6 agents.
 2. Exact JSON schema conformance for EligibilityAssessment.
@@ -15,21 +15,21 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from models import ClaimState, EligibilityStatus, FactUpdateRequest, HumanApprovalRequest
 from services.firestore_service import db
-from agents.orchestrator import ClaimPilotOrchestrator
+from agents.orchestrator import SIAOrchestrator, ClaimPilotOrchestrator
 from agents.claim_prep_agent import run_claim_prep_agent
 from agents.eligibility_agent import run_eligibility_agent
 
 
 def test_scenario_1_pipeline():
     print("=== 1. Testing Scenario 1 Multi-Agent Pipeline ===")
-    case = ClaimPilotOrchestrator.create_claim_case(
+    case = SIAOrchestrator.create_claim_case(
         title="Test Scenario 1: Appendectomy Reimbursement",
         user_id="usr_test"
     )
     claim_id = case.claim_case_id
     print(f"Created Claim Case: {claim_id}")
 
-    result = ClaimPilotOrchestrator.execute_pipeline(claim_id)
+    result = SIAOrchestrator.execute_pipeline(claim_id)
     assert result["status"] in [ClaimState.READY_FOR_REVIEW.value, ClaimState.ESCALATED_TO_HUMAN.value]
     print(f"Pipeline executed in {result['latency_ms']:.1f}ms with status: {result['status']}")
 

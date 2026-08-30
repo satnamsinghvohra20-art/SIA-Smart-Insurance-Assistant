@@ -19,7 +19,7 @@ TRACKING_STAGES = [
         "status": "Submitted to TPA Portal",
         "description": "Claim payload & IRDAI evidence package acknowledged by TPA Gateway.",
         "badge_color": "blue",
-        "whatsapp_msg": "🔔 ClaimPilot Alert: Your claim (Ref: {claim_id}) has been submitted to Star Health TPA. Claim form and cross-verified hospital bills are attached.",
+        "whatsapp_msg": "🔔 S.I.A. Alert: Your claim (Ref: {claim_id}) has been submitted to Star Health TPA. Claim form and cross-verified hospital bills are attached.",
     },
     {
         "status": "Initial Document Scrutiny Passed",
@@ -37,7 +37,7 @@ TRACKING_STAGES = [
         "status": "TPA Query: Pre-auth Match Verified",
         "description": "Cross-referenced with hospital admission records. All checks cleared autonomously.",
         "badge_color": "purple",
-        "whatsapp_msg": "⚡ ClaimPilot Agent: TPA raised hospital pre-auth query. Resolved autonomously via hospital admission API matching.",
+        "whatsapp_msg": "⚡ S.I.A. Agent: TPA raised hospital pre-auth query. Resolved autonomously via hospital admission API matching.",
     },
     {
         "status": "Approved — NEFT Settlement Initiated",
@@ -66,7 +66,7 @@ def publish(claim_id: str):
                 {
                     "step": 0,
                     "type": "whatsapp",
-                    "sender": "ClaimPilot Assistant",
+                    "sender": "S.I.A. Assistant",
                     "text": stage0["whatsapp_msg"].format(claim_id=claim_id),
                     "timestamp": datetime.utcnow().strftime("%I:%M %p"),
                 }
@@ -116,7 +116,7 @@ def _simulate_polling_worker(claim_id: str):
             _tracking_state[claim_id]["notifications"].append({
                 "step": step,
                 "type": "whatsapp",
-                "sender": "ClaimPilot Assistant",
+                "sender": "S.I.A. Assistant",
                 "text": stage["whatsapp_msg"].format(claim_id=claim_id),
                 "timestamp": now_time_str,
             })

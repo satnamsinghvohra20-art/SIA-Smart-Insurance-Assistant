@@ -1,4 +1,4 @@
-# ClaimPilot — Autonomous Multi-Agent Health Reimbursement Platform
+# S.I.A. (Smart Insurance Assistant) — Autonomous Multi-Agent Health Reimbursement Platform
 
 > **Production-style Multi-Agent AI system that helps Indian employees discover, verify, prepare, and track eligible medical insurance reimbursements with strict human-in-the-loop safety controls.**
 
@@ -17,7 +17,7 @@ Indian corporate employees lose over **₹18,000 Crores annually** in unclaimed 
 3. **Clerical Turnaround Delays:** Manual claim filling takes 45+ minutes per claim and is prone to errors.
 4. **Filing Deadlines:** 30-day post-discharge deadlines are frequently missed without active tracking.
 
-**ClaimPilot** converts complicated medical documents into an actionable, verified, human-approved reimbursement package in under 3 minutes.
+**S.I.A. (Smart Insurance Assistant)** converts complicated medical documents into an actionable, verified, human-approved reimbursement package in under 3 minutes.
 
 ---
 
@@ -25,7 +25,7 @@ Indian corporate employees lose over **₹18,000 Crores annually** in unclaimed 
 
 ```
 +---------------------------------------------------------------------------------------------------+
-|                                 ClaimPilot Enterprise Web UI                                      |
+|                        S.I.A. (Smart Insurance Assistant) Enterprise Web UI                       |
 |    (Eligibility Gauge, 6-Agent Rail, Editable Facts, Missing Itemized Action, IRDAI PDF Viewer)  |
 +---------------------------------------------------------------------------------------------------+
                                                   |
@@ -59,7 +59,7 @@ Indian corporate employees lose over **₹18,000 Crores annually** in unclaimed 
 
 ## 📦 Data Model (11 Firestore Collections)
 
-ClaimPilot implements all 11 required collections:
+S.I.A. implements all 11 required collections:
 
 1. **`users`**: User profile, employee ID, corporate group name, contact details.
 2. **`claim_cases`**: Primary case entity with state, claimed amount, estimated reimbursement, and deadlines.
@@ -195,7 +195,7 @@ gcloud services enable \
 gcloud firestore databases create --location=$REGION --type=firestore-native
 
 # 4. Build and Deploy Backend to Cloud Run
-gcloud run deploy claimpilot-api \
+gcloud run deploy sia-api \
   --source . \
   --platform managed \
   --region $REGION \
@@ -207,7 +207,7 @@ gcloud run deploy claimpilot-api \
 
 ## 🛡️ Trust & Safety Invariants
 
-1. **Explicit Human Approval Gate:** ClaimPilot will **never** submit a claim, sign a document, or email external parties without explicit human signoff and declaration acceptance.
+1. **Explicit Human Approval Gate:** S.I.A. will **never** submit a claim, sign a document, or email external parties without explicit human signoff and declaration acceptance.
 2. **Deterministic Arithmetic:** Financial deductions follow deterministic IRDAI schedules and policy math — no LLM hallucinated sums.
 3. **DPDP Act 2023 Shield:** Sensitive identifiers (Aadhaar, PAN, phone numbers) are masked at ingestion.
 4. **NMC Doctor Verification:** Treating doctors are cross-checked against the National Medical Commission (NMC) registry.

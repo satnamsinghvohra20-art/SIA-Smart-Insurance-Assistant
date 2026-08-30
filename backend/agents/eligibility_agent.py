@@ -82,6 +82,7 @@ def run_eligibility_agent(claim_case_id: str, policy_rules: Dict[str, Any] = Non
 
     if is_excluded:
         eligibility_status = EligibilityStatus.INELIGIBLE
+        confidence = 0.98
         max_reimbursable = 0.0
         min_reimbursable = 0.0
         basis_explanation = (
@@ -89,6 +90,7 @@ def run_eligibility_agent(claim_case_id: str, policy_rules: Dict[str, Any] = Non
         )
     else:
         eligibility_status = EligibilityStatus.LIKELY_ELIGIBLE
+        confidence = 0.96
         basis_explanation = (
             f"Claim is within policy sum insured limit (₹{sum_insured:,.0f} under {policy_name}). "
             f"Procedure '{diagnosis}' is covered under Active Inpatient Care. "
@@ -146,7 +148,7 @@ def run_eligibility_agent(claim_case_id: str, policy_rules: Dict[str, Any] = Non
         basis=basis_explanation,
         gross_claimed=claimed_amount,
         non_medical_deductions=non_medical_deductions,
-        copay_amount=0.0,
+        copay_amount=round(copay_deduction, 2),
         room_rent_penalty=0.0
     )
 

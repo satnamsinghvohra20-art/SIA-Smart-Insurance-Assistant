@@ -1,5 +1,5 @@
 """
-ClaimPilot Backend API
+S.I.A. (Smart Insurance Assistant) Backend API
 Autonomous Multi-Agent Health Insurance Claim Adjudication & Reimbursement Engine.
 
 Multi-Agent Architecture (Google ADK / Genkit Pattern):
@@ -48,7 +48,7 @@ from models import (
 from services.firestore_service import db
 
 # Multi-Agent Orchestrator & Agents
-from agents.orchestrator import ClaimPilotOrchestrator
+from agents.orchestrator import SIAOrchestrator, ClaimPilotOrchestrator
 from agents.intake_agent import run_intake_agent
 from agents.safety_agent import run_safety_agent
 from agents.eligibility_agent import run_eligibility_agent
@@ -80,7 +80,7 @@ from services.auth_service import (
 )
 
 app = FastAPI(
-    title="ClaimPilot Multi-Agent API",
+    title="S.I.A. (Smart Insurance Assistant) Multi-Agent API",
     description="Autonomous Health Insurance Claim Reimbursement Pipeline for India (GCP Vertex AI / Cloud Run / Firestore Architecture)",
     version="3.0.0",
 )
@@ -172,11 +172,11 @@ def list_claim_cases():
     cases = db.list_claim_cases()
     if not cases:
         # Auto-seed the primary demo scenario case
-        demo_case = ClaimPilotOrchestrator.create_claim_case(
-            title="Inpatient Appendectomy Reimbursement (Star Health GHI)",
+        demo_case = SIAOrchestrator.create_claim_case(
+            title="Appendectomy Inpatient Claim (Star Health Demo)",
             user_id="usr_demo123"
         )
-        ClaimPilotOrchestrator.execute_pipeline(demo_case.claim_case_id)
+        SIAOrchestrator.execute_pipeline(demo_case.claim_case_id)
         cases = db.list_claim_cases()
     return cases
 
@@ -184,7 +184,7 @@ def list_claim_cases():
 @app.post("/api/claim-cases")
 def create_claim_case(req: CreateClaimRequest):
     """Creates a new claim case."""
-    case = ClaimPilotOrchestrator.create_claim_case(title=req.title, user_id=req.user_id)
+    case = SIAOrchestrator.create_claim_case(title=req.title, user_id=req.user_id)
     return case.model_dump()
 
 
@@ -226,7 +226,7 @@ def trigger_pipeline(claim_id: str):
     if not case:
         raise HTTPException(404, f"Claim case '{claim_id}' not found")
     
-    result = ClaimPilotOrchestrator.execute_pipeline(claim_id)
+    result = SIAOrchestrator.execute_pipeline(claim_id)
     return result
 
 
@@ -245,7 +245,7 @@ async def upload_claim_documents(
     """Accepts multi-document uploads for a claim case and runs the 6-agent pipeline."""
     case = db.get_claim_case(claim_id)
     if not case:
-        case = ClaimPilotOrchestrator.create_claim_case(claim_case_id=claim_id)
+        case = SIAOrchestrator.create_claim_case(claim_case_id=claim_id)
 
     raw_docs = []
     case_upload_dir = UPLOADS_DIR / claim_id
@@ -332,7 +332,7 @@ async def upload_claim_documents(
         set_gemini_api_key(gemini_api_key)
 
     # Run pipeline with uploaded documents
-    pipeline_result = ClaimPilotOrchestrator.execute_pipeline(claim_id, raw_documents=raw_docs)
+    pipeline_result = SIAOrchestrator.execute_pipeline(claim_id, raw_documents=raw_docs)
     return pipeline_result
 
 
@@ -520,11 +520,11 @@ def seed_scenario_1():
     
     Executes all 6 agents autonomously in the background and populates Firestore collections.
     """
-    case = ClaimPilotOrchestrator.create_claim_case(
-        title="Scenario 1: ₹42,000 Inpatient Appendectomy Claim (Star Health Corporate GHI)",
+    case = SIAOrchestrator.create_claim_case(
+        title=f"{scenario_name.replace('_', ' ').title()} Auto Adjudication",
         user_id="usr_demo123"
     )
-    result = ClaimPilotOrchestrator.execute_pipeline(case.claim_case_id)
+    result = SIAOrchestrator.execute_pipeline(case.claim_case_id)
     return {
         "status": "seeded",
         "claim_case_id": case.claim_case_id,
@@ -602,7 +602,8 @@ def analytics():
         "capital_recovered_inr": 34800000.0,
         "avg_processing_time_mins": 2.4,
         "traditional_time_mins": 45.0,
-        "clerical_rejection_rate_before": 38.0,
+        "clerical_rejection_rate_manual": 38.4,
+        "clerical_rejection_rate_sia": 0.8,
         "clerical_rejection_rate_claimpilot": 0.8,
         "avg_compute_cost_per_claim_inr": 0.35,
         "fraud_prevention_savings_inr": 5820000.0,
@@ -720,14 +721,14 @@ def serve_index():
     frontend_index = Path(__file__).parent.parent / "frontend" / "index.html"
     if frontend_index.exists():
         return FileResponse(frontend_index)
-    return {"status": "ok", "service": "ClaimPilot Multi-Agent Pipeline"}
+    return {"status": "ok", "service": "S.I.A. (Smart Insurance Assistant) Multi-Agent Pipeline"}
 
 
 @app.get("/health")
 def health():
     return {
         "status": "ok",
-        "service": "ClaimPilot Multi-Agent Pipeline",
+        "service": "S.I.A. (Smart Insurance Assistant) Multi-Agent Pipeline",
         "version": "3.0.0",
         "agents": ["IntakeAgent", "SafetyAgent", "EligibilityAgent", "EvidenceAgent", "ClaimPrepAgent", "FollowUpAgent"],
         "firestore_status": "connected",

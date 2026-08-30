@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  claimpilot:
+  sia:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: claimpilot-app
+    container_name: sia-app
     ports:
       - "8000:8000"
     environment:

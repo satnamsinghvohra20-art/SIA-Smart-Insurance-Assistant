@@ -1,6 +1,6 @@
 """
-CLAIM PILOT — INTERACTIVE CONVERSATIONAL CLAIMS COPILOT
--------------------------------------------------------
+S.I.A. (SMART INSURANCE ASSISTANT) — INTERACTIVE CONVERSATIONAL CLAIMS COPILOT
+------------------------------------------------------------------------------
 Answers natural language inquiries regarding claim adjudication, policy clauses,
 co-pay deductions, IRDAI ombudsman regulations, and dual-policy split routing
 using real-time Google Gemini LLM generation with deterministic insurance fallback.
@@ -40,7 +40,7 @@ def answer_claim_query(
         def _call_copilot():
             genai.configure(api_key=key)
             system_prompt = (
-                f"You are ClaimPilot Copilot, an expert AI health insurance claims assistant in India.\n"
+                f"You are S.I.A. (Smart Insurance Assistant), an expert AI health insurance claims assistant in India.\n"
                 f"Active Claim Context:\n"
                 f"- Claim ID: {claim_id or 'CLM-LIVE'}\n"
                 f"- Patient: {patient_name}\n"
@@ -84,8 +84,8 @@ def answer_claim_query(
     if "co-pay" in q_low or "copay" in q_low or "deduct" in q_low or "cut" in q_low:
         reply = (
             f"Under your health policy, standard co-pay and non-medical consumables deductions apply to the gross bill of ₹{total_amount:,.2f}.\n\n"
-            f"💡 **ClaimPilot Pro Tip:** If you have secondary corporate or top-up coverage, "
-            f"ClaimPilot automatically routes split claims to recover the remaining non-payable balance!"
+            f"💡 **S.I.A. Pro Tip:** If you have secondary corporate or top-up coverage, "
+            f"S.I.A. automatically routes split claims to recover the remaining non-payable balance!"
         )
     elif "doctor" in q_low or "nmc" in q_low or "license" in q_low or "fraud" in q_low:
         reply = (
@@ -98,7 +98,7 @@ def answer_claim_query(
         )
     elif "appeal" in q_low or "ombudsman" in q_low or "reject" in q_low:
         reply = (
-            f"If your claim is ever repudiated or disputed by the TPA, ClaimPilot auto-drafts a formal Ombudsman Appeal Petition "
+            f"If your claim is ever repudiated or disputed by the TPA, S.I.A. auto-drafts a formal Ombudsman Appeal Petition "
             f"under Section 45 of Insurance Act 1938 and Rule 17 of Insurance Ombudsman Rules 2017 with mandatory 14-day TAT resolution."
         )
     elif "abha" in q_low or "ayushman" in q_low or "abdm" in q_low:
@@ -107,7 +107,7 @@ def answer_claim_query(
         )
     else:
         reply = (
-            f"ClaimPilot has processed your {diagnosis} claim for {patient_name} amounting to ₹{total_amount:,.2f} at {hospital}. "
+            f"S.I.A. has processed your {diagnosis} claim for {patient_name} amounting to ₹{total_amount:,.2f} at {hospital}. "
             f"All clinical facts and IRDAI Part A & B claim forms are synchronized and ready for submission."
         )
 
@@ -115,6 +115,6 @@ def answer_claim_query(
         "query": query,
         "reply": reply,
         "claim_id": claim_id,
-        "copilot_model": "ClaimPilot Hybrid Reasoning Engine",
+        "copilot_model": "S.I.A. Hybrid Reasoning Engine",
     }
 

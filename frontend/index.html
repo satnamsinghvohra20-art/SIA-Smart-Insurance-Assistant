@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClaimPilot — Autonomous Multi-Agent Health Reimbursement & Adjudication Suite</title>
+<title>S.I.A. (Smart Insurance Assistant) — Autonomous Multi-Agent Health Reimbursement & Adjudication Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -666,9 +666,9 @@
 <!-- Header Navigation Bar -->
 <header>
   <a href="#" class="brand-group" onclick="showLandingPage(event)">
-    <div class="brand-logo-gem">CP</div>
+    <div class="brand-logo-gem">SIA</div>
     <div class="brand-text">
-      <h1>ClaimPilot <span style="font-size: 10px; font-weight: 800; color: var(--cyan-neon); background: var(--cyan-glow); padding: 3px 9px; border-radius: 12px; border: 1px solid rgba(0,229,255,0.35);">ENTERPRISE AI</span></h1>
+      <h1>S.I.A. <span style="font-size: 10px; font-weight: 800; color: var(--cyan-neon); background: var(--cyan-glow); padding: 3px 9px; border-radius: 12px; border: 1px solid rgba(0,229,255,0.35);">SMART INSURANCE ASSISTANT</span></h1>
       <p>Autonomous Multi-Agent Health Reimbursement & Adjudication Suite</p>
     </div>
   </a>
@@ -715,7 +715,7 @@
     </div>
     <h1>Stop Losing Medical Reimbursements.<br><span class="gradient-text">6 Autonomous AI Agents</span> Discover, Audit & Submit.</h1>
     <p class="hero-subtitle">
-      ClaimPilot turns complicated hospital invoices, discharge summaries, and employer policy clauses into an audit-proof, human-approved reimbursement package in under 3 minutes.
+      S.I.A. (Smart Insurance Assistant) turns complicated hospital invoices, discharge summaries, and employer policy clauses into an audit-proof, human-approved reimbursement package in under 3 minutes.
     </p>
 
     <div class="hero-cta-group">
@@ -819,7 +819,7 @@
         <span style="font-size: 11px; font-weight: 700; color: var(--emerald); background: var(--emerald-glow); padding: 4px 12px; border-radius: 12px;">PPN TARIFF BENCHMARK</span>
         <h3 style="font-size: 32px; font-weight: 800; color: #fff; margin: 12px 0 10px; font-family: 'Outfit', sans-serif;">GIPSA Fair Price Intelligence</h3>
         <p style="font-size: 14.5px; color: var(--text-secondary); line-height: 1.6;">
-          ClaimPilot benchmarks every procedure against standard General Insurance Public Sector Association (GIPSA) schedules.
+          S.I.A. benchmarks every procedure against standard General Insurance Public Sector Association (GIPSA) schedules.
         </p>
         <div style="margin-top: 20px; display: flex; gap: 12px;">
           <button class="btn btn-emerald-glow" onclick="showWorkspacePage(event)">Explore in Workspace &rarr;</button>
@@ -852,7 +852,7 @@
 
   <!-- Footer -->
   <footer style="border-top: 1px solid var(--border-subtle); padding: 48px 56px; text-align: center; font-size: 13px; color: var(--text-muted); background: rgba(3, 7, 18, 0.95);">
-    <p>&copy; 2026 ClaimPilot. Built for Indian employees claiming health insurance reimbursements. Powered by Google Cloud Vertex AI & Firestore.</p>
+    <p>&copy; 2026 S.I.A. (Smart Insurance Assistant). Built for Indian employees claiming health insurance reimbursements. Powered by Google Cloud Vertex AI & Firestore.</p>
   </footer>
 
 </div>
@@ -1212,7 +1212,7 @@
       <button class="btn-close-modal" onclick="closeModal('modalHospitalEmail')">&times;</button>
     </div>
     <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px;">
-      ClaimPilot identified that an itemized pharmacy and OT consumables breakdown is required by your TPA for full reimbursement. Review the pre-composed email before dispatching.
+      S.I.A. identified that an itemized pharmacy and OT consumables breakdown is required by your TPA for full reimbursement. Review the pre-composed email before dispatching.
     </p>
     <div style="margin-bottom: 14px;">
       <label style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Recipient</label>
@@ -1509,9 +1509,9 @@
 <script>
 let currentClaimId = "CLM-SCENARIO-1";
 let currentClaimData = null;
-let activeApiKey = localStorage.getItem("claimpilot_gemini_key") || "";
+let activeApiKey = localStorage.getItem("sia_gemini_key") || "";
 let currentAuthUser = null;
-let currentAuthToken = localStorage.getItem("claimpilot_auth_token") || "";
+let currentAuthToken = localStorage.getItem("sia_auth_token") || "";
 
 window.addEventListener("DOMContentLoaded", () => {
   initTheme();
@@ -1522,8 +1522,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // ==================== Authentication & Session Controller ====================
 async function checkAuthSession() {
   try {
-    const token = localStorage.getItem("claimpilot_auth_token");
-    const storedUser = localStorage.getItem("claimpilot_auth_user");
+    const token = localStorage.getItem("sia_auth_token");
+    const storedUser = localStorage.getItem("sia_auth_user");
     if (storedUser) {
       currentAuthUser = JSON.parse(storedUser);
       updateAuthUI(currentAuthUser);
@@ -1534,7 +1534,7 @@ async function checkAuthSession() {
         const data = await res.json();
         if (data.authenticated && data.user) {
           currentAuthUser = data.user;
-          localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+          localStorage.setItem("sia_auth_user", JSON.stringify(data.user));
           updateAuthUI(data.user);
         }
       }
@@ -1636,8 +1636,8 @@ async function handleLoginSubmit(authType) {
 
     currentAuthUser = data.user;
     currentAuthToken = data.token;
-    localStorage.setItem("claimpilot_auth_token", data.token);
-    localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+    localStorage.setItem("sia_auth_token", data.token);
+    localStorage.setItem("sia_auth_user", JSON.stringify(data.user));
 
     updateAuthUI(data.user);
     closeLoginModal();
@@ -1668,8 +1668,8 @@ async function handleDemoLogin(userId) {
 
     currentAuthUser = data.user;
     currentAuthToken = data.token;
-    localStorage.setItem("claimpilot_auth_token", data.token);
-    localStorage.setItem("claimpilot_auth_user", JSON.stringify(data.user));
+    localStorage.setItem("sia_auth_token", data.token);
+    localStorage.setItem("sia_auth_user", JSON.stringify(data.user));
 
     updateAuthUI(data.user);
     closeLoginModal();
@@ -1689,7 +1689,7 @@ async function handleDemoLogin(userId) {
 
 async function handleLogout() {
   try {
-    const token = localStorage.getItem("claimpilot_auth_token");
+    const token = localStorage.getItem("sia_auth_token");
     if (token) {
       await fetch(`/api/auth/logout?token=${token}`, { method: "POST" });
     }
@@ -1697,14 +1697,14 @@ async function handleLogout() {
 
   currentAuthUser = null;
   currentAuthToken = "";
-  localStorage.removeItem("claimpilot_auth_token");
-  localStorage.removeItem("claimpilot_auth_user");
+  localStorage.removeItem("sia_auth_token");
+  localStorage.removeItem("sia_auth_user");
   updateAuthUI(null);
   showToast("Logged out successfully.", "👋");
 }
 
 function initTheme() {
-  const saved = localStorage.getItem("claimpilot_theme") || "green";
+  const saved = localStorage.getItem("sia_theme") || "green";
   setTheme(saved === "dark" ? "dark" : "green");
 }
 
@@ -1715,16 +1715,16 @@ function setTheme(theme) {
   if (theme === "dark") {
     document.body.classList.add("dark-theme");
     if (btn) btn.innerHTML = "🌙 OLED Dark";
-    localStorage.setItem("claimpilot_theme", "dark");
+    localStorage.setItem("sia_theme", "dark");
   } else {
     // Default Glassy Green is root
     if (btn) btn.innerHTML = "🌿 Glassy Green";
-    localStorage.setItem("claimpilot_theme", "green");
+    localStorage.setItem("sia_theme", "green");
   }
 }
 
 function toggleTheme() {
-  const current = localStorage.getItem("claimpilot_theme") || "green";
+  const current = localStorage.getItem("sia_theme") || "green";
   const next = current === "green" ? "dark" : "green";
   setTheme(next);
   if (next === "green") {
@@ -1964,7 +1964,7 @@ async function handleHumanApproval(event) {
         signer_name: signerName,
         signer_declaration: "I confirm that the extracted information and attached receipts are accurate to the best of my knowledge.",
         disclaimer_accepted: true,
-        comments: "Approved via ClaimPilot Web UI"
+        comments: "Approved via S.I.A. Web UI"
       })
     });
     const json = await res.json();
@@ -2096,7 +2096,7 @@ function saveApiKey() {
   const k = document.getElementById("inputApiKey").value.trim();
   if (k) {
     activeApiKey = k;
-    localStorage.setItem("claimpilot_gemini_key", k);
+    localStorage.setItem("sia_gemini_key", k);
     fetch("/api/set-api-key", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
