@@ -1544,6 +1544,82 @@ function changeLanguage(lang) {
 }
 
 // ==================== Pre-Admission Estimator Modal Controller ====================
+
+// ==================== Ombudsman Appeal Modal Controller ====================
+function openAppealModal() {
+  const modal = document.getElementById("appealModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closeAppealModal() {
+  const modal = document.getElementById("appealModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function generateOmbudsmanAppeal() {
+  const grounds = document.getElementById("appealGrounds").value;
+  try {
+    const res = await fetch(`/api/claim-cases/${currentClaimId}/generate-appeal?rejection_reason=${encodeURIComponent(grounds)}`, {
+      method: "POST"
+    });
+    const data = await res.json();
+    document.getElementById("appealResultContainer").style.display = "block";
+    document.getElementById("appealTextContent").textContent = data.appeal_letter;
+    showToast("Ombudsman appeal petition drafted successfully!");
+  } catch (err) {
+    showToast("Failed to generate appeal petition", true);
+  }
+}
+
+function copyAppealText() {
+  const txt = document.getElementById("appealTextContent").textContent;
+  navigator.clipboard.writeText(txt);
+  showToast("Petition copied to clipboard! Ready to file.");
+}
+
+// ==================== Annexure 1 Disputer Modal Controller ====================
+function openDisputeModal() {
+  const modal = document.getElementById("disputeModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closeDisputeModal() {
+  const modal = document.getElementById("disputeModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function runAnnexure1Dispute() {
+  const resDiv = document.getElementById("disputeResultContainer");
+  try {
+    const res = await fetch("/api/tariff/dispute-deductions", { method: "POST" });
+    const data = await res.json();
+    resDiv.style.display = "block";
+    resDiv.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px;">
+        <span style="font-weight: 700; color: #fff;">Recoverable Consumable Deductions</span>
+        <span style="color: var(--cyan); font-weight: 800; font-size: 1.1rem;">₹${data.total_potential_recovery.toLocaleString()} Recoverable</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+        ${data.contested_items.map(item => `
+          <div style="background: rgba(6, 48, 33, 0.6); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--cyan);">
+            <div style="display: flex; justify-content: space-between; font-weight: 600; color: #fff; font-size: 0.85rem;">
+              <span>${item.item}</span>
+              <span style="color: #F43F5E;">-₹${item.amount.toLocaleString()}</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">${item.irdai_clause}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 10px; font-size: 0.8rem; color: #A7F3D0;">
+        💡 <strong>Action:</strong> ${data.recommendation}
+      </div>
+    `;
+    showToast("Annexure 1 audit complete!");
+  } catch (err) {
+    showToast("Failed to run Annexure 1 audit", true);
+  }
+}
+
 function openPreauthModal() {
   const modal = document.getElementById("preauthModal");
   if (modal) modal.style.display = "flex";
@@ -2330,6 +2406,69 @@ function handleFileSelected(e) {
     </button>
 
     <div id="estimatorResults" style="display: none; background: rgba(2, 24, 16, 0.7); border: 1px solid var(--border-glass); border-radius: 16px; padding: 18px;">
+      <!-- Populated dynamically via JS -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Ombudsman Appeal Generator Modal -->
+<div id="appealModal" style="display: none; position: fixed; inset: 0; background: rgba(2, 24, 16, 0.9); backdrop-filter: blur(12px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: var(--bg-surface); border: 1px solid rgba(251, 191, 36, 0.5); border-radius: 24px; max-width: 720px; width: 100%; padding: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h3 style="font-size: 1.4rem; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <span>⚖️</span> IRDAI Insurance Ombudsman Appeal Generator
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Draft formal legal grievance petition under Rule 17 of Insurance Ombudsman Rules 2017 & IRDAI 2024 regulations.</p>
+      </div>
+      <button onclick="closeAppealModal()" style="background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.4); color: #F43F5E; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Grounds for Repudiation / Dispute</label>
+      <select id="appealGrounds" style="width: 100%; padding: 10px 14px; background: rgba(4, 34, 23, 0.95); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; font-size: 0.88rem;">
+        <option value="Pre-existing disease (PED) clause invoked unlawfully on emergency acute condition">Unlawful Pre-Existing Disease (PED) Rejection</option>
+        <option value="Proportionate room rent deduction applied excessively exceeding IRDAI tariff norms">Excessive Proportionate Room Rent Deduction</option>
+        <option value="Wrongful deduction of essential medical consumables under Annexure 1">Unwarranted Hospital Consumable Deductions</option>
+        <option value="Repudiation citing 30-day initial waiting period on accidental/emergency admission">Emergency Admission 30-Day Waiting Period Conflict</option>
+      </select>
+    </div>
+
+    <button onclick="generateOmbudsmanAppeal()" class="btn btn-primary" style="width: 100%; margin-bottom: 20px; justify-content: center; padding: 12px; font-size: 0.95rem; background: linear-gradient(135deg, #F59E0B, #10B981);">
+      <span>⚡</span> Generate Legally Grounded Appeal Petition
+    </button>
+
+    <div id="appealResultContainer" style="display: none; background: rgba(2, 24, 16, 0.9); border: 1px solid var(--border-glass); border-radius: 16px; padding: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span style="font-weight: 700; color: #FBBF24; font-size: 0.95rem;">📜 Drafted Appeal Petition</span>
+        <button onclick="copyAppealText()" class="btn btn-glass" style="font-size: 0.78rem; padding: 6px 12px;">
+          <span>📋</span> Copy Petition
+        </button>
+      </div>
+      <pre id="appealTextContent" style="white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #A7F3D0; line-height: 1.6; max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 14px; border-radius: 10px;"></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Annexure 1 Non-Payables Smart Disputer Modal -->
+<div id="disputeModal" style="display: none; position: fixed; inset: 0; background: rgba(2, 24, 16, 0.9); backdrop-filter: blur(12px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: var(--bg-surface); border: 1px solid var(--border-glow); border-radius: 24px; max-width: 680px; width: 100%; padding: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h3 style="font-size: 1.4rem; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <span>📋</span> IRDAI Annexure 1 Non-Payables Smart Disputer
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Contest unwarranted hospital consumables deducted from your claim settlement.</p>
+      </div>
+      <button onclick="closeDisputeModal()" style="background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.4); color: #F43F5E; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+
+    <button onclick="runAnnexure1Dispute()" class="btn btn-primary" style="width: 100%; margin-bottom: 20px; justify-content: center; padding: 12px; font-size: 0.95rem;">
+      <span>🔍</span> Audit Hospital Consumables Against IRDAI Master Circular
+    </button>
+
+    <div id="disputeResultContainer" style="display: none; background: rgba(2, 24, 16, 0.8); border: 1px solid var(--border-glass); border-radius: 16px; padding: 18px;">
       <!-- Populated dynamically via JS -->
     </div>
   </div>
