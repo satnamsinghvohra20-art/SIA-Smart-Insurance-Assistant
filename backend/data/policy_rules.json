@@ -1,16 +1,16 @@
-﻿{
+{
   "policies": [
     {
       "id": "star_health_family_optima",
       "policy_number_prefix": "STAR-HEALTH",
       "name": "Star Health — Family Health Optima Plan",
       "tpa_name": "Star Health In-House Claims Administration",
-      "sum_insured": 500000.00,
+      "sum_insured": 500000.0,
       "co_pay_percent": 10,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 730,
       "filing_window_days": 30,
-      "room_rent_capping": 5000.00,
+      "room_rent_capping": 5000.0,
       "excluded_procedures": [
         "cosmetic rhinoplasty",
         "aesthetic surgery",
@@ -24,12 +24,12 @@
       "policy_number_prefix": "HDFC-ERGO",
       "name": "HDFC ERGO — Optima Secure & Corporate Health",
       "tpa_name": "Medi Assist Insurance TPA Pvt. Ltd.",
-      "sum_insured": 300000.00,
+      "sum_insured": 300000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 0,
       "pre_existing_waiting_days": 0,
       "filing_window_days": 45,
-      "room_rent_capping": 10000.00,
+      "room_rent_capping": 10000.0,
       "day_one_coverage_waiver": true,
       "excluded_procedures": [
         "cosmetic surgery",
@@ -41,12 +41,12 @@
       "policy_number_prefix": "ICICI-LOMBARD",
       "name": "ICICI Lombard — Health AdvantEdge Complete",
       "tpa_name": "ICICI Lombard Health Care In-House TPA",
-      "sum_insured": 750000.00,
+      "sum_insured": 750000.0,
       "co_pay_percent": 5,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 1095,
       "filing_window_days": 30,
-      "room_rent_capping": 8000.00,
+      "room_rent_capping": 8000.0,
       "excluded_procedures": [
         "cosmetic rhinoplasty",
         "aesthetic surgery",
@@ -58,12 +58,12 @@
       "policy_number_prefix": "CARE-HEALTH",
       "name": "Care Health — Care Supreme Plan",
       "tpa_name": "Care Health In-House TPA",
-      "sum_insured": 1000000.00,
+      "sum_insured": 1000000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 1095,
       "filing_window_days": 30,
-      "room_rent_capping": 15000.00,
+      "room_rent_capping": 15000.0,
       "excluded_procedures": [
         "cosmetic rhinoplasty",
         "aesthetic surgery"
@@ -74,12 +74,12 @@
       "policy_number_prefix": "NIVA-BUPA",
       "name": "Niva Bupa — ReAssure 2.0 Titanium",
       "tpa_name": "Niva Bupa In-House TPA",
-      "sum_insured": 1000000.00,
+      "sum_insured": 1000000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 730,
       "filing_window_days": 30,
-      "room_rent_capping": 20000.00,
+      "room_rent_capping": 20000.0,
       "excluded_procedures": [
         "cosmetic surgery",
         "aesthetic procedures"
@@ -90,12 +90,12 @@
       "policy_number_prefix": "ADITYA-BIRLA",
       "name": "Aditya Birla — Activ Health Platinum Enhanced",
       "tpa_name": "Aditya Birla Health Insurance In-House TPA",
-      "sum_insured": 1000000.00,
+      "sum_insured": 1000000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 730,
       "filing_window_days": 30,
-      "room_rent_capping": 12000.00,
+      "room_rent_capping": 12000.0,
       "excluded_procedures": [
         "cosmetic surgery",
         "aesthetic procedures"
@@ -106,12 +106,12 @@
       "policy_number_prefix": "MANIPAL-CIGNA",
       "name": "ManipalCigna — ProHealth Premier Plan",
       "tpa_name": "ManipalCigna Health In-House TPA",
-      "sum_insured": 1500000.00,
+      "sum_insured": 1500000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 730,
       "filing_window_days": 30,
-      "room_rent_capping": 25000.00,
+      "room_rent_capping": 25000.0,
       "excluded_procedures": [
         "cosmetic surgery",
         "aesthetic treatments"
@@ -122,12 +122,12 @@
       "policy_number_prefix": "TATA-AIG",
       "name": "Tata AIG — MediCare Premier Plan",
       "tpa_name": "Paramount Health Services & Insurance TPA",
-      "sum_insured": 500000.00,
+      "sum_insured": 500000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 730,
       "filing_window_days": 30,
-      "room_rent_capping": 7500.00,
+      "room_rent_capping": 7500.0,
       "excluded_procedures": [
         "cosmetic surgery",
         "aesthetic procedures"
@@ -138,12 +138,12 @@
       "policy_number_prefix": "BAJAJ-ALLIANZ",
       "name": "Bajaj Allianz — Health Guard Gold Plan",
       "tpa_name": "Bajaj Allianz In-House Health Administration Team (HAT)",
-      "sum_insured": 500000.00,
+      "sum_insured": 500000.0,
       "co_pay_percent": 10,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 1095,
       "filing_window_days": 30,
-      "room_rent_capping": 5000.00,
+      "room_rent_capping": 5000.0,
       "excluded_procedures": [
         "cosmetic rhinoplasty",
         "aesthetic procedures"
@@ -154,12 +154,12 @@
       "policy_number_prefix": "SBI-GENERAL",
       "name": "SBI General — Arogya Plus Policy",
       "tpa_name": "Heritage Health Insurance TPA Pvt. Ltd.",
-      "sum_insured": 300000.00,
+      "sum_insured": 300000.0,
       "co_pay_percent": 0,
       "waiting_period_days": 30,
       "pre_existing_waiting_days": 1460,
       "filing_window_days": 30,
-      "room_rent_capping": 4000.00,
+      "room_rent_capping": 4000.0,
       "excluded_procedures": [
         "cosmetic surgery",
         "aesthetic rhinoplasty"
