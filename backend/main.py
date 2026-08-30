@@ -549,7 +549,7 @@ def seed_scenario_1():
     Executes all 6 agents autonomously in the background and populates Firestore collections.
     """
     case = SIAOrchestrator.create_claim_case(
-        title=f"{scenario_name.replace('_', ' ').title()} Auto Adjudication",
+        title="Scenario 1 Appendectomy Auto Adjudication",
         user_id="usr_demo123"
     )
     result = SIAOrchestrator.execute_pipeline(case.claim_case_id)
@@ -852,43 +852,43 @@ def get_demo_scenarios():
         "scenarios": [
             {
                 "id": "scenario_1",
-                "title": "Star Health ?" Acute Appendicitis (₹42,000)",
+                "title": "Star Health - Acute Appendicitis (Rs. 42,000)",
                 "insurer": "Star Health & Allied Insurance",
                 "patient": "Manpreet Kaur",
                 "bill_amount": 42000.0,
                 "verdict": "LIKELY_ELIGIBLE",
                 "risk_level": "LOW_RISK",
-                "admissible_est": "₹37,590 - ₹39,270"
+                "admissible_est": "Rs. 37,590 - Rs. 39,270"
             },
             {
                 "id": "scenario_2",
-                "title": "HDFC ERGO ?" Phaco Cataract with Foldable IOL (₹48,000)",
+                "title": "HDFC ERGO - Phaco Cataract with Foldable IOL (Rs. 48,000)",
                 "insurer": "HDFC ERGO Health Optima",
                 "patient": "Suresh Varma",
                 "bill_amount": 48000.0,
                 "verdict": "PARTIALLY_ELIGIBLE",
                 "risk_level": "LOW_RISK",
-                "admissible_est": "₹38,000 - ₹40,000 (Capped by sub-limit)"
+                "admissible_est": "Rs. 38,000 - Rs. 40,000 (Capped by sub-limit)"
             },
             {
                 "id": "scenario_3",
-                "title": "ICICI Lombard ?" Robotic Knee Replacement (₹2,40,000)",
+                "title": "ICICI Lombard - Robotic Knee Replacement (Rs. 2,40,000)",
                 "insurer": "ICICI Lombard Complete Health",
                 "patient": "Gurpreet Singh",
                 "bill_amount": 240000.0,
                 "verdict": "HIGH_VALUE_REVIEW",
                 "risk_level": "MEDIUM_RISK",
-                "admissible_est": "₹1,95,000 - ₹2,15,000"
+                "admissible_est": "Rs. 1,95,000 - Rs. 2,15,000"
             },
             {
                 "id": "scenario_4",
-                "title": "Care Health ?" Non-NABH Hospital (₹65,000)",
+                "title": "Care Health - Non-NABH Hospital (Rs. 65,000)",
                 "insurer": "Care Supreme",
                 "patient": "Anita Sharma",
                 "bill_amount": 65000.0,
                 "verdict": "PROPORTIONATE_DEDUCTION",
                 "risk_level": "HIGH_RISK",
-                "admissible_est": "₹44,000 - ₹48,000 (Non-accredited penalty)"
+                "admissible_est": "Rs. 44,000 - Rs. 48,000 (Non-accredited penalty)"
             }
         ]
     }
